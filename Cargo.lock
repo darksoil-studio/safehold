@@ -4705,6 +4705,7 @@ dependencies = [
  "colored",
  "env_logger",
  "fixt",
+ "futures",
  "holo_hash 0.5.2",
  "holochain",
  "holochain_client",
