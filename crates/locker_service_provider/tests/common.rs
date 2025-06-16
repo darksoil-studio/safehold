@@ -177,11 +177,13 @@ pub async fn setup() -> Scenario {
         .filter(None, Level::Info.to_level_filter())
         .filter_module("holochain_sqlite", log::LevelFilter::Off)
         .filter_module("tracing::span", log::LevelFilter::Off)
-        .filter_module("iroh", log::LevelFilter::Off)
+        .filter_module("iroh", log::LevelFilter::Error)
+        .filter_module("kitsune2", log::LevelFilter::Warn)
         .init();
 
     let infra_provider = launch_infra_provider().await;
     let infra_provider_pubkey = infra_provider.0.my_pub_key.clone();
+
     tokio::spawn(async move {
         run(
             tempdir::TempDir::new("test")
