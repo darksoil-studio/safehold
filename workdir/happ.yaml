@@ -1,0 +1,27 @@
+---
+manifest_version: "1"
+name: push-notifications-service-provider
+description: ~
+roles:   
+  - name: locker_service
+    provisioning:
+      strategy: create
+      deferred: false
+    dna:
+      bundled: ""
+      modifiers:
+        network_seed: ~
+        properties: ~
+      version: ~
+      clone_limit: 0
+  - name: service_providers
+    provisioning:
+      strategy: create
+      deferred: false
+    dna:
+      bundled: ""
+      modifiers:
+        network_seed: ~
+        properties: ~
+      version: ~
+      clone_limit: 100000

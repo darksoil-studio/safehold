@@ -1,0 +1,32 @@
+{ inputs, ... }:
+
+{
+  # Import all `../dnas/*/dna.nix` files
+  imports = (map (m: "${./..}/dnas/${m}/dna.nix") (builtins.attrNames
+    (if builtins.pathExists ../dnas then builtins.readDir ../dnas else { })));
+
+  perSystem = { inputs', lib, self', system, ... }: {
+    packages.locker_service_provider_happ =
+      inputs.holochain-nix-builders.outputs.builders.${system}.happ {
+        happManifest = ./happ.yaml;
+
+        dnas = {
+          locker_service =
+            self'.packages.locker_service_dna;
+          service_providers = self'.packages.service_providers_dna;
+        };
+      };
+
+    packages.locker_service_client_happ =
+      inputs.holochain-nix-builders.outputs.builders.${system}.happ {
+        happManifest = ./happ.yaml;
+
+        dnas = {
+          locker_service =
+            self'.packages.locker_service_client_dna;
+          service_providers = self'.packages.service_providers_dna;
+        };
+      };
+
+  };
+}

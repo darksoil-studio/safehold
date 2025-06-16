@@ -1,0 +1,18 @@
+[package]
+name = "locker_gateway"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "locker_gateway"
+
+[dependencies]
+hdk = { workspace = true }
+
+serde = { workspace = true }
+
+hc_zome_traits = { git = "https://github.com/holochain-open-dev/zome-traits", branch = "main" }
+
+locker_service_trait = { path = "../../../../../crates/locker_service_trait" }
+locker_types = { path = "../../../../../crates/locker_types" }
