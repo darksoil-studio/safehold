@@ -4,16 +4,6 @@ integrity:
   network_seed: null
   properties: null
   zomes:
-  - name: locker_service_integrity
-    hash: null
-    bundled: ../target/wasm32-unknown-unknown/release/locker_service_integrity.wasm
-    dependencies: null
-    dylib: null
-  - name: clone_manager_integrity
-    hash: null
-    bundled: ../target/wasm32-unknown-unknown/release/clone_manager_integrity.wasm
-    dependencies: null
-    dylib: null
   - name: locker_integrity
     hash: null
     bundled: ../../../target/wasm32-unknown-unknown/release/locker_integrity.wasm
@@ -21,18 +11,6 @@ integrity:
     dylib: null
 coordinator:
   zomes:
-  - name: locker_service
-    hash: null
-    bundled: ../target/wasm32-unknown-unknown/release/locker_service.wasm
-    dependencies:
-    - name: locker_service_integrity
-    dylib: null
-  - name: clone_manager
-    hash: null
-    bundled: ../target/wasm32-unknown-unknown/release/clone_manager.wasm
-    dependencies:
-    - name: clone_manager_integrity
-    dylib: null
   - name: locker
     hash: null
     bundled: ../../../target/wasm32-unknown-unknown/release/locker.wasm

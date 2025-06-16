@@ -11,8 +11,8 @@
         happManifest = ./happ.yaml;
 
         dnas = {
-          locker_service =
-            self'.packages.locker_service_dna;
+          locker = self'.packages.locker_dna;
+          manager = self'.packages.manager_dna;
           service_providers = self'.packages.service_providers_dna;
         };
       };
@@ -22,8 +22,8 @@
         happManifest = ./happ.yaml;
 
         dnas = {
-          locker_service =
-            self'.packages.locker_service_client_dna;
+          manager = self'.packages.manager_client_dna;
+          locker = self'.packages.locker_dna;
           service_providers = self'.packages.service_providers_dna;
         };
       };

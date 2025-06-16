@@ -1,0 +1,11 @@
+[package]
+name = "locker_service_trait"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hc_zome_traits = { git = "https://github.com/holochain-open-dev/zome-traits", branch = "main" }
+
+hdk = { workspace = true }
+
+locker_types = { path = "../locker_types" }

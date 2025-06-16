@@ -36,34 +36,34 @@ jobs:
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
-          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#push-notifications-service-provider
-          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-provider | jq -r 'keys[0]')
+          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#locker-service-provider
+          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-provider | jq -r 'keys[0]')
 
-          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#push-notifications-service-provider.meta.debug
-          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-provider.meta.debug | jq -r 'keys[0]')
+          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#locker-service-provider.meta.debug
+          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-provider.meta.debug | jq -r 'keys[0]')
 
       - name: Pin provider
         if: github.event_name != 'pull_request' && github.ref_name == 'main'
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
-          cachix pin darksoil-studio push-notifications-service-provider  $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-provider  | jq -r 'keys[0]')
-          cachix pin darksoil-studio push-notifications-service-provider  $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-provider.meta.debug | jq -r 'keys[0]')
+          cachix pin darksoil-studio locker-service-provider  $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-provider  | jq -r 'keys[0]')
+          cachix pin darksoil-studio locker-service-provider  $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-provider.meta.debug | jq -r 'keys[0]')
 
       - name: Build client
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
-          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#push-notifications-service-client
-          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-client | jq -r 'keys[0]')
+          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#locker-service-client
+          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-client | jq -r 'keys[0]')
 
-          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#push-notifications-service-client.meta.debug
-          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-client.meta.debug | jq -r 'keys[0]')
+          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#locker-service-client.meta.debug
+          cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-client.meta.debug | jq -r 'keys[0]')
 
       - name: Pin client
         if: github.event_name != 'pull_request' && github.ref_name == 'main'
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
-          cachix pin darksoil-studio push-notifications-service-client  $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-client  | jq -r 'keys[0]')
-          cachix pin darksoil-studio push-notifications-service-client  $(nix path-info --json --accept-flake-config --no-warn-dirty .#push-notifications-service-client.meta.debug | jq -r 'keys[0]')
+          cachix pin darksoil-studio locker-service-client  $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-client  | jq -r 'keys[0]')
+          cachix pin darksoil-studio locker-service-client  $(nix path-info --json --accept-flake-config --no-warn-dirty .#locker-service-client.meta.debug | jq -r 'keys[0]')

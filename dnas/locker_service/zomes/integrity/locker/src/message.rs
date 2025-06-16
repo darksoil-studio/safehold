@@ -3,8 +3,17 @@ pub use locker_types::MessageWithProvenance;
 
 pub fn validate_create_message(
     _action: EntryCreationAction,
-    _message: MessageWithProvenance,
+    message: MessageWithProvenance,
 ) -> ExternResult<ValidateCallbackResult> {
+    let Ok(true) = verify_signature(
+        message.provenance.clone(),
+        message.signature.clone(),
+        &message.message,
+    ) else {
+        return Ok(ValidateCallbackResult::Invalid(String::from(
+            "Invalid signature",
+        )));
+    };
     // TODO: add the appropriate validation rules
     Ok(ValidateCallbackResult::Valid)
 }

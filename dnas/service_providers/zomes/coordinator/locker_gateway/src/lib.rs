@@ -1,19 +1,16 @@
 use hdk::prelude::*;
-use locker_service_trait::locker_SERVICE_HASH;
+use locker_service_trait::LOCKER_SERVICE_HASH;
 
 mod locker_service;
 
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
     let mut fns: BTreeSet<GrantedFunction> = BTreeSet::new();
-    fns.insert((zome_info()?.name, FunctionName::from("register_fcm_token")));
-    fns.insert((
-        zome_info()?.name,
-        FunctionName::from("send_push_notification"),
-    ));
+    fns.insert((zome_info()?.name, FunctionName::from("get_messages")));
+    fns.insert((zome_info()?.name, FunctionName::from("store_message")));
     let functions = GrantedFunctions::Listed(fns);
     let cap_grant = ZomeCallCapGrant {
-        tag: String::from("send_push_notification"),
+        tag: String::from("store_and_get_messages"),
         access: CapAccess::Unrestricted,
         functions,
     };
@@ -24,7 +21,7 @@ pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
         ZomeName::from("service_providers"),
         "announce_as_provider".into(),
         None,
-        locker_SERVICE_HASH,
+        LOCKER_SERVICE_HASH,
     )?;
     let ZomeCallResponse::Ok(_) = response else {
         return Ok(InitCallbackResult::Fail(format!(

@@ -1,0 +1,19 @@
+manifest_version: '1'
+name: locker_service
+integrity:
+  network_seed: null
+  properties: null
+  zomes:
+  - name: clone_manager_integrity
+    hash: null
+    bundled: ../target/wasm32-unknown-unknown/release/clone_manager_integrity.wasm
+    dependencies: null
+    dylib: null
+coordinator:
+  zomes:
+  - name: clone_manager
+    hash: null
+    bundled: ../target/wasm32-unknown-unknown/release/clone_manager.wasm
+    dependencies:
+    - name: clone_manager_integrity
+    dylib: null

@@ -21,15 +21,9 @@ impl LockerService for LockerGateway {
             ));
         }
 
-        verify_signature(
-            message.provenance.clone(),
-            message.signature.clone(),
-            &message.message,
-        )?;
-
         let response = call(
-            CallTargetCell::OtherRole(RoleName::from("locker_service")),
-            ZomeName::from("locker_service"),
+            CallTargetCell::OtherRole(RoleName::from("locker")),
+            ZomeName::from("locker"),
             FunctionName::from("create_message"),
             None,
             message,
@@ -43,8 +37,8 @@ impl LockerService for LockerGateway {
     fn get_messages(_: ()) -> ExternResult<Vec<MessageWithProvenance>> {
         let agent = call_info()?.provenance;
         let response = call(
-            CallTargetCell::OtherRole(RoleName::from("locker_service")),
-            ZomeName::from("locker_service"),
+            CallTargetCell::OtherRole(RoleName::from("locker")),
+            ZomeName::from("locker"),
             FunctionName::from("get_messages_for_recipient"),
             None,
             agent,

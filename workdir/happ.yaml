@@ -1,9 +1,9 @@
 ---
 manifest_version: "1"
-name: push-notifications-service-provider
+name: locker-service-provider
 description: ~
 roles:   
-  - name: locker_service
+  - name: manager
     provisioning:
       strategy: create
       deferred: false
@@ -14,6 +14,17 @@ roles:
         properties: ~
       version: ~
       clone_limit: 0
+  - name: locker
+    provisioning:
+      strategy: create
+      deferred: false
+    dna:
+      bundled: ""
+      modifiers:
+        network_seed: ~
+        properties: ~
+      version: ~
+      clone_limit: 100000
   - name: service_providers
     provisioning:
       strategy: create

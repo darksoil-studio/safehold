@@ -58,30 +58,30 @@
         };
         devShells.npm-ci = inputs'.scaffolding.devShells.synchronized-pnpm;
 
-        packages.test-push-notifications-service = pkgs.writeShellApplication {
-          name = "test-push-notifications-service";
+        packages.test-locker-service = pkgs.writeShellApplication {
+          name = "test-locker-service";
           runtimeInputs = [
-            self'.packages.push-notifications-service-provider.meta.debug
-            self'.packages.push-notifications-service-client.meta.debug
+            self'.packages.locker-service-provider.meta.debug
+            self'.packages.locker-service-client.meta.debug
           ];
           text = ''
-            trap 'killall push-notifications-service-provider' 2 ERR
+            trap 'killall locker-service-provider' 2 ERR
 
             export RUST_LOG=error
 
             rm -rf /tmp/pnsp
             rm -rf /tmp/pnsp2
-            push-notifications-service-provider --data-dir /tmp/pnsp --bootstrap-url http://bad --signal-url ws://bad &
-            push-notifications-service-provider --data-dir /tmp/pnsp2 --bootstrap-url http://bad --signal-url ws://bad &
-            push-notifications-service-client --bootstrap-url http://bad --signal-url ws://bad publish-service-account-key --service-account-key-path "$1"
-            push-notifications-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$2"
+            locker-service-provider --data-dir /tmp/pnsp --bootstrap-url http://bad --signal-url ws://bad &
+            locker-service-provider --data-dir /tmp/pnsp2 --bootstrap-url http://bad --signal-url ws://bad &
+            locker-service-client --bootstrap-url http://bad --signal-url ws://bad publish-service-account-key --service-account-key-path "$1"
+            locker-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$2"
 
             echo "The test push notifications service is now ready to be used."
 
             echo ""
 
             wait
-            killall push-notifications-service-provider
+            killall locker-service-provider
           '';
         };
 
@@ -91,14 +91,14 @@
           buildInputs = [ pkgs.makeWrapper ];
           postBuild = ''
             wrapProgram $out/bin/scaffold-remote-zome \
-              --add-flags "push-notifications-service-provider-zome \
+              --add-flags "locker-service-provider-zome \
                 --integrity-zome-name locker_service_provider_integrity \
                 --coordinator-zome-name locker_service_provider \
-                --remote-zome-git-url github:darksoil-studio/push-notifications-service-provider-zome \
-                --remote-npm-package-name @darksoil-studio/push-notifications-service-provider-zome \
+                --remote-zome-git-url github:darksoil-studio/locker-service-provider-zome \
+                --remote-npm-package-name @darksoil-studio/locker-service-provider-zome \
                 --remote-zome-git-branch main-0.5 \
-                --context-element push-notifications-service-provider-context \
-                --context-element-import @darksoil-studio/push-notifications-service-provider-zome/dist/elements/push-notifications-service-provider-context.js" 
+                --context-element locker-service-provider-context \
+                --context-element-import @darksoil-studio/locker-service-provider-zome/dist/elements/locker-service-provider-context.js" 
           '';
         };
       };

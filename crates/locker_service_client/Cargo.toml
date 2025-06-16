@@ -1,0 +1,54 @@
+[package]
+name = "locker-service-client"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "locker_service_client"
+path = "src/lib.rs"
+
+[[bin]]
+name = "locker-service-client"
+path = "src/main.rs"
+
+[dependencies]
+holochain_runtime = { git = "https://github.com/darksoil-studio/tauri-plugin-holochain", branch = "main-0.5" }
+holochain = "0.5"
+holochain_util = "0.5"
+holochain_client = "0.7.0"
+holochain_conductor_api = "0.5"
+holochain_types = "0.5"
+
+anyhow = "1"
+clap = {version = "4.5.4", features = [ "derive" ] }
+tokio = { version = "1", features = [ "full" ] } 
+mr_bundle = "0.5"
+sha256 = "1"
+url2 = "0.0.6"
+log = "0.4"
+env_logger = "0.11"
+chrono = "0.4"
+
+serde_yaml = "0.9"
+serde_json = "1"
+mockall = "0.13"
+
+clone_manager_types = { git = "https://github.com/darksoil-studio/clone-manager-zome", branch = "main-0.5"}
+clone_manager_utils = { git = "https://github.com/darksoil-studio/clone-manager-zome", branch = "main-0.5"}
+
+service_providers_types = { git = "https://github.com/darksoil-studio/service-providers", branch = "main-0.5"}
+service_providers_utils = { git = "https://github.com/darksoil-studio/service-providers", branch = "main-0.5"}
+locker_types = { path = "../locker_types" }
+locker_service_trait = { path = "../locker_service_trait" }
+roles_types = { git = "https://github.com/darksoil-studio/roles-zome", branch = "main-0.5"}
+
+tempdir = "0.3"
+colored = "2"
+
+[dev-dependencies]
+tempdir = "0.3.7"
+serde_yaml = "0.9"
+holo_hash = "0.5"
+fixt = "0.5"
+
+locker-service-provider = { path = "../locker_service_provider" }
