@@ -52,7 +52,7 @@ pub async fn run(
         })
         .await;
 
-    log::info!("Starting push notifications service provider.");
+    log::info!("Starting locker service provider.");
 
     loop {
         let app_ws = runtime
