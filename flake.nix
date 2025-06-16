@@ -73,7 +73,7 @@
             rm -rf /tmp/pnsp2
             locker-service-provider --data-dir /tmp/pnsp --bootstrap-url http://bad --signal-url ws://bad &
             locker-service-provider --data-dir /tmp/pnsp2 --bootstrap-url http://bad --signal-url ws://bad &
-            locker-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$2"
+            locker-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$1"
 
             echo "The test locker service is now ready to be used."
 
