@@ -10,3 +10,5 @@ name = "locker_integrity"
 [dependencies]
 hdi = { workspace = true }
 serde = { workspace = true }
+
+locker_types = { path = "../../../../../crates/locker_types" }

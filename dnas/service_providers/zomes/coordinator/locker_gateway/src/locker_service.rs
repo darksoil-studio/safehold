@@ -1,54 +1,59 @@
 use hc_zome_traits::{implement_zome_trait_as_externs, implemented_zome_traits};
 use hdk::prelude::*;
-use locker_service_trait::{
-    PushNotificationsService, RegisterFcmTokenInput, SendPushNotificationToAgentInput,
-};
+use locker_service_trait::LockerService;
 use locker_types::*;
 
 #[implemented_zome_traits]
 pub enum ZomeTraits {
-    PushNotifications(PushNotificationsGateway),
+    LockerService(LockerGateway),
 }
 
-pub struct PushNotificationsGateway;
+pub struct LockerGateway;
 
 #[implement_zome_trait_as_externs]
-impl PushNotificationsService for PushNotificationsGateway {
-    fn register_fcm_token(input: RegisterFcmTokenInput) -> ExternResult<()> {
+impl LockerService for LockerGateway {
+    fn store_message(message: MessageWithProvenance) -> ExternResult<()> {
         let agent = call_info()?.provenance;
+
+        if agent.ne(&message.provenance) {
+            return Err(wasm_error!(
+                "Caller agent is not the same as the provenance agent."
+            ));
+        }
+
+        verify_signature(
+            message.provenance.clone(),
+            message.signature.clone(),
+            &message.message,
+        )?;
+
         let response = call(
             CallTargetCell::OtherRole(RoleName::from("locker_service")),
             ZomeName::from("locker_service"),
-            FunctionName::from("register_fcm_token_for_agent"),
+            FunctionName::from("create_message"),
             None,
-            RegisterFcmTokenForAgentInput {
-                fcm_project_id: input.fcm_project_id,
-                token: input.token,
-                agent,
-            },
+            message,
         )?;
         let ZomeCallResponse::Ok(_) = response else {
-            return Err(wasm_error!("Failed to register fcm token: {response:?}"));
+            return Err(wasm_error!("Failed to store message: {response:?}"));
         };
         Ok(())
     }
 
-    fn send_push_notification(input: SendPushNotificationToAgentInput) -> ExternResult<()> {
+    fn get_messages(_: ()) -> ExternResult<Vec<MessageWithProvenance>> {
         let agent = call_info()?.provenance;
         let response = call(
             CallTargetCell::OtherRole(RoleName::from("locker_service")),
             ZomeName::from("locker_service"),
-            FunctionName::from("send_push_notification_to_agent"),
+            FunctionName::from("get_messages_for_recipient"),
             None,
-            SendPushNotificationToAgentWithProvenanceInput {
-                provenance: agent,
-                agent: input.agent,
-                notification: input.notification,
-            },
+            agent,
         )?;
-        let ZomeCallResponse::Ok(_) = response else {
-            return Err(wasm_error!("Failed to register fcm token: {response:?}"));
+        let ZomeCallResponse::Ok(result) = response else {
+            return Err(wasm_error!("Failed to get messages: {:?}"));
         };
-        Ok(())
+        let messages: Vec<MessageWithProvenance> =
+            result.decode().map_err(|err| wasm_error!("{}", err))?;
+        Ok(messages)
     }
 }

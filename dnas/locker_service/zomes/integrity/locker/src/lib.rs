@@ -7,7 +7,7 @@ pub use message::*;
 #[hdk_entry_types]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
-    Message(Message),
+    Message(MessageWithProvenance),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -85,14 +85,15 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     EntryTypes::Message(message) => {
                         let original_app_entry =
                             must_get_valid_record(action.clone().original_action_address)?;
-                        let original_message = match Message::try_from(original_app_entry) {
-                            Ok(entry) => entry,
-                            Err(e) => {
-                                return Ok(ValidateCallbackResult::Invalid(format!(
-                                    "Expected to get Message from Record: {e:?}"
-                                )));
-                            }
-                        };
+                        let original_message =
+                            match MessageWithProvenance::try_from(original_app_entry) {
+                                Ok(entry) => entry,
+                                Err(e) => {
+                                    return Ok(ValidateCallbackResult::Invalid(format!(
+                                        "Expected to get Message from Record: {e:?}"
+                                    )));
+                                }
+                            };
                         validate_update_message(
                             action,
                             message,
@@ -219,10 +220,11 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                 message.clone(),
                             )?;
                             if let ValidateCallbackResult::Valid = result {
-                                let original_message: Option<Message> = original_record
-                                    .entry()
-                                    .to_app_option()
-                                    .map_err(|e| wasm_error!(e))?;
+                                let original_message: Option<MessageWithProvenance> =
+                                    original_record
+                                        .entry()
+                                        .to_app_option()
+                                        .map_err(|e| wasm_error!(e))?;
                                 let original_message = match original_message {
                                     Some(message) => message,
                                     None => {
