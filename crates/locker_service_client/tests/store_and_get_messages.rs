@@ -86,8 +86,6 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    std::thread::sleep(Duration::from_secs(2));
-
     let messages: Vec<MessageWithProvenance> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id.clone(),
@@ -102,7 +100,7 @@ async fn store_and_get_messages() {
 
     let messages: Vec<MessageWithProvenance> = make_service_request(
         &recipient.0,
-        locker_service_trait_service_id,
+        locker_service_trait_service_id.clone(),
         "get_messages".into(),
         (),
     )
