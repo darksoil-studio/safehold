@@ -5,7 +5,7 @@ use clone_manager_types::CloneRequest;
 use common::*;
 use holochain::prelude::DnaModifiers;
 use holochain_client::{AgentPubKey, ExternIO, SerializedBytes, ZomeCallTarget};
-use locker_types::{Message, MessageWithProvenance};
+use locker_types::Message;
 use roles_types::Properties;
 use service_providers_utils::make_service_request;
 
@@ -80,7 +80,7 @@ async fn store_and_get_messages() {
 
     let message = Message {
         recipients: vec![recipient.0.my_pub_key.clone()],
-        content: message_content,
+        contents: message_content,
     };
     let signature = sender
         .1
@@ -97,7 +97,7 @@ async fn store_and_get_messages() {
         .await
         .unwrap();
 
-    let message_with_provenance = MessageWithProvenance {
+    let message_with_provenance = Message {
         provenance: sender.0.my_pub_key.clone(),
         signature,
         message,
@@ -114,7 +114,7 @@ async fn store_and_get_messages() {
 
     std::thread::sleep(Duration::from_secs(2));
 
-    let messages: Vec<MessageWithProvenance> = make_service_request(
+    let messages: Vec<Message> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id.clone(),
         "get_messages".into(),
@@ -126,7 +126,7 @@ async fn store_and_get_messages() {
     assert_eq!(messages.len(), 1);
     assert_eq!(messages[0], message_with_provenance);
 
-    let messages: Vec<MessageWithProvenance> = make_service_request(
+    let messages: Vec<Message> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id,
         "get_messages".into(),
