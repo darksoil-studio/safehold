@@ -1,6 +1,6 @@
 use hc_zome_traits::{implement_zome_trait_as_externs, implemented_zome_traits};
 use hdk::prelude::*;
-use locker_service_trait::LockerService;
+use locker_service_trait::{LockerService, MessageOutput, StoreMessageInput};
 use locker_types::*;
 
 #[implemented_zome_traits]
@@ -12,21 +12,22 @@ pub struct LockerGateway;
 
 #[implement_zome_trait_as_externs]
 impl LockerService for LockerGateway {
-    fn store_message(message: MessageWithProvenance) -> ExternResult<()> {
-        let agent = call_info()?.provenance;
-
-        if agent.ne(&message.provenance) {
-            return Err(wasm_error!(
-                "Caller agent is not the same as the provenance agent."
-            ));
-        }
+    fn store_message(input: StoreMessageInput) -> ExternResult<()> {
+        let sender = call_info()?.provenance;
 
         let response = call(
             CallTargetCell::OtherRole(RoleName::from("locker")),
             ZomeName::from("locker"),
             FunctionName::from("create_message"),
             None,
-            message,
+            CreateMessageInput {
+                message: Message {
+                    sender,
+                    signature: input.signature,
+                    contents: input.contents,
+                },
+                recipients: input.recipients,
+            },
         )?;
         let ZomeCallResponse::Ok(_) = response else {
             return Err(wasm_error!("Failed to store message: {response:?}"));
@@ -34,7 +35,7 @@ impl LockerService for LockerGateway {
         Ok(())
     }
 
-    fn get_messages(_: ()) -> ExternResult<Vec<MessageWithProvenance>> {
+    fn get_messages(_: ()) -> ExternResult<Vec<MessageOutput>> {
         let agent = call_info()?.provenance;
         let response = call(
             CallTargetCell::OtherRole(RoleName::from("locker")),
@@ -46,8 +47,7 @@ impl LockerService for LockerGateway {
         let ZomeCallResponse::Ok(result) = response else {
             return Err(wasm_error!("Failed to get messages: {:?}"));
         };
-        let messages: Vec<MessageWithProvenance> =
-            result.decode().map_err(|err| wasm_error!("{}", err))?;
+        let messages: Vec<MessageOutput> = result.decode().map_err(|err| wasm_error!("{}", err))?;
         Ok(messages)
     }
 }

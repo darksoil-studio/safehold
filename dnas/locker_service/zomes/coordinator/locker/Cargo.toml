@@ -11,3 +11,6 @@ name = "locker"
 hdk = { workspace = true }
 serde = { workspace = true }
 locker_integrity = { workspace = true }
+
+locker_types = { path = "../../../../../crates/locker_types" }
+locker_service_trait = { path = "../../../../../crates/locker_service_trait" }
