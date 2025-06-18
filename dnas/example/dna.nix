@@ -12,9 +12,9 @@
         dnaManifest = ./workdir/dna.yaml;
         zomes = {
           # This overrides all the "bundled" properties for the DNA manifest
-          encrypted_channels_integrity =
-            self'.packages.encrypted_channels_integrity;
-          encrypted_channels = self'.packages.encrypted_channels;
+          encrypted_messages_integrity =
+            self'.packages.encrypted_messages_integrity;
+          encrypted_messages = self'.packages.encrypted_messages;
         };
       };
   };
