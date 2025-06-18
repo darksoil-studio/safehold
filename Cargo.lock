@@ -2379,9 +2379,9 @@ dependencies = [
 
 [[package]]
 name = "holochain"
-version = "0.5.1"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4784b6ea0df9b7481bd96d9007e2b7ec14aefffb46b5b315d3a1ae87360604e"
+checksum = "9fc1316aa55425ed7f3c0ed6c641df7615e7eff572d80700773aefca3df4a5ad"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2472,9 +2472,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_cascade"
-version = "0.5.1"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3480680fd6f7a6a66195f0b4a882b23f19ef83537d7a3dbddf32ccd9565dca4"
+checksum = "134cbc07e3aa57102ddf331ea0b2aedb37ef4d1e46bd8051f1b051da19280a85"
 dependencies = [
  "async-trait",
  "fixt",
@@ -2698,9 +2698,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_p2p"
-version = "0.5.1"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c95b4fb7a2006d565e100dbcfbe214288523b47cd8b59c43fb50e560cf48e23"
+checksum = "7c41aaac0a9d280c2eac6ffc40b9bd6e4f6e624467c8e9e198f043cdcfd802ec"
 dependencies = [
  "async-trait",
  "blake2b_simd",
@@ -3806,9 +3806,9 @@ dependencies = [
 
 [[package]]
 name = "kitsune2"
-version = "0.1.7"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "578eaf9c7402a06a2a18d9bfe98023b37e9b742c9378dfcb91a2383387bf4a46"
+checksum = "3da5867368fb4f7b15f66f990fc5d58f6f0070e2f3bc2a2210c0c6a82ebfa301"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4217,6 +4217,7 @@ dependencies = [
  "clone_manager_types",
  "clone_manager_utils",
  "env_logger",
+ "fixt",
  "futures",
  "holochain",
  "holochain_client",
