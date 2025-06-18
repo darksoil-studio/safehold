@@ -6,16 +6,13 @@ use peer_keys::query_peer_keys;
 use utils::{create_relaxed, from_bytes, to_bytes};
 
 use locker_service_trait::MessageOutput;
-use locker_types::{AgentSpecificContents, Message, MessageContents, MessageWithProvenance};
+use locker_types::{
+    AgentSpecificContents, DecryptedMessageOutput, EncryptMessageInput, Message, MessageContents,
+    MessageWithProvenance,
+};
 
 mod peer_keys;
 mod utils;
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct EncryptMessageInput {
-    pub recipients: Vec<AgentPubKey>,
-    pub message: MessageContents,
-}
 
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum MessageEncryption {
@@ -142,16 +139,20 @@ fn sign_message(message: Message) -> ExternResult<MessageWithProvenance> {
 }
 
 #[hdk_extern]
-pub fn decrypt_messages(messages: Vec<MessageOutput>) -> ExternResult<Vec<MessageContents>> {
-    let mut decrypted_messages: Vec<MessageContents> = vec![];
+pub fn decrypt_messages(messages: Vec<MessageOutput>) -> ExternResult<Vec<DecryptedMessageOutput>> {
+    let mut decrypted_messages: Vec<DecryptedMessageOutput> = vec![];
 
     for message in messages {
+        let provenance = message.provenance.clone();
         let result = decrypt_message(message);
         let Ok(decrypted_message) = result else {
             error!("Failed to decrypt message: {:?}", result);
             continue;
         };
-        decrypted_messages.push(decrypted_message);
+        decrypted_messages.push(DecryptedMessageOutput {
+            provenance,
+            contents: decrypted_message,
+        });
     }
 
     Ok(decrypted_messages)

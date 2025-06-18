@@ -1,7 +1,6 @@
 use hdk::prelude::*;
 use locker_integrity::*;
 use locker_service_trait::*;
-use locker_types::*;
 
 #[hdk_extern]
 pub fn create_messages(inputs: Vec<MessageWithProvenance>) -> ExternResult<()> {
@@ -16,7 +15,7 @@ pub fn create_messages(inputs: Vec<MessageWithProvenance>) -> ExternResult<()> {
 pub fn create_message(message: MessageWithProvenance) -> ExternResult<Record> {
     let message_hash = hash_entry(&message)?;
     create_entry(&EntryTypes::Message(message.clone()))?;
-    for (agent, contents) in input.recipients.clone() {
+    for (agent, contents) in message.message.recipients.clone() {
         create_link(
             agent,
             message_hash.clone(),
