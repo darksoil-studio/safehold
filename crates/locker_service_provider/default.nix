@@ -158,6 +158,6 @@
         progenitors = inputs.service-providers.outputs.progenitors;
       };
 
-      checks.send-push-notification-test = check;
+      checks.store-and-get-messages-test = check;
     };
 }
