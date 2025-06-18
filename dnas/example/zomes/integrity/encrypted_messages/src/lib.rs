@@ -1,6 +1,7 @@
-pub mod message;
 use hdi::prelude::*;
-pub use message::*;
+
+pub use peer_keys::*;
+pub mod peer_keys;
 
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "type")]
@@ -8,7 +9,7 @@ pub use message::*;
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
     #[entry_type(visibility = "private")]
-    Message(MessageWithProvenance),
+    PeerKeys(PeerKeys),
 }
 
 // #[derive(Serialize, Deserialize)]
@@ -56,15 +57,15 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
     match op.flattened::<EntryTypes, ()>()? {
         FlatOp::StoreEntry(store_entry) => match store_entry {
             OpEntry::CreateEntry { app_entry, action } => match app_entry {
-                EntryTypes::Message(message) => {
-                    validate_create_message(EntryCreationAction::Create(action), message)
+                EntryTypes::PeerKeys(message) => {
+                    validate_create_peer_keys(EntryCreationAction::Create(action), message)
                 }
             },
             OpEntry::UpdateEntry {
                 app_entry, action, ..
             } => match app_entry {
-                EntryTypes::Message(message) => {
-                    validate_create_message(EntryCreationAction::Update(action), message)
+                EntryTypes::PeerKeys(message) => {
+                    validate_create_peer_keys(EntryCreationAction::Update(action), message)
                 }
             },
             _ => Ok(ValidateCallbackResult::Valid),
@@ -83,22 +84,22 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     }
                 };
                 match app_entry {
-                    EntryTypes::Message(message) => {
+                    EntryTypes::PeerKeys(message) => {
                         let original_app_entry =
                             must_get_valid_record(action.clone().original_action_address)?;
-                        let original_message = match MessageWithProvenance::try_from(original_app_entry) {
+                        let original_peer_keys = match PeerKeys::try_from(original_app_entry) {
                             Ok(entry) => entry,
                             Err(e) => {
                                 return Ok(ValidateCallbackResult::Invalid(format!(
-                                    "Expected to get Message from Record: {e:?}"
+                                    "Expected to get PeerKeys from Record: {e:?}"
                                 )));
                             }
                         };
-                        validate_update_message(
+                        validate_update_peer_keys(
                             action,
                             message,
                             original_create_action,
-                            original_message,
+                            original_peer_keys,
                         )
                     }
                 }
@@ -145,10 +146,10 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 }
             };
             match original_app_entry {
-                EntryTypes::Message(original_message) => validate_delete_message(
+                EntryTypes::PeerKeys(original_peer_keys) => validate_delete_peer_keys(
                     delete_entry.clone().action,
                     original_action,
-                    original_message,
+                    original_peer_keys,
                 ),
             }
         }
@@ -177,8 +178,8 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `StoreEntry`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `StoreEntry` validation failed
                 OpRecord::CreateEntry { app_entry, action } => match app_entry {
-                    EntryTypes::Message(message) => {
-                        validate_create_message(EntryCreationAction::Create(action), message)
+                    EntryTypes::PeerKeys(message) => {
+                        validate_create_peer_keys(EntryCreationAction::Create(action), message)
                     }
                 },
                 // Complementary validation to the `RegisterUpdate` Op, in which the record itself is validated
@@ -203,17 +204,17 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         }
                     };
                     match app_entry {
-                        EntryTypes::Message(message) => {
-                            let result = validate_create_message(
+                        EntryTypes::PeerKeys(peer_keys) => {
+                            let result = validate_create_peer_keys(
                                 EntryCreationAction::Update(action.clone()),
-                                message.clone(),
+                                peer_keys.clone(),
                             )?;
                             if let ValidateCallbackResult::Valid = result {
-                                let original_message: Option<MessageWithProvenance> = original_record
+                                let original_peer_keys: Option<PeerKeys> = original_record
                                     .entry()
                                     .to_app_option()
                                     .map_err(|e| wasm_error!(e))?;
-                                let original_message = match original_message {
+                                let original_peer_keys = match original_peer_keys {
                                     Some(message) => message,
                                     None => {
                                         return Ok(
@@ -224,11 +225,11 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                         );
                                     }
                                 };
-                                validate_update_message(
+                                validate_update_peer_keys(
                                     action,
-                                    message,
+                                    peer_keys,
                                     original_action,
-                                    original_message,
+                                    original_peer_keys,
                                 )
                             } else {
                                 Ok(result)
@@ -286,8 +287,8 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         }
                     };
                     match original_app_entry {
-                        EntryTypes::Message(original_message) => {
-                            validate_delete_message(action, original_action, original_message)
+                        EntryTypes::PeerKeys(original_peer_keys) => {
+                            validate_delete_peer_keys(action, original_action, original_peer_keys)
                         }
                     }
                 }

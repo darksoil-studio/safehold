@@ -6,9 +6,9 @@ pub fn validate_create_message(
     message: MessageWithProvenance,
 ) -> ExternResult<ValidateCallbackResult> {
     let Ok(true) = verify_signature(
-        message.sender.clone(),
+        message.provenance.clone(),
         message.signature.clone(),
-        &message.contents,
+        &message.message,
     ) else {
         return Ok(ValidateCallbackResult::Invalid(String::from(
             "Invalid signature",
