@@ -47,3 +47,4 @@ serde_yaml = "0.9"
 locker-service-client = { path = "../locker_service_client" }
 futures = "0.3"
 fixt = "0.5"
+holo_hash = "0.5"
