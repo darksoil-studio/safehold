@@ -18,3 +18,15 @@ pub struct MessageWithProvenance {
     pub signature: Signature,
     pub message: Message,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EncryptMessageInput {
+    pub recipients: Vec<AgentPubKey>,
+    pub message: MessageContents,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DecryptedMessageOutput {
+    pub provenance: AgentPubKey,
+    pub contents: MessageContents,
+}

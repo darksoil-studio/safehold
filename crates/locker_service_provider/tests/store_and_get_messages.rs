@@ -3,10 +3,11 @@ use std::{collections::BTreeSet, time::Duration};
 mod common;
 use anyhow::anyhow;
 use common::*;
-use holo_hash::DnaHash;
-use holochain_client::{AdminWebsocket, AgentPubKey, ExternIO, SerializedBytes, ZomeCallTarget};
+use holochain::core::DnaHash;
+use holochain_client::{AdminWebsocket, AgentPubKey, ExternIO, ZomeCallTarget};
 use locker_service_client::LockerServiceClient;
-use locker_types::MessageWithProvenance;
+use locker_service_trait::MessageOutput;
+use locker_types::{DecryptedMessageOutput, EncryptMessageInput, MessageWithProvenance};
 use service_providers_utils::make_service_request;
 use tempdir::TempDir;
 
@@ -54,36 +55,29 @@ async fn store_and_get_messages() {
 
     let message_content: Vec<u8> = vec![0, 1, 2];
 
-    let message = MessageWithProvenance {
+    let message = EncryptMessageInput {
+        message: message_content.clone(),
         recipients: vec![recipient.0.my_pub_key.clone()],
-        contents: message_content,
     };
-    let signature = sender
-        .1
-        .conductor_handle
-        .keystore()
-        .sign(
-            sender.0.my_pub_key.clone(),
-            SerializedBytes::try_from(message.clone())
-                .unwrap()
-                .bytes()
-                .as_slice()
-                .into(),
+
+    let messages: Vec<MessageWithProvenance> = sender
+        .0
+        .call_zome(
+            ZomeCallTarget::RoleName("example".into()),
+            "encrypted_messages".into(),
+            "encrypt_message".into(),
+            ExternIO::encode(message).unwrap(),
         )
         .await
+        .unwrap()
+        .decode()
         .unwrap();
-
-    let message_with_provenance = MessageWithProvenance {
-        provenance: sender.0.my_pub_key.clone(),
-        signature,
-        message,
-    };
 
     let _response: () = make_service_request(
         &sender.0,
         locker_service_trait_service_id.clone(),
-        "store_message".into(),
-        message_with_provenance.clone(),
+        "store_messages".into(),
+        messages.clone(),
     )
     .await
     .unwrap();
@@ -95,7 +89,7 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    let messages: Vec<MessageWithProvenance> = make_service_request(
+    let messages_outputs: Vec<MessageOutput> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id.clone(),
         "get_messages".into(),
@@ -104,12 +98,11 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    assert_eq!(messages.len(), 1);
-    assert_eq!(messages[0], message_with_provenance);
+    assert_eq!(messages_outputs.len(), 1);
 
     std::thread::sleep(Duration::from_millis(100));
 
-    let messages: Vec<MessageWithProvenance> = make_service_request(
+    let messages: Vec<MessageOutput> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id.clone(),
         "get_messages".into(),
@@ -118,7 +111,23 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    assert_eq!(messages.len(), 0);
+    assert_eq!(messages_outputs.len(), 0);
+
+    let decrypted_messages: Vec<DecryptedMessageOutput> = recipient
+        .0
+        .call_zome(
+            ZomeCallTarget::RoleName("example".into()),
+            "encrypted_messages".into(),
+            "decrypt_messages".into(),
+            ExternIO::encode(messages).unwrap(),
+        )
+        .await
+        .unwrap()
+        .decode()
+        .unwrap();
+
+    assert_eq!(decrypted_messages.len(), 0);
+    assert_eq!(decrypted_messages[0].contents, message_content);
 }
 
 async fn consistency(admins_wss: Vec<AdminWebsocket>) -> anyhow::Result<()> {
