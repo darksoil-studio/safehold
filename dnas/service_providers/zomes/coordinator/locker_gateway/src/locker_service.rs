@@ -12,22 +12,27 @@ pub struct LockerGateway;
 
 #[implement_zome_trait_as_externs]
 impl LockerService for LockerGateway {
-    fn store_message(input: StoreMessageInput) -> ExternResult<()> {
+    fn store_messages(inputs: Vec<StoreMessageInput>) -> ExternResult<()> {
         let sender = call_info()?.provenance;
 
-        let response = call(
-            CallTargetCell::OtherRole(RoleName::from("locker")),
-            ZomeName::from("locker"),
-            FunctionName::from("create_message"),
-            None,
-            CreateMessageInput {
+        let input: Vec<CreateMessageInput> = inputs
+            .into_iter()
+            .map(|input| CreateMessageInput {
                 message: Message {
-                    sender,
+                    sender: sender.clone(),
                     signature: input.signature,
                     contents: input.contents,
                 },
                 recipients: input.recipients,
-            },
+            })
+            .collect();
+
+        let response = call(
+            CallTargetCell::OtherRole(RoleName::from("locker")),
+            ZomeName::from("locker"),
+            FunctionName::from("create_messages"),
+            None,
+            input,
         )?;
         let ZomeCallResponse::Ok(_) = response else {
             return Err(wasm_error!("Failed to store message: {response:?}"));

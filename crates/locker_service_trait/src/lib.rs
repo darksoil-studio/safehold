@@ -8,7 +8,7 @@ use locker_types::{AgentSpecificContents, Message, MessageContents};
 pub struct StoreMessageInput {
     pub signature: Signature,
     pub contents: MessageContents,
-    pub recipients: BTreeMap<AgentPubKey, Option<Vec<u8>>>,
+    pub recipients: BTreeMap<AgentPubKey, AgentSpecificContents>,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq, SerializedBytes)]
@@ -19,7 +19,7 @@ pub struct MessageOutput {
 
 #[zome_trait]
 pub trait LockerService {
-    fn store_message(message: StoreMessageInput) -> ExternResult<()>;
+    fn store_messages(message: Vec<StoreMessageInput>) -> ExternResult<()>;
 
     fn get_messages(_: ()) -> ExternResult<Vec<MessageOutput>>;
 }

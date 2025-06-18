@@ -1,61 +1,37 @@
-use std::time::Duration;
+use std::{collections::BTreeSet, time::Duration};
 
 mod common;
-use clone_manager_types::CloneRequest;
+use anyhow::anyhow;
 use common::*;
-use holochain::prelude::DnaModifiers;
-use holochain_client::{AgentPubKey, ExternIO, SerializedBytes, ZomeCallTarget};
+use holo_hash::DnaHash;
+use holochain_client::{AdminWebsocket, AgentPubKey, ExternIO, SerializedBytes, ZomeCallTarget};
+use locker_service_client::LockerServiceClient;
 use locker_types::Message;
-use roles_types::Properties;
 use service_providers_utils::make_service_request;
+use tempdir::TempDir;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn store_and_get_messages() {
     let Scenario {
-        infra_provider,
+        network_seed,
+        progenitor,
         // service_provider,
         happ_developer,
         sender,
         recipient,
     } = setup().await;
 
-    let roles_properties = Properties {
-        progenitors: vec![infra_provider.0.my_pub_key.clone().into()],
-    };
-    let properties_bytes = SerializedBytes::try_from(roles_properties).unwrap();
-    let modifiers = DnaModifiers {
-        properties: properties_bytes,
-        network_seed: String::from(""),
-    };
+    let client = LockerServiceClient::create(
+        TempDir::new("locker-service-test").unwrap().into_path(),
+        network_config(),
+        "client-happ".into(),
+        client_happ_path(),
+        vec![progenitor.clone()],
+    )
+    .await
+    .unwrap();
 
-    let clone_providers: Vec<AgentPubKey> = infra_provider
-        .0
-        .call_zome(
-            ZomeCallTarget::RoleName("manager".into()),
-            "clone_manager".into(),
-            "get_clone_providers".into(),
-            ExternIO::encode(()).unwrap(),
-        )
-        .await
-        .unwrap()
-        .decode()
-        .unwrap();
-
-    assert_eq!(clone_providers.len(), 2);
-
-    infra_provider
-        .0
-        .call_zome(
-            ZomeCallTarget::RoleName("manager".into()),
-            "clone_manager".into(),
-            "create_clone_request".into(),
-            ExternIO::encode(CloneRequest {
-                dna_modifiers: modifiers,
-            })
-            .unwrap(),
-        )
-        .await
-        .unwrap();
+    client.create_clone_request(network_seed).await.unwrap();
 
     std::thread::sleep(Duration::from_secs(25));
 
@@ -112,7 +88,12 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    std::thread::sleep(Duration::from_secs(2));
+    consistency(vec![
+        recipient.1.admin_websocket().await.unwrap(),
+        sender.1.admin_websocket().await.unwrap(),
+    ])
+    .await
+    .unwrap();
 
     let messages: Vec<Message> = make_service_request(
         &recipient.0,
@@ -126,9 +107,11 @@ async fn store_and_get_messages() {
     assert_eq!(messages.len(), 1);
     assert_eq!(messages[0], message_with_provenance);
 
+    std::thread::sleep(Duration::from_millis(100));
+
     let messages: Vec<Message> = make_service_request(
         &recipient.0,
-        locker_service_trait_service_id,
+        locker_service_trait_service_id.clone(),
         "get_messages".into(),
         (),
     )
@@ -136,4 +119,69 @@ async fn store_and_get_messages() {
     .unwrap();
 
     assert_eq!(messages.len(), 0);
+}
+
+async fn consistency(admins_wss: Vec<AdminWebsocket>) -> anyhow::Result<()> {
+    let mut retry_count = 0;
+    loop {
+        let dna_hashes: BTreeSet<DnaHash> =
+            futures::future::try_join_all(admins_wss.iter().map(|admin| admin.list_dnas()))
+                .await
+                .unwrap()
+                .into_iter()
+                .flatten()
+                .collect();
+
+        let consistencied = futures::future::try_join_all(
+            dna_hashes
+                .into_iter()
+                .map(|dna| are_conductors_consistencied(&admins_wss, dna)),
+        )
+        .await?
+        .iter()
+        .all(|c| c.clone());
+
+        if consistencied {
+            return Ok(());
+        }
+
+        retry_count += 1;
+
+        if retry_count > 200 {
+            return Err(anyhow!("Timeout"));
+        }
+
+        std::thread::sleep(Duration::from_millis(500));
+    }
+}
+
+async fn are_conductors_consistencied(
+    admins_wss: &Vec<AdminWebsocket>,
+    dna_hash: DnaHash,
+) -> anyhow::Result<bool> {
+    let states = futures::future::try_join_all(admins_wss.iter().map(|admin_ws| async {
+        let cells = admin_ws.list_cell_ids().await?;
+        let Some(cell_id) = cells.into_iter().find(|cell| cell.dna_hash().eq(&dna_hash)) else {
+            return Err(anyhow!("Cell not found for dna: {dna_hash}."));
+        };
+        let dump = admin_ws.dump_full_state(cell_id, None).await?;
+        Ok(dump)
+    }))
+    .await?;
+
+    if states.iter().any(|s| {
+        s.integration_dump.validation_limbo.len() > 0
+            || s.integration_dump.integration_limbo.len() > 0
+    }) {
+        return Ok(false);
+    }
+
+    if !states
+        .windows(2)
+        .all(|w| w[0].integration_dump.integrated.len() == w[1].integration_dump.integrated.len())
+    {
+        return Ok(false);
+    }
+
+    Ok(true)
 }

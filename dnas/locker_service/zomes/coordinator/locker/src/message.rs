@@ -4,6 +4,15 @@ use locker_service_trait::*;
 use locker_types::*;
 
 #[hdk_extern]
+pub fn create_messages(inputs: Vec<CreateMessageInput>) -> ExternResult<()> {
+    for input in inputs {
+        create_message(input)?;
+    }
+
+    Ok(())
+}
+
+#[hdk_extern]
 pub fn create_message(input: CreateMessageInput) -> ExternResult<Record> {
     let message = input.message;
     let message_hash = hash_entry(&message)?;

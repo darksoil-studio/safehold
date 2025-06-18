@@ -5,8 +5,7 @@
     let
       SERVICE_PROVIDER_HAPP =
         self'.packages.locker_service_provider_happ.meta.debug;
-      CLIENT_HAPP =
-        self'.packages.locker_service_client_happ.meta.debug;
+      CLIENT_HAPP = self'.packages.locker_service_client_happ.meta.debug;
 
       END_USER_HAPP =
         (inputs.holochain-nix-builders.outputs.builders.${system}.happ {
@@ -27,11 +26,23 @@
                     properties: ~
                   version: ~
                   clone_limit: 100000
+              - name: example
+                provisioning:
+                  strategy: create
+                  deferred: false
+                dna:
+                  bundled: ""
+                  modifiers:
+                    network_seed: ~
+                    properties: ~
+                  version: ~
+                  clone_limit: 100000
           '';
 
           dnas = {
             service_providers =
               inputs'.service-providers.packages.service_providers_dna;
+            example = self'.packages.example_dna;
           };
         }).meta.debug;
 
@@ -94,27 +105,25 @@
           HAPP_DEVELOPER_HAPP;
       });
 
-      binaryWithDebugHapp =
-        pkgs.runCommandLocal "locker-service-provider" {
-          buildInputs = [ pkgs.makeWrapper ];
-        } ''
-          mkdir $out
-          mkdir $out/bin
-          DNA_HASHES=test
-          makeWrapper ${binary}/bin/locker-service-provider $out/bin/locker-service-provider \
-            --add-flags "${self'.packages.locker_service_provider_happ.meta.debug} --app-id $DNA_HASHES"
-        '';
-      binaryWithHapp =
-        pkgs.runCommandLocal "locker-service-provider" {
-          buildInputs = [ pkgs.makeWrapper ];
-          meta.debug = binaryWithDebugHapp;
-        } ''
-          mkdir $out
-          mkdir $out/bin
-          DNA_HASHES=$(cat ${self'.packages.locker_service_provider_happ.dna_hashes})
-          makeWrapper ${binary}/bin/locker-service-provider $out/bin/locker-service-provider \
-            --add-flags "${self'.packages.locker_service_provider_happ} --app-id $DNA_HASHES"
-        '';
+      binaryWithDebugHapp = pkgs.runCommandLocal "locker-service-provider" {
+        buildInputs = [ pkgs.makeWrapper ];
+      } ''
+        mkdir $out
+        mkdir $out/bin
+        DNA_HASHES=test
+        makeWrapper ${binary}/bin/locker-service-provider $out/bin/locker-service-provider \
+          --add-flags "${self'.packages.locker_service_provider_happ.meta.debug} --app-id $DNA_HASHES"
+      '';
+      binaryWithHapp = pkgs.runCommandLocal "locker-service-provider" {
+        buildInputs = [ pkgs.makeWrapper ];
+        meta.debug = binaryWithDebugHapp;
+      } ''
+        mkdir $out
+        mkdir $out/bin
+        DNA_HASHES=$(cat ${self'.packages.locker_service_provider_happ.dna_hashes})
+        makeWrapper ${binary}/bin/locker-service-provider $out/bin/locker-service-provider \
+          --add-flags "${self'.packages.locker_service_provider_happ} --app-id $DNA_HASHES"
+      '';
     in rec {
 
       builders.locker-service-provider = { progenitors }:
@@ -145,10 +154,9 @@
             '';
         in binaryWithProgenitors;
 
-      packages.locker-service-provider =
-        builders.locker-service-provider {
-          progenitors = inputs.service-providers.outputs.progenitors;
-        };
+      packages.locker-service-provider = builders.locker-service-provider {
+        progenitors = inputs.service-providers.outputs.progenitors;
+      };
 
       checks.send-push-notification-test = check;
     };
