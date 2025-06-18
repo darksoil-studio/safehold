@@ -1,0 +1,16 @@
+[package]
+name = "encrypted_messages"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "encrypted_messages"
+
+[dependencies]
+hdk = { workspace = true }
+serde = { workspace = true }
+encrypted_messages_integrity = { path = "../../integrity/encrypted_messages" }
+
+locker_types = { path = "../../../../../crates/locker_types" }
+locker_service_trait = { path = "../../../../../crates/locker_service_trait" }

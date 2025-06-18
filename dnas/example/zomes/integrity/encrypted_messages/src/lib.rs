@@ -7,14 +7,15 @@ pub use message::*;
 #[hdk_entry_types]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
+    #[entry_type(visibility = "private")]
     Message(MessageWithProvenance),
 }
 
-#[derive(Serialize, Deserialize)]
-#[hdk_link_types]
-pub enum LinkTypes {
-    RecipientToMessages,
-}
+// #[derive(Serialize, Deserialize)]
+// #[hdk_link_types]
+// pub enum LinkTypes {
+//     RecipientToMessages,
+// }
 
 // Validation you perform during the genesis process. Nobody else on the network performs it, only you.
 // There *is no* access to network calls in this callback
@@ -52,7 +53,7 @@ pub fn validate_agent_joining(
 // You can read more about validation here: https://docs.rs/hdi/latest/hdi/index.html#data-validation
 #[hdk_extern]
 pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
-    match op.flattened::<EntryTypes, LinkTypes>()? {
+    match op.flattened::<EntryTypes, ()>()? {
         FlatOp::StoreEntry(store_entry) => match store_entry {
             OpEntry::CreateEntry { app_entry, action } => match app_entry {
                 EntryTypes::Message(message) => {
@@ -85,15 +86,14 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     EntryTypes::Message(message) => {
                         let original_app_entry =
                             must_get_valid_record(action.clone().original_action_address)?;
-                        let original_message =
-                            match MessageWithProvenance::try_from(original_app_entry) {
-                                Ok(entry) => entry,
-                                Err(e) => {
-                                    return Ok(ValidateCallbackResult::Invalid(format!(
-                                        "Expected to get Message from Record: {e:?}"
-                                    )));
-                                }
-                            };
+                        let original_message = match MessageWithProvenance::try_from(original_app_entry) {
+                            Ok(entry) => entry,
+                            Err(e) => {
+                                return Ok(ValidateCallbackResult::Invalid(format!(
+                                    "Expected to get Message from Record: {e:?}"
+                                )));
+                            }
+                        };
                         validate_update_message(
                             action,
                             message,
@@ -158,14 +158,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             target_address,
             tag,
             action,
-        } => match link_type {
-            LinkTypes::RecipientToMessages => validate_create_link_recipient_to_messages(
-                action,
-                base_address,
-                target_address,
-                tag,
-            ),
-        },
+        } => Ok(ValidateCallbackResult::Invalid(String::from(
+            "No link types in the encrypted_channels zome.",
+        ))),
         FlatOp::RegisterDeleteLink {
             link_type,
             base_address,
@@ -173,15 +168,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             tag,
             original_action,
             action,
-        } => match link_type {
-            LinkTypes::RecipientToMessages => validate_delete_link_recipient_to_messages(
-                action,
-                original_action,
-                base_address,
-                target_address,
-                tag,
-            ),
-        },
+        } => Ok(ValidateCallbackResult::Invalid(String::from(
+            "No link types in the encrypted_channels zome.",
+        ))),
         FlatOp::StoreRecord(store_record) => {
             match store_record {
                 // Complementary validation to the `StoreEntry` Op, in which the record itself is validated
@@ -220,11 +209,10 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                 message.clone(),
                             )?;
                             if let ValidateCallbackResult::Valid = result {
-                                let original_message: Option<MessageWithProvenance> =
-                                    original_record
-                                        .entry()
-                                        .to_app_option()
-                                        .map_err(|e| wasm_error!(e))?;
+                                let original_message: Option<MessageWithProvenance> = original_record
+                                    .entry()
+                                    .to_app_option()
+                                    .map_err(|e| wasm_error!(e))?;
                                 let original_message = match original_message {
                                     Some(message) => message,
                                     None => {
@@ -312,14 +300,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     tag,
                     link_type,
                     action,
-                } => match link_type {
-                    LinkTypes::RecipientToMessages => validate_create_link_recipient_to_messages(
-                        action,
-                        base_address,
-                        target_address,
-                        tag,
-                    ),
-                },
+                } => Ok(ValidateCallbackResult::Invalid(String::from(
+                    "No link types in the encrypted_channels zome.",
+                ))),
                 // Complementary validation to the `RegisterDeleteLink` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `RegisterDeleteLink`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `RegisterDeleteLink` validation failed
@@ -327,38 +310,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     original_action_hash,
                     base_address,
                     action,
-                } => {
-                    let record = must_get_valid_record(original_action_hash)?;
-                    let create_link = match record.action() {
-                        Action::CreateLink(create_link) => create_link.clone(),
-                        _ => {
-                            return Ok(ValidateCallbackResult::Invalid(
-                                "The action that a DeleteLink deletes must be a CreateLink"
-                                    .to_string(),
-                            ));
-                        }
-                    };
-                    let link_type = match LinkTypes::from_type(
-                        create_link.zome_index,
-                        create_link.link_type,
-                    )? {
-                        Some(lt) => lt,
-                        None => {
-                            return Ok(ValidateCallbackResult::Valid);
-                        }
-                    };
-                    match link_type {
-                        LinkTypes::RecipientToMessages => {
-                            validate_delete_link_recipient_to_messages(
-                                action,
-                                create_link.clone(),
-                                base_address,
-                                create_link.target_address,
-                                create_link.tag,
-                            )
-                        }
-                    }
-                }
+                } => Ok(ValidateCallbackResult::Invalid(String::from(
+                    "No link types in the encrypted_channels zome.",
+                ))),
                 OpRecord::CreatePrivateEntry { .. } => Ok(ValidateCallbackResult::Valid),
                 OpRecord::UpdatePrivateEntry { .. } => Ok(ValidateCallbackResult::Valid),
                 OpRecord::CreateCapClaim { .. } => Ok(ValidateCallbackResult::Valid),
