@@ -1,25 +1,17 @@
-use std::collections::BTreeMap;
-
 use hc_zome_traits::*;
 use hdk::prelude::*;
-use locker_types::{AgentSpecificContents, Message, MessageContents};
-
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, SerializedBytes)]
-pub struct StoreMessageInput {
-    pub signature: Signature,
-    pub contents: MessageContents,
-    pub recipients: BTreeMap<AgentPubKey, AgentSpecificContents>,
-}
+use locker_types::{AgentSpecificContents, MessageContents, MessageWithProvenance};
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq, SerializedBytes)]
 pub struct MessageOutput {
-    pub message: Message,
+    pub provenance: AgentPubKey,
+    pub message_contents: MessageContents,
     pub agent_specific_contents: AgentSpecificContents,
 }
 
 #[zome_trait]
 pub trait LockerService {
-    fn store_messages(message: Vec<StoreMessageInput>) -> ExternResult<()>;
+    fn store_messages(message: Vec<MessageWithProvenance>) -> ExternResult<()>;
 
     fn get_messages(_: ()) -> ExternResult<Vec<MessageOutput>>;
 }

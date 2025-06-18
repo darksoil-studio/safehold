@@ -1,9 +1,9 @@
 use hdi::prelude::*;
-pub use locker_types::Message;
+pub use locker_types::MessageWithProvenance;
 
 pub fn validate_create_message(
     _action: EntryCreationAction,
-    message: Message,
+    message: MessageWithProvenance,
 ) -> ExternResult<ValidateCallbackResult> {
     let Ok(true) = verify_signature(
         message.sender.clone(),
@@ -20,9 +20,9 @@ pub fn validate_create_message(
 
 pub fn validate_update_message(
     _action: Update,
-    _message: Message,
+    _message: MessageWithProvenance,
     _original_action: EntryCreationAction,
-    _original_message: Message,
+    _original_message: MessageWithProvenance,
 ) -> ExternResult<ValidateCallbackResult> {
     Ok(ValidateCallbackResult::Invalid(
         "Messages cannot be updated".to_string(),
@@ -32,7 +32,7 @@ pub fn validate_update_message(
 pub fn validate_delete_message(
     _action: Delete,
     _original_action: EntryCreationAction,
-    _original_message: Message,
+    _original_message: MessageWithProvenance,
 ) -> ExternResult<ValidateCallbackResult> {
     Ok(ValidateCallbackResult::Invalid(
         "Messages cannot be deleted".to_string(),
@@ -51,7 +51,7 @@ pub fn validate_create_link_recipient_to_messages(
             "No action hash associated with link".to_string()
         )))?;
     let entry = must_get_entry(entry_hash)?;
-    let _message = crate::Message::try_from(entry.content)?;
+    let _message = crate::MessageWithProvenance::try_from(entry.content)?;
     // TODO: add the appropriate validation rules
     Ok(ValidateCallbackResult::Valid)
 }

@@ -6,7 +6,7 @@ use common::*;
 use holo_hash::DnaHash;
 use holochain_client::{AdminWebsocket, AgentPubKey, ExternIO, SerializedBytes, ZomeCallTarget};
 use locker_service_client::LockerServiceClient;
-use locker_types::Message;
+use locker_types::MessageWithProvenance;
 use service_providers_utils::make_service_request;
 use tempdir::TempDir;
 
@@ -54,7 +54,7 @@ async fn store_and_get_messages() {
 
     let message_content: Vec<u8> = vec![0, 1, 2];
 
-    let message = Message {
+    let message = MessageWithProvenance {
         recipients: vec![recipient.0.my_pub_key.clone()],
         contents: message_content,
     };
@@ -73,7 +73,7 @@ async fn store_and_get_messages() {
         .await
         .unwrap();
 
-    let message_with_provenance = Message {
+    let message_with_provenance = MessageWithProvenance {
         provenance: sender.0.my_pub_key.clone(),
         signature,
         message,
@@ -95,7 +95,7 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    let messages: Vec<Message> = make_service_request(
+    let messages: Vec<MessageWithProvenance> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id.clone(),
         "get_messages".into(),
@@ -109,7 +109,7 @@ async fn store_and_get_messages() {
 
     std::thread::sleep(Duration::from_millis(100));
 
-    let messages: Vec<Message> = make_service_request(
+    let messages: Vec<MessageWithProvenance> = make_service_request(
         &recipient.0,
         locker_service_trait_service_id.clone(),
         "get_messages".into(),

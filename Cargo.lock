@@ -1632,10 +1632,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "encrypted_channels"
+name = "encrypted_messages"
 version = "0.0.1"
 dependencies = [
- "encrypted_channels_integrity",
+ "encrypted_messages_integrity",
  "hdk",
  "locker_service_trait",
  "locker_types",
@@ -1643,7 +1643,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "encrypted_channels_integrity"
+name = "encrypted_messages_integrity"
 version = "0.0.1"
 dependencies = [
  "hdi",

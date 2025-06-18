@@ -7,7 +7,7 @@ pub use message::*;
 #[hdk_entry_types]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
-    Message(Message),
+    Message(MessageWithProvenance),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -86,7 +86,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         let original_app_entry =
                             must_get_valid_record(action.clone().original_action_address)?;
                         let original_message =
-                            match Message::try_from(original_app_entry) {
+                            match MessageWithProvenance::try_from(original_app_entry) {
                                 Ok(entry) => entry,
                                 Err(e) => {
                                     return Ok(ValidateCallbackResult::Invalid(format!(
@@ -220,7 +220,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                 message.clone(),
                             )?;
                             if let ValidateCallbackResult::Valid = result {
-                                let original_message: Option<Message> =
+                                let original_message: Option<MessageWithProvenance> =
                                     original_record
                                         .entry()
                                         .to_app_option()

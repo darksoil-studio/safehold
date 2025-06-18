@@ -4,7 +4,7 @@ use locker_service_trait::*;
 use locker_types::*;
 
 #[hdk_extern]
-pub fn create_messages(inputs: Vec<CreateMessageInput>) -> ExternResult<()> {
+pub fn create_messages(inputs: Vec<MessageWithProvenance>) -> ExternResult<()> {
     for input in inputs {
         create_message(input)?;
     }
@@ -13,8 +13,7 @@ pub fn create_messages(inputs: Vec<CreateMessageInput>) -> ExternResult<()> {
 }
 
 #[hdk_extern]
-pub fn create_message(input: CreateMessageInput) -> ExternResult<Record> {
-    let message = input.message;
+pub fn create_message(message: MessageWithProvenance) -> ExternResult<Record> {
     let message_hash = hash_entry(&message)?;
     create_entry(&EntryTypes::Message(message.clone()))?;
     for (agent, contents) in input.recipients.clone() {
@@ -56,14 +55,15 @@ pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<Me
             let Some(entry) = r.entry().as_option() else {
                 return None;
             };
-            let Ok(message) = Message::try_from(entry) else {
+            let Ok(message) = MessageWithProvenance::try_from(entry) else {
                 return None;
             };
             Some(message)
         })
         .zip(links)
         .map(|(message, link)| MessageOutput {
-            message,
+            provenance: message.provenance,
+            message_contents: message.message.contents,
             agent_specific_contents: link.tag.0,
         })
         .collect();

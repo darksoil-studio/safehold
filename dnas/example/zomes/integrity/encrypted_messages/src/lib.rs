@@ -8,7 +8,7 @@ pub use message::*;
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
     #[entry_type(visibility = "private")]
-    Message(Message),
+    Message(MessageWithProvenance),
 }
 
 // #[derive(Serialize, Deserialize)]
@@ -86,7 +86,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     EntryTypes::Message(message) => {
                         let original_app_entry =
                             must_get_valid_record(action.clone().original_action_address)?;
-                        let original_message = match Message::try_from(original_app_entry) {
+                        let original_message = match MessageWithProvenance::try_from(original_app_entry) {
                             Ok(entry) => entry,
                             Err(e) => {
                                 return Ok(ValidateCallbackResult::Invalid(format!(
@@ -209,7 +209,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                 message.clone(),
                             )?;
                             if let ValidateCallbackResult::Valid = result {
-                                let original_message: Option<Message> = original_record
+                                let original_message: Option<MessageWithProvenance> = original_record
                                     .entry()
                                     .to_app_option()
                                     .map_err(|e| wasm_error!(e))?;
