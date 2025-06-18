@@ -45,11 +45,3 @@ roles_types = { git = "https://github.com/darksoil-studio/roles-zome", branch = 
 
 tempdir = "0.3"
 colored = "2"
-
-[dev-dependencies]
-tempdir = "0.3.7"
-serde_yaml = "0.9"
-holo_hash = "0.5"
-fixt = "0.5"
-
-locker-service-provider = { path = "../locker_service_provider" }
