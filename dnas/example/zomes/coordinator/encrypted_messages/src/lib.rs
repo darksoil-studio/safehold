@@ -30,8 +30,9 @@ pub enum MessageEncryption {
 
 #[hdk_extern]
 pub fn encrypt_message(input: EncryptMessageInput) -> ExternResult<Vec<MessageWithProvenance>> {
-    let hash = hash_blake2b(input.message.clone(), 255)?;
-    let key_ref = x_salsa20_poly1305_shared_secret_create_random(Some(hash.into()))?;
+    // let hash = hash_blake2b(input.message.clone(), 32)?;
+    // let key_ref = x_salsa20_poly1305_shared_secret_create_random(Some(hash.into()))?;
+    let key_ref = x_salsa20_poly1305_shared_secret_create_random(None)?;
 
     let mut messages: Vec<MessageWithProvenance> = vec![];
 

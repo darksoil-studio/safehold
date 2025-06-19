@@ -17,7 +17,6 @@ async fn store_and_get_messages() {
         network_seed,
         progenitor,
         // service_provider,
-        happ_developer,
         sender,
         recipient,
     } = setup().await;
@@ -34,11 +33,18 @@ async fn store_and_get_messages() {
 
     client.create_clone_request(network_seed).await.unwrap();
 
-    std::thread::sleep(Duration::from_secs(25));
+    std::thread::sleep(Duration::from_secs(5));
+
+    consistency(vec![
+        recipient.1.admin_websocket().await.unwrap(),
+        sender.1.admin_websocket().await.unwrap(),
+    ])
+    .await
+    .unwrap();
 
     let locker_service_trait_service_id = locker_service_trait::LOCKER_SERVICE_HASH.to_vec();
 
-    let service_providers: Vec<AgentPubKey> = happ_developer
+    let service_providers: Vec<AgentPubKey> = sender
         .0
         .call_zome(
             ZomeCallTarget::RoleName("service_providers".into()),
@@ -100,7 +106,7 @@ async fn store_and_get_messages() {
 
     assert_eq!(messages_outputs.len(), 1);
 
-    std::thread::sleep(Duration::from_millis(100));
+    std::thread::sleep(Duration::from_millis(500));
 
     let messages: Vec<MessageOutput> = make_service_request(
         &recipient.0,
@@ -177,6 +183,8 @@ async fn are_conductors_consistencied(
         Ok(dump)
     }))
     .await?;
+
+    println!("{:?}", states);
 
     if states.iter().any(|s| {
         s.integration_dump.validation_limbo.len() > 0

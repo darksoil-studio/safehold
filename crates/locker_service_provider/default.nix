@@ -46,33 +46,6 @@
           };
         }).meta.debug;
 
-      HAPP_DEVELOPER_HAPP =
-        (inputs.holochain-nix-builders.outputs.builders.${system}.happ {
-          happManifest = builtins.toFile "happ.yaml" ''
-            ---
-            manifest_version: "1"
-            name: happ_developer_test_happ
-            description: ~
-            roles:   
-              - name: service_providers
-                provisioning:
-                  strategy: create
-                  deferred: false
-                dna:
-                  bundled: ""
-                  modifiers:
-                    network_seed: ~
-                    properties: ~
-                  version: ~
-                  clone_limit: 100000
-          '';
-
-          dnas = {
-            service_providers =
-              inputs'.service-providers.packages.service_providers_dna;
-          };
-        }).meta.debug;
-
       craneLib = inputs.crane.mkLib pkgs;
       src = craneLib.cleanCargoSource (craneLib.path self.outPath);
 
@@ -101,8 +74,7 @@
         # RUST_LOG = "info";
         WASM_LOG = "info";
         # For the integration test
-        inherit END_USER_HAPP CLIENT_HAPP SERVICE_PROVIDER_HAPP
-          HAPP_DEVELOPER_HAPP;
+        inherit END_USER_HAPP CLIENT_HAPP SERVICE_PROVIDER_HAPP;
       });
 
       binaryWithDebugHapp = pkgs.runCommandLocal "locker-service-provider" {
