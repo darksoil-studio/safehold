@@ -95,8 +95,9 @@ pub async fn launch(
 }
 
 pub struct Scenario {
-    pub sender: (AppWebsocket, HolochainRuntime),
-    pub recipient: (AppWebsocket, HolochainRuntime),
+    pub alice: (AppWebsocket, HolochainRuntime),
+    pub bob: (AppWebsocket, HolochainRuntime),
+    pub carol: (AppWebsocket, HolochainRuntime),
     pub progenitor: AgentPubKey,
     pub network_seed: String,
 }
@@ -152,14 +153,21 @@ pub async fn setup() -> Scenario {
         .unwrap();
     });
 
-    let sender = launch(
+    let alice = launch(
         infra_provider_pubkey.clone(),
         vec![String::from("service_providers")],
         end_user_happ_path(),
         network_seed.clone(),
     )
     .await;
-    let recipient = launch(
+    let bob = launch(
+        infra_provider_pubkey.clone(),
+        vec![String::from("service_providers")],
+        end_user_happ_path(),
+        network_seed.clone(),
+    )
+    .await;
+    let carol = launch(
         infra_provider_pubkey.clone(),
         vec![String::from("service_providers")],
         end_user_happ_path(),
@@ -168,8 +176,9 @@ pub async fn setup() -> Scenario {
     .await;
 
     Scenario {
-        sender,
-        recipient,
+        alice,
+        bob,
+        carol,
         progenitor: infra_provider_pubkey.clone(),
         network_seed,
     }

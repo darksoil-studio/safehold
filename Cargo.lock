@@ -3089,6 +3089,44 @@ dependencies = [
 ]
 
 [[package]]
+name = "holochain_runtime"
+version = "0.1.0"
+source = "git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=main-0.5#02d6a68312051d9b465b176a3393be5eefa863db"
+dependencies = [
+ "anyhow",
+ "arbitrary",
+ "async-std",
+ "async-trait",
+ "base64 0.22.1",
+ "derive_arbitrary",
+ "holochain",
+ "holochain_client",
+ "holochain_conductor_api",
+ "holochain_keystore",
+ "holochain_types",
+ "kitsune2_api",
+ "kitsune2_core",
+ "kitsune_p2p_mdns",
+ "lair_keystore",
+ "lair_keystore_api",
+ "local-ip-address",
+ "log",
+ "mr_bundle",
+ "one_err",
+ "portpicker",
+ "sbd-server",
+ "serde",
+ "serde_json",
+ "sha256",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "tx5-signal",
+ "url2",
+ "zip 0.6.6",
+]
+
+[[package]]
 name = "holochain_secure_primitive"
 version = "0.5.2"
 source = "git+https://github.com/guillemcordoba/holochain?branch=develop-0.5#130b86b78622474a3ad2d698518c354abb6a5ee4"
@@ -3841,19 +3879,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "include_dna_def"
-version = "0.1.0"
-dependencies = [
- "holochain_types",
- "holochain_zome_types",
- "proc-macro2",
- "quote",
- "serde_json",
- "syn 2.0.103",
- "tokio",
-]
-
-[[package]]
 name = "indexmap"
 version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4365,7 +4390,7 @@ dependencies = [
 [[package]]
 name = "kitsune2"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4377,7 +4402,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_api"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -4393,7 +4418,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_bootstrap_client"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "base64 0.22.1",
  "kitsune2_api",
@@ -4405,7 +4430,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_core"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "backon",
  "bytes",
@@ -4426,7 +4451,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_dht"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4436,7 +4461,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_gossip"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "bytes",
  "futures",
@@ -4455,7 +4480,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_transport_iroh"
 version = "0.1.8"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#bd8b77328a3e58528042cb8575b8191aee37b4ba"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#7f31ba181320f5d05e4685caeb3175966396745b"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -4742,7 +4767,7 @@ dependencies = [
  "holochain",
  "holochain_client",
  "holochain_conductor_api",
- "holochain_runtime",
+ "holochain_runtime 0.1.0 (git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=develop)",
  "holochain_types",
  "holochain_util 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "locker_service_trait",
@@ -4777,7 +4802,7 @@ dependencies = [
  "holochain",
  "holochain_client",
  "holochain_conductor_api",
- "holochain_runtime",
+ "holochain_runtime 0.1.0 (git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=main-0.5)",
  "holochain_types",
  "holochain_util 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "locker-service-client",

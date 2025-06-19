@@ -14,6 +14,7 @@ pub enum EntryTypes {
 #[hdk_link_types]
 pub enum LinkTypes {
     RecipientToMessages,
+    AgentsPath,
 }
 
 // Validation you perform during the genesis process. Nobody else on the network performs it, only you.
@@ -165,6 +166,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 target_address,
                 tag,
             ),
+            LinkTypes::AgentsPath => Ok(ValidateCallbackResult::Valid),
         },
         FlatOp::RegisterDeleteLink {
             link_type,
@@ -181,6 +183,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 target_address,
                 tag,
             ),
+            LinkTypes::AgentsPath => Ok(ValidateCallbackResult::Invalid(String::from(
+                "AgentsPath links cannot be deleted",
+            ))),
         },
         FlatOp::StoreRecord(store_record) => {
             match store_record {
@@ -319,6 +324,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         target_address,
                         tag,
                     ),
+                    LinkTypes::AgentsPath => Ok(ValidateCallbackResult::Valid),
                 },
                 // Complementary validation to the `RegisterDeleteLink` Op, in which the record itself is validated
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `RegisterDeleteLink`
@@ -357,6 +363,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                 create_link.tag,
                             )
                         }
+                        LinkTypes::AgentsPath => Ok(ValidateCallbackResult::Invalid(String::from(
+                            "AgentsPath links cannot be deleted",
+                        ))),
                     }
                 }
                 OpRecord::CreatePrivateEntry { .. } => Ok(ValidateCallbackResult::Valid),

@@ -5,7 +5,7 @@ use holochain_client::{AgentPubKey, ExternIO, ZomeCallTarget};
 use holochain_runtime::HolochainRuntime;
 use roles_types::Properties;
 
-use crate::read_from_file;
+use crate::{locker_clones::reconcile_locker_clones, read_from_file};
 
 pub async fn setup(
     runtime: &HolochainRuntime,
@@ -17,7 +17,7 @@ pub async fn setup(
     let installed_apps = admin_ws.list_apps(None).await?;
     let happ_bundle = read_from_file(locker_service_provider_happ_path).await?;
     let roles_properties = Properties {
-        progenitors: progenitors.into_iter().map(|p| p.into()).collect(),
+        progenitors: progenitors.clone().into_iter().map(|p| p.into()).collect(),
     };
     let value = serde_yaml::to_value(roles_properties).unwrap();
     let properties_bytes = YamlProperties::new(value);
@@ -54,7 +54,7 @@ pub async fn setup(
                 membrane_proof: None,
                 modifiers: Some(DnaModifiersOpt {
                     properties: Some(properties_bytes.clone()),
-                    ..Default::default()
+                    network_seed: Some(String::from("throwaway")),
                 }),
             },
         );
@@ -91,14 +91,7 @@ pub async fn setup(
             )
             .await?;
 
-        app_ws
-            .call_zome(
-                ZomeCallTarget::RoleName("proxy".into()),
-                "proxy".into(),
-                "create_proxied_role".into(),
-                ExternIO::encode(String::from("locker"))?,
-            )
-            .await?;
+        reconcile_locker_clones(&admin_ws, &app_ws, progenitors).await?;
 
         log::info!("Installed app {app_info:?}");
     }
