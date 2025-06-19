@@ -1,46 +1,46 @@
 [patch.crates-io.fixt]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holo_hash]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_conductor_api]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_integrity_types]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_keystore]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_nonce]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_p2p]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_timestamp]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_types]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.holochain_zome_types]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [patch.crates-io.kitsune2]
 branch = "iroh-transport"
@@ -68,7 +68,7 @@ git = "https://github.com/guillemcordoba/kitsune2"
 
 [patch.crates-io.mr_bundle]
 branch = "develop-0.5"
-git = "https://github.com/guillemcordoba/holochain"
+git = "https://github.com/holochain/holochain"
 
 [profile.dev]
 opt-level = "z"
