@@ -1,0 +1,16 @@
+[package]
+name = "include_dna_def"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+proc-macro2 = "1"
+syn = "2"
+holochain_zome_types = "0.5"
+quote = "1.0"
+holochain_types = "0.5"
+tokio = { version = "1.45.1", features = ["full"] }
+serde_json = "1"

@@ -39,26 +39,6 @@ pub async fn setup(
                 }),
             },
         );
-        roles_settings.insert(
-            String::from("locker"),
-            RoleSettings::Provisioned {
-                membrane_proof: None,
-                modifiers: Some(DnaModifiersOpt {
-                    properties: Some(properties_bytes.clone()),
-                    ..Default::default()
-                }),
-            },
-        );
-        roles_settings.insert(
-            String::from("service_providers"),
-            RoleSettings::Provisioned {
-                membrane_proof: None,
-                modifiers: Some(DnaModifiersOpt {
-                    properties: Some(properties_bytes.clone()),
-                    network_seed: Some("throwaway".into()),
-                }),
-            },
-        );
 
         let app_info = runtime
             .install_app(

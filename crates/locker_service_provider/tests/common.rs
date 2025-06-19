@@ -11,12 +11,6 @@ use log::Level;
 use roles_types::Properties;
 use url2::url2;
 
-pub fn happ_developer_happ_path() -> PathBuf {
-    std::option_env!("HAPP_DEVELOPER_HAPP")
-        .expect("Failed to find HAPP_DEVELOPER_HAPP")
-        .into()
-}
-
 pub fn service_provider_happ_path() -> PathBuf {
     std::option_env!("SERVICE_PROVIDER_HAPP")
         .expect("Failed to find SERVICE_PROVIDER_HAPP")
@@ -101,7 +95,6 @@ pub async fn launch(
 }
 
 pub struct Scenario {
-    pub happ_developer: (AppWebsocket, HolochainRuntime),
     pub sender: (AppWebsocket, HolochainRuntime),
     pub recipient: (AppWebsocket, HolochainRuntime),
     pub progenitor: AgentPubKey,
@@ -109,11 +102,16 @@ pub struct Scenario {
 }
 
 pub async fn setup() -> Scenario {
+    rustls::crypto::aws_lc_rs::default_provider()
+        .install_default()
+        .unwrap();
+
     Builder::new()
         .format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))
         .target(env_logger::Target::Stdout)
         .filter(None, Level::Info.to_level_filter())
         .filter_module("holochain_sqlite", log::LevelFilter::Off)
+        .filter_module("holochain", log::LevelFilter::Warn)
         .filter_module("tracing::span", log::LevelFilter::Off)
         .filter_module("iroh", log::LevelFilter::Error)
         .filter_module("kitsune2", log::LevelFilter::Warn)
@@ -125,7 +123,7 @@ pub async fn setup() -> Scenario {
     let pubkey = infra_provider_pubkey.clone();
 
     let tmp = tempdir::TempDir::new("test").unwrap();
-    let path = tmp.path().to_path_buf();
+    let path = tmp.into_path();
     // We spawn two nodes to make gossip work between them
     tokio::spawn(async move {
         locker_service_provider::run(
@@ -139,8 +137,8 @@ pub async fn setup() -> Scenario {
         .unwrap();
     });
 
-    let tmp = tempdir::TempDir::new("test").unwrap();
-    let path = tmp.path().to_path_buf();
+    let tmp = tempdir::TempDir::new("test2").unwrap();
+    let path = tmp.into_path();
     let pubkey = infra_provider_pubkey.clone();
     tokio::spawn(async move {
         locker_service_provider::run(
@@ -153,13 +151,7 @@ pub async fn setup() -> Scenario {
         .await
         .unwrap();
     });
-    let happ_developer = launch(
-        infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
-        happ_developer_happ_path(),
-        network_seed.clone(),
-    )
-    .await;
+
     let sender = launch(
         infra_provider_pubkey.clone(),
         vec![String::from("service_providers")],
@@ -175,10 +167,7 @@ pub async fn setup() -> Scenario {
     )
     .await;
 
-    std::thread::sleep(Duration::from_secs(20));
-
     Scenario {
-        happ_developer,
         sender,
         recipient,
         progenitor: infra_provider_pubkey.clone(),

@@ -19,13 +19,26 @@
 
     packages.locker_service_client_happ =
       inputs.holochain-nix-builders.outputs.builders.${system}.happ {
-        happManifest = ./happ.yaml;
+        happManifest = builtins.toFile "happ.yaml" ''
+          ---
+          manifest_version: "1"
+          name: locker-service-client
+          description: ~
+          roles:   
+            - name: manager
+              provisioning:
+                strategy: create
+                deferred: false
+              dna:
+                bundled: ""
+                modifiers:
+                  network_seed: ~
+                  properties: ~
+                version: ~
+                clone_limit: 0
+        '';
 
-        dnas = {
-          manager = self'.packages.manager_client_dna;
-          locker = self'.packages.locker_dna;
-          service_providers = self'.packages.service_providers_dna;
-        };
+        dnas = { manager = self'.packages.manager_client_dna; };
       };
 
   };
