@@ -2,6 +2,12 @@ use hdk::prelude::*;
 use locker_integrity::*;
 use locker_service_trait::*;
 
+use crate::utils::ensure_relaxed;
+
+fn agent_path(agent: AgentPubKey) -> ExternResult<TypedPath> {
+    Path::from(format!("all_agents.{}", agent)).typed(LinkTypes::AgentsPath)
+}
+
 #[hdk_extern]
 pub fn create_messages(inputs: Vec<MessageWithProvenance>) -> ExternResult<()> {
     for input in inputs {
@@ -12,27 +18,36 @@ pub fn create_messages(inputs: Vec<MessageWithProvenance>) -> ExternResult<()> {
 }
 
 #[hdk_extern]
-pub fn create_message(message: MessageWithProvenance) -> ExternResult<Record> {
+pub fn create_message(message: MessageWithProvenance) -> ExternResult<EntryHash> {
     let message_hash = hash_entry(&message)?;
+
+    let None = get(message_hash.clone(), GetOptions::default())? else {
+        return Ok(message_hash);
+    };
+
     create_entry(&EntryTypes::Message(message.clone()))?;
+
     for (agent, contents) in message.message.recipients.clone() {
+        let path = agent_path(agent)?;
+
+        ensure_relaxed(&path)?;
+
         create_link(
-            agent,
+            path.path_entry_hash()?,
             message_hash.clone(),
             LinkTypes::RecipientToMessages,
             contents,
         )?;
     }
-    let record = get(message_hash.clone(), GetOptions::default())?.ok_or(wasm_error!(
-        WasmErrorInner::Guest("Could not find the newly created Message".to_string())
-    ))?;
-    Ok(record)
+    Ok(message_hash)
 }
 
 #[hdk_extern]
 pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<MessageOutput>> {
+    let path = agent_path(recipient)?;
     let links = get_links(
-        GetLinksInputBuilder::try_new(recipient, LinkTypes::RecipientToMessages)?.build(),
+        GetLinksInputBuilder::try_new(path.path_entry_hash()?, LinkTypes::RecipientToMessages)?
+            .build(),
     )?;
 
     for link in &links {

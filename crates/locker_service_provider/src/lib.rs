@@ -4,9 +4,11 @@ use clone_manager_utils::{clone_cell, reconcile_cloned_cells};
 use holochain_client::{AdminWebsocket, AppWebsocket};
 use holochain_runtime::*;
 use holochain_types::prelude::*;
+use locker_clones::reconcile_locker_clones;
 use setup::setup;
 use std::{fs, path::PathBuf, time::Duration};
 
+mod locker_clones;
 mod setup;
 
 pub const SERVICE_PROVIDERS_ROLE_NAME: &'static str = "service_providers";
@@ -25,7 +27,7 @@ pub async fn run(
         &runtime,
         &app_id,
         &locker_service_provider_happ_path,
-        progenitors,
+        progenitors.clone(),
     )
     .await?;
 
@@ -69,6 +71,9 @@ pub async fn run(
         {
             log::error!("Failed to reconcile cloned services: {err}");
         }
+        if let Err(err) = reconcile_locker_clones(&admin_ws, &app_ws, progenitors.clone()).await {
+            log::error!("Failed to reconcile locker clones: {err}");
+        }
 
         std::thread::sleep(Duration::from_secs(30));
     }
@@ -90,6 +95,7 @@ pub async fn handle_signal(
     }
     Ok(())
 }
+
 pub async fn read_from_file(happ_bundle_path: &PathBuf) -> Result<AppBundle> {
     let bytes = fs::read(happ_bundle_path)?;
     Ok(AppBundle::decode(bytes.as_slice())?)

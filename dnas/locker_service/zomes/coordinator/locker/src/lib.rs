@@ -2,6 +2,8 @@ use hdk::prelude::*;
 use locker_integrity::*;
 
 pub mod message;
+pub mod migration;
+pub mod utils;
 
 // Called the first time a zome call is made to the cell containing this zome
 #[hdk_extern]

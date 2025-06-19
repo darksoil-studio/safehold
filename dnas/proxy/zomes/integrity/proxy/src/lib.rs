@@ -7,7 +7,8 @@ pub use proxied_role::*;
 #[hdk_entry_types]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
-    ProxiedRole(ProxiedRole),
+    #[entry_type(visibility = "private")]
+    ProxiedDna(ProxiedDna),
 }
 
 // Validation you perform during the genesis process. Nobody else on the network performs it, only you.
@@ -49,14 +50,14 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
     match op.flattened::<EntryTypes, ()>()? {
         FlatOp::StoreEntry(store_entry) => match store_entry {
             OpEntry::CreateEntry { app_entry, action } => match app_entry {
-                EntryTypes::ProxiedRole(proxied_role) => {
+                EntryTypes::ProxiedDna(proxied_role) => {
                     validate_create_proxied_role(EntryCreationAction::Create(action), proxied_role)
                 }
             },
             OpEntry::UpdateEntry {
                 app_entry, action, ..
             } => match app_entry {
-                EntryTypes::ProxiedRole(proxied_role) => {
+                EntryTypes::ProxiedDna(proxied_role) => {
                     validate_create_proxied_role(EntryCreationAction::Update(action), proxied_role)
                 }
             },
@@ -76,11 +77,10 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     }
                 };
                 match app_entry {
-                    EntryTypes::ProxiedRole(proxied_role) => {
+                    EntryTypes::ProxiedDna(proxied_role) => {
                         let original_app_entry =
                             must_get_valid_record(action.clone().original_action_address)?;
-                        let original_proxied_role = match ProxiedRole::try_from(original_app_entry)
-                        {
+                        let original_proxied_role = match ProxiedDna::try_from(original_app_entry) {
                             Ok(entry) => entry,
                             Err(e) => {
                                 return Ok(ValidateCallbackResult::Invalid(format!(
@@ -139,7 +139,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 }
             };
             match original_app_entry {
-                EntryTypes::ProxiedRole(original_proxied_role) => validate_delete_proxied_role(
+                EntryTypes::ProxiedDna(original_proxied_role) => validate_delete_proxied_role(
                     delete_entry.clone().action,
                     original_action,
                     original_proxied_role,
@@ -171,7 +171,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 // If you want to optimize performance, you can remove the validation for an entry type here and keep it in `StoreEntry`
                 // Notice that doing so will cause `must_get_valid_record` for this record to return a valid record even if the `StoreEntry` validation failed
                 OpRecord::CreateEntry { app_entry, action } => match app_entry {
-                    EntryTypes::ProxiedRole(proxied_role) => validate_create_proxied_role(
+                    EntryTypes::ProxiedDna(proxied_role) => validate_create_proxied_role(
                         EntryCreationAction::Create(action),
                         proxied_role,
                     ),
@@ -198,13 +198,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         }
                     };
                     match app_entry {
-                        EntryTypes::ProxiedRole(proxied_role) => {
+                        EntryTypes::ProxiedDna(proxied_role) => {
                             let result = validate_create_proxied_role(
                                 EntryCreationAction::Update(action.clone()),
                                 proxied_role.clone(),
                             )?;
                             if let ValidateCallbackResult::Valid = result {
-                                let original_proxied_role: Option<ProxiedRole> = original_record
+                                let original_proxied_role: Option<ProxiedDna> = original_record
                                     .entry()
                                     .to_app_option()
                                     .map_err(|e| wasm_error!(e))?;
@@ -281,7 +281,7 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         }
                     };
                     match original_app_entry {
-                        EntryTypes::ProxiedRole(original_proxied_role) => {
+                        EntryTypes::ProxiedDna(original_proxied_role) => {
                             validate_delete_proxied_role(
                                 action,
                                 original_action,
