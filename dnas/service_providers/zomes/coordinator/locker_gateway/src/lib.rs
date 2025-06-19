@@ -3,12 +3,6 @@ use hdk::prelude::*;
 use locker_service_trait::*;
 use locker_types::*;
 
-fn def() {
-    let dna_def: DnaDef = include_dna_def::include_dna_def!(
-        "/home/guillem/projects/darksoil/locker/dnas/locker_service/workdir/locker.dna"
-    );
-}
-
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
     let mut fns: BTreeSet<GrantedFunction> = BTreeSet::new();
@@ -58,12 +52,18 @@ impl LockerService for LockerGateway {
             }
         }
 
+        let proxied_call = ProxiedCall {
+            zome_name: ZomeName::from("locker"),
+            fn_name: FunctionName::from("create_messages"),
+            payload: ExternIO::encode(messages).map_err(|err| wasm_error!(err))?,
+        };
+
         let response = call(
-            CallTargetCell::OtherRole(RoleName::from("locker")),
-            ZomeName::from("locker"),
-            FunctionName::from("create_messages"),
+            CallTargetCell::OtherRole(RoleName::from("proxy")),
+            ZomeName::from("proxy"),
+            FunctionName::from("proxied_call"),
             None,
-            messages,
+            proxied_call,
         )?;
         let ZomeCallResponse::Ok(_) = response else {
             return Err(wasm_error!("Failed to store message: {response:?}"));
@@ -73,16 +73,24 @@ impl LockerService for LockerGateway {
 
     fn get_messages(_: ()) -> ExternResult<Vec<MessageOutput>> {
         let agent = call_info()?.provenance;
+
+        let proxied_call = ProxiedCall {
+            zome_name: ZomeName::from("locker"),
+            fn_name: FunctionName::from("get_messages_for_recipient"),
+            payload: ExternIO::encode(agent).map_err(|err| wasm_error!(err))?,
+        };
+
         let response = call(
-            CallTargetCell::OtherRole(RoleName::from("locker")),
-            ZomeName::from("locker"),
-            FunctionName::from("get_messages_for_recipient"),
+            CallTargetCell::OtherRole(RoleName::from("proxy")),
+            ZomeName::from("proxy"),
+            FunctionName::from("proxied_call"),
             None,
-            agent,
+            proxied_call,
         )?;
         let ZomeCallResponse::Ok(result) = response else {
             return Err(wasm_error!("Failed to get messages: {:?}"));
         };
+        let result: ExternIO = result.decode().map_err(|err| wasm_error!("{}", err))?;
         let messages: Vec<MessageOutput> = result.decode().map_err(|err| wasm_error!("{}", err))?;
         Ok(messages)
     }

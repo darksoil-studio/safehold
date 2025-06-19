@@ -30,3 +30,10 @@ pub struct DecryptedMessageOutput {
     pub provenance: AgentPubKey,
     pub contents: MessageContents,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ProxiedCall {
+    pub zome_name: ZomeName,
+    pub fn_name: FunctionName,
+    pub payload: ExternIO,
+}

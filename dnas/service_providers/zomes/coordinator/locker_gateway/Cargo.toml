@@ -12,11 +12,7 @@ hdk = { workspace = true }
 
 serde = { workspace = true }
 
-include_dna_def = { path = "../../../../../crates/include_dna_def" }
-
 hc_zome_traits = { git = "https://github.com/holochain-open-dev/zome-traits", branch = "main" }
 
 locker_service_trait = { path = "../../../../../crates/locker_service_trait" }
 locker_types = { path = "../../../../../crates/locker_types" }
-
-serde_json = "1"

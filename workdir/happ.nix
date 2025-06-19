@@ -13,6 +13,7 @@
         dnas = {
           manager = self'.packages.manager_dna;
           locker = self'.packages.locker_dna;
+          proxy = self'.packages.proxy_dna;
           service_providers = self'.packages.service_providers_dna;
         };
       };

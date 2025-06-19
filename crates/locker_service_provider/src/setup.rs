@@ -39,6 +39,16 @@ pub async fn setup(
             },
         );
         roles_settings.insert(
+            String::from("proxy"),
+            RoleSettings::Provisioned {
+                membrane_proof: None,
+                modifiers: Some(DnaModifiersOpt {
+                    properties: Some(properties_bytes.clone()),
+                    ..Default::default()
+                }),
+            },
+        );
+        roles_settings.insert(
             String::from("locker"),
             RoleSettings::Provisioned {
                 membrane_proof: None,
@@ -78,6 +88,15 @@ pub async fn setup(
                 "clone_manager".into(),
                 "init".into(),
                 ExternIO::encode(())?,
+            )
+            .await?;
+
+        app_ws
+            .call_zome(
+                ZomeCallTarget::RoleName("proxy".into()),
+                "proxy".into(),
+                "create_proxied_role".into(),
+                ExternIO::encode(String::from("locker"))?,
             )
             .await?;
 
