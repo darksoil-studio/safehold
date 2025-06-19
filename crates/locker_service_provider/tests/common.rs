@@ -175,6 +175,8 @@ pub async fn setup() -> Scenario {
     )
     .await;
 
+    std::thread::sleep(Duration::from_secs(5));
+
     Scenario {
         alice,
         bob,
