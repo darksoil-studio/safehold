@@ -1,0 +1,19 @@
+manifest_version: '1'
+name: proxy
+integrity:
+  network_seed: null
+  properties: null
+  zomes:
+  - name: proxy_integrity
+    hash: null
+    bundled: ../../../target/wasm32-unknown-unknown/release/proxy_integrity.wasm
+    dependencies: null
+    dylib: null
+coordinator:
+  zomes:
+  - name: proxy
+    hash: null
+    bundled: ../../../target/wasm32-unknown-unknown/release/proxy.wasm
+    dependencies:
+    - name: proxy_integrity
+    dylib: null

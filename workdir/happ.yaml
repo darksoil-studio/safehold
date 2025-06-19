@@ -1,38 +1,49 @@
----
-manifest_version: "1"
+manifest_version: '1'
 name: locker-service-provider
-description: ~
-roles:   
-  - name: manager
-    provisioning:
-      strategy: create
-      deferred: false
-    dna:
-      bundled: ""
-      modifiers:
-        network_seed: ~
-        properties: ~
-      version: ~
-      clone_limit: 0
-  - name: locker
-    provisioning:
-      strategy: create
-      deferred: false
-    dna:
-      bundled: ""
-      modifiers:
-        network_seed: ~
-        properties: ~
-      version: ~
-      clone_limit: 100000
-  - name: service_providers
-    provisioning:
-      strategy: create
-      deferred: false
-    dna:
-      bundled: ""
-      modifiers:
-        network_seed: ~
-        properties: ~
-      version: ~
-      clone_limit: 100000
+description: null
+roles:
+- name: manager
+  provisioning:
+    strategy: create
+    deferred: false
+  dna:
+    bundled: ''
+    modifiers:
+      network_seed: null
+      properties: null
+    installed_hash: null
+    clone_limit: 0
+- name: proxy
+  provisioning:
+    strategy: create
+    deferred: false
+  dna:
+    bundled: ../dnas/proxy/workdir/proxy.dna
+    modifiers:
+      network_seed: null
+      properties: null
+    installed_hash: null
+    clone_limit: 0
+- name: locker
+  provisioning:
+    strategy: create
+    deferred: false
+  dna:
+    bundled: ''
+    modifiers:
+      network_seed: null
+      properties: null
+    installed_hash: null
+    clone_limit: 100000
+- name: service_providers
+  provisioning:
+    strategy: create
+    deferred: false
+  dna:
+    bundled: ''
+    modifiers:
+      network_seed: null
+      properties: null
+    installed_hash: null
+    clone_limit: 100000
+allow_deferred_memproofs: false

@@ -4803,11 +4803,9 @@ version = "0.0.1"
 dependencies = [
  "hc_zome_traits",
  "hdk 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "include_dna_def",
  "locker_service_trait",
  "locker_types",
  "serde",
- "serde_json",
 ]
 
 [[package]]
@@ -6281,6 +6279,24 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.103",
+]
+
+[[package]]
+name = "proxy"
+version = "0.0.1"
+dependencies = [
+ "hdk 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "locker_types",
+ "proxy_integrity",
+ "serde",
+]
+
+[[package]]
+name = "proxy_integrity"
+version = "0.0.1"
+dependencies = [
+ "hdi 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
 ]
 
 [[package]]
