@@ -9,6 +9,7 @@ name = "locker"
 
 [dependencies]
 hdk = { workspace = true }
+holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 locker_integrity = { workspace = true }
 

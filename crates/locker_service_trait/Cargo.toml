@@ -7,6 +7,7 @@ edition = "2021"
 hc_zome_traits = { git = "https://github.com/holochain-open-dev/zome-traits", branch = "main" }
 
 hdk = { workspace = true }
+holochain_serialized_bytes = "*"
 serde = "1"
 
 locker_types = { path = "../locker_types" }

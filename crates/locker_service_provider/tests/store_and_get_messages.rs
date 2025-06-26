@@ -36,7 +36,7 @@ async fn store_and_get_messages() {
 
     client.create_clone_request(network_seed).await.unwrap();
 
-    std::thread::sleep(Duration::from_secs(120));
+    std::thread::sleep(Duration::from_secs(20));
 
     let locker_service_trait_service_id = locker_service_trait::LOCKER_SERVICE_HASH.to_vec();
 
@@ -65,7 +65,7 @@ async fn store_and_get_messages() {
 
     assert_eq!(messages.len(), 2);
 
-    std::thread::sleep(Duration::from_secs(120));
+    std::thread::sleep(Duration::from_secs(10));
 
     let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
 

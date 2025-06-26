@@ -44,19 +44,12 @@
       perSystem = { inputs', config, pkgs, system, self', ... }: {
         devShells.default = pkgs.mkShell {
           inputsFrom = [
-            inputs'.scaffolding.devShells.synchronized-pnpm
             inputs'.holochain-nix-builders.devShells.holochainDev
             inputs'.holonix.devShells.default
           ];
 
-          packages = [
-            inputs'.holochain-nix-builders.packages.holochain
-            inputs'.scaffolding.packages.hc-scaffold-zome
-            inputs'.tauri-plugin-holochain.packages.hc-pilot
-            inputs'.playground.packages.hc-playground
-          ];
+          packages = [ inputs'.scaffolding.packages.hc-scaffold-zome ];
         };
-        devShells.npm-ci = inputs'.scaffolding.devShells.synchronized-pnpm;
 
         packages.test-locker-service = pkgs.writeShellApplication {
           name = "test-locker-service";
@@ -84,22 +77,6 @@
           '';
         };
 
-        packages.scaffold = pkgs.symlinkJoin {
-          name = "scaffold-remote-zome";
-          paths = [ inputs'.scaffolding.packages.scaffold-remote-zome ];
-          buildInputs = [ pkgs.makeWrapper ];
-          postBuild = ''
-            wrapProgram $out/bin/scaffold-remote-zome \
-              --add-flags "locker-service-provider-zome \
-                --integrity-zome-name locker_service_provider_integrity \
-                --coordinator-zome-name locker_service_provider \
-                --remote-zome-git-url github:darksoil-studio/locker-service-provider-zome \
-                --remote-npm-package-name @darksoil-studio/locker-service-provider-zome \
-                --remote-zome-git-branch main-0.5 \
-                --context-element locker-service-provider-context \
-                --context-element-import @darksoil-studio/locker-service-provider-zome/dist/elements/locker-service-provider-context.js" 
-          '';
-        };
       };
     };
 }

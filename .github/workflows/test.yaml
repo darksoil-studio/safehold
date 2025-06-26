@@ -26,10 +26,6 @@ jobs:
         with:
           name: darksoil-studio
 
-      - uses: cachix/cachix-action@v15
-        with:
-          name: darksoil-studio
-
       - name: Install and test
         run: |
           nix flake check -L

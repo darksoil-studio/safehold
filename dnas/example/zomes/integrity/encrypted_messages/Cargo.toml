@@ -9,6 +9,7 @@ name = "encrypted_messages_integrity"
 
 [dependencies]
 hdi = { workspace = true }
+holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 
 locker_types = { path = "../../../../../crates/locker_types" }

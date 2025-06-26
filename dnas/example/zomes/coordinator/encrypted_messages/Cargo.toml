@@ -9,6 +9,7 @@ name = "encrypted_messages"
 
 [dependencies]
 hdk = { workspace = true }
+holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 encrypted_messages_integrity = { path = "../../integrity/encrypted_messages" }
 
