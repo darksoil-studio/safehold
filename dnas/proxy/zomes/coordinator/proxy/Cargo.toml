@@ -9,6 +9,7 @@ name = "proxy"
 
 [dependencies]
 hdk = { workspace = true }
+holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 proxy_integrity = { workspace = true }
 

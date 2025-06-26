@@ -1,74 +1,3 @@
-[patch.crates-io.fixt]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holo_hash]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_conductor_api]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_integrity_types]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_keystore]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_nonce]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_p2p]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_timestamp]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_types]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.holochain_zome_types]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
-
-[patch.crates-io.kitsune2]
-branch = "iroh-transport"
-git = "https://github.com/guillemcordoba/kitsune2"
-
-[patch.crates-io.kitsune2_api]
-branch = "iroh-transport"
-git = "https://github.com/guillemcordoba/kitsune2"
-
-[patch.crates-io.kitsune2_bootstrap_client]
-branch = "iroh-transport"
-git = "https://github.com/guillemcordoba/kitsune2"
-
-[patch.crates-io.kitsune2_core]
-branch = "iroh-transport"
-git = "https://github.com/guillemcordoba/kitsune2"
-
-[patch.crates-io.kitsune2_dht]
-branch = "iroh-transport"
-git = "https://github.com/guillemcordoba/kitsune2"
-
-[patch.crates-io.kitsune2_gossip]
-branch = "iroh-transport"
-git = "https://github.com/guillemcordoba/kitsune2"
-
-[patch.crates-io.mr_bundle]
-branch = "develop-0.5"
-git = "https://github.com/holochain/holochain"
 
 [profile.dev]
 opt-level = "z"
@@ -81,9 +10,10 @@ members = ["dnas/*/zomes/coordinator/*", "dnas/*/zomes/integrity/*", "crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "=0.6.2"
-hdk = "=0.5.2"
+hdi = "0.6.3"
+hdk = "0.5.3"
 serde = "1.0"
+holochain_serialized_bytes = "*"
 
 [workspace.dependencies.locker]
 path = "dnas/locker_service/zomes/coordinator/locker"
@@ -96,3 +26,11 @@ path = "dnas/proxy/zomes/coordinator/proxy"
 
 [workspace.dependencies.proxy_integrity]
 path = "dnas/proxy/zomes/integrity/proxy"
+
+[patch.crates-io]
+kitsune2 = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
+kitsune2_api = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
+kitsune2_core = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
+kitsune2_dht = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
+kitsune2_gossip = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
+kitsune2_bootstrap_client = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
