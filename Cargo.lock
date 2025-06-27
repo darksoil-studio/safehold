@@ -2245,7 +2245,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4271d37baee1b8c7e4b708028c57d816cf9d2434acb33a549475f78c181f6253"
 dependencies = [
  "fallible-iterator",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "stable_deref_trait",
 ]
 
@@ -2285,7 +2285,7 @@ dependencies = [
  "futures-sink",
  "futures-util",
  "http 0.2.12",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "slab",
  "tokio",
  "tokio-util",
@@ -2304,7 +2304,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "http 1.3.1",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "slab",
  "tokio",
  "tokio-util",
@@ -2648,7 +2648,7 @@ dependencies = [
  "holochain_zome_types",
  "hostname 0.4.1",
  "human-panic",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itertools 0.12.1",
  "kitsune2_api",
  "kitsune2_core",
@@ -2791,7 +2791,7 @@ dependencies = [
  "holochain_types",
  "holochain_util",
  "holochain_zome_types",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "kitsune2_api",
  "kitsune2_core",
  "schemars 0.8.22",
@@ -2968,45 +2968,7 @@ dependencies = [
 [[package]]
 name = "holochain_runtime"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=develop#dd0c6f09d34b210dcd7da8f86f74fd063e14bcf6"
-dependencies = [
- "anyhow",
- "arbitrary",
- "async-std",
- "async-trait",
- "base64 0.22.1",
- "derive_arbitrary",
- "holochain",
- "holochain_client",
- "holochain_conductor_api",
- "holochain_keystore",
- "holochain_types",
- "kitsune2_api",
- "kitsune2_core",
- "kitsune_p2p_mdns",
- "lair_keystore",
- "lair_keystore_api",
- "local-ip-address",
- "log",
- "mr_bundle",
- "one_err",
- "portpicker",
- "sbd-server",
- "serde",
- "serde_json",
- "sha256",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "tx5-signal",
- "url2",
- "zip 0.6.6",
-]
-
-[[package]]
-name = "holochain_runtime"
-version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=main-0.5#02d6a68312051d9b465b176a3393be5eefa863db"
+source = "git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=main-0.5#a6b90f1afe245aea87657c18109fe4f9656d6fba"
 dependencies = [
  "anyhow",
  "arbitrary",
@@ -3220,7 +3182,7 @@ dependencies = [
  "holochain_trace",
  "holochain_util",
  "holochain_zome_types",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itertools 0.12.1",
  "kitsune2_api",
  "mr_bundle",
@@ -3801,9 +3763,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.9.0"
+version = "2.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cea70ddb795996207ad57735b50c5982d8844f38ba9ee5f1aedcfb708a2aa11e"
+checksum = "fe4cd85333e22411419a0bcae1297d25e58c9443848b11dc6a86fefe8c78a661"
 dependencies = [
  "equivalent",
  "hashbrown 0.15.4",
@@ -3822,7 +3784,7 @@ dependencies = [
  "crossbeam-utils",
  "dashmap",
  "env_logger",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "is-terminal",
  "itoa",
  "log",
@@ -4675,7 +4637,7 @@ dependencies = [
  "holochain",
  "holochain_client",
  "holochain_conductor_api",
- "holochain_runtime 0.1.0 (git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=develop)",
+ "holochain_runtime",
  "holochain_types",
  "holochain_util",
  "locker_service_trait",
@@ -4710,7 +4672,7 @@ dependencies = [
  "holochain",
  "holochain_client",
  "holochain_conductor_api",
- "holochain_runtime 0.1.0 (git+https://github.com/darksoil-studio/tauri-plugin-holochain?branch=main-0.5)",
+ "holochain_runtime",
  "holochain_types",
  "holochain_util",
  "locker-service-client",
@@ -5494,7 +5456,7 @@ dependencies = [
  "crc32fast",
  "flate2",
  "hashbrown 0.14.5",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "memchr",
  "ruzstd",
 ]
@@ -5763,7 +5725,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4c5cc86750666a3ed20bdaf5ca2a0344f9c67674cae0515bec2da16fbaa47db"
 dependencies = [
  "fixedbitset",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "quickcheck",
 ]
 
@@ -5874,7 +5836,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d77244ce2d584cd84f6a15f86195b8c9b2a0dfbfd817c09e0464244091a58ed"
 dependencies = [
  "base64 0.22.1",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "quick-xml 0.37.5",
  "serde",
  "time",
@@ -6911,7 +6873,7 @@ dependencies = [
  "bytecheck 0.8.1",
  "bytes",
  "hashbrown 0.15.4",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "munge",
  "ptr_meta 0.3.0",
  "rancor",
@@ -7467,7 +7429,7 @@ version = "1.0.140"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20068b6e96dc6c9bd23e01df8827e6c7e1f2fddd43c21810382803c136b99373"
 dependencies = [
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itoa",
  "memchr",
  "ryu",
@@ -7505,7 +7467,7 @@ dependencies = [
  "chrono",
  "hex",
  "indexmap 1.9.3",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "schemars 0.9.0",
  "serde",
  "serde_derive",
@@ -7532,7 +7494,7 @@ version = "0.9.34+deprecated"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6a8b1a1a2ebf674015cc02edccce75287f1a0130d394307b36743c2f5d504b47"
 dependencies = [
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itoa",
  "ryu",
  "serde",
@@ -8419,7 +8381,7 @@ version = "0.22.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "41fe8c660ae4257887cf66394862d21dbca4a6ddd26f04a3560410406a2f819a"
 dependencies = [
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -9005,7 +8967,7 @@ dependencies = [
  "cmake",
  "derive_more 1.0.0",
  "idna_adapter",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "js-sys",
  "more-asserts",
  "paste",
@@ -9114,7 +9076,7 @@ dependencies = [
  "enumset",
  "getrandom 0.2.16",
  "hex",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "more-asserts",
  "rkyv",
  "sha2",
@@ -9137,7 +9099,7 @@ dependencies = [
  "dashmap",
  "enum-iterator",
  "fnv",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "libc",
  "libunwind",
  "mach2",
@@ -9166,7 +9128,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "161296c618fa2d63f6ed5fffd1112937e803cb9ec71b32b01a76321555660917"
 dependencies = [
  "bitflags 2.9.1",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "semver",
 ]
 
@@ -9965,7 +9927,7 @@ dependencies = [
  "flate2",
  "getrandom 0.3.3",
  "hmac",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "lzma-rs",
  "memchr",
  "pbkdf2 0.12.2",

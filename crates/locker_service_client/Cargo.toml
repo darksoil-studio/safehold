@@ -12,7 +12,7 @@ name = "locker-service-client"
 path = "src/main.rs"
 
 [dependencies]
-holochain_runtime = { git = "https://github.com/darksoil-studio/tauri-plugin-holochain", branch = "develop" }
+holochain_runtime = { git = "https://github.com/darksoil-studio/tauri-plugin-holochain", branch = "main-0.5" }
 holochain = "0.5"
 holochain_util = "0.5"
 holochain_client = "0.7.0"
