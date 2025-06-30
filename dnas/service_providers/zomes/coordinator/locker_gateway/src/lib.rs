@@ -21,7 +21,7 @@ pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
         ZomeName::from("service_providers"),
         "announce_as_provider".into(),
         None,
-        LOCKER_SERVICE_HASH,
+        SAFEHOLD_SERVICE_HASH,
     )?;
     let ZomeCallResponse::Ok(_) = response else {
         return Ok(InitCallbackResult::Fail(format!(
