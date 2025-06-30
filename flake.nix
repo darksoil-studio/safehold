@@ -60,7 +60,7 @@
           text = ''
             trap 'killall locker-service-provider' 2 ERR
 
-            export RUST_LOG=error
+            export RUST_LOG=''${RUST_LOG:=error}
 
             rm -rf /tmp/locker-service
             rm -rf /tmp/locker-service2

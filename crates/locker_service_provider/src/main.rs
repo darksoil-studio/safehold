@@ -71,8 +71,6 @@ async fn main() -> Result<()> {
         .filter(None, log_level().to_level_filter())
         .filter_module("holochain_sqlite", log::LevelFilter::Off)
         .filter_module("tracing::span", log::LevelFilter::Off)
-        .filter_module("iroh", log::LevelFilter::Off)
-        .filter_module("kitsune2", log::LevelFilter::Off)
         .init();
     set_wasm_level();
 

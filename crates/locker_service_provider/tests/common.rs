@@ -76,7 +76,7 @@ pub async fn launch(
 
     let app_id = String::from("locker-test");
 
-    let app_info = runtime
+    let _app_info = runtime
         .install_app(
             app_id.clone(),
             read_from_file(&happ_path).await.unwrap(),
