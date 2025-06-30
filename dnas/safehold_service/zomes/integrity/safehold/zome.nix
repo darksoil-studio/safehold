@@ -2,7 +2,7 @@
 
 {
   perSystem = { inputs', system, self', ... }: {
-    packages.safehold_gateway =
+    packages.safehold_integrity =
       inputs.holochain-nix-builders.outputs.builders.${system}.rustZome {
         workspacePath = inputs.self.outPath;
         crateCargoToml = ./Cargo.toml;

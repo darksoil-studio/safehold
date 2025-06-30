@@ -35,8 +35,8 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./workdir/happ.nix
-        ./crates/locker_service_provider/default.nix
-        ./crates/locker_service_client/default.nix
+        ./crates/safehold_service_provider/default.nix
+        ./crates/safehold_service_client/default.nix
         inputs.holochain-nix-builders.outputs.flakeModules.builders
       ];
 
@@ -51,29 +51,29 @@
           packages = [ inputs'.scaffolding.packages.hc-scaffold-zome ];
         };
 
-        packages.test-locker-service = pkgs.writeShellApplication {
-          name = "test-locker-service";
+        packages.test-safehold-service = pkgs.writeShellApplication {
+          name = "test-safehold-service";
           runtimeInputs = [
-            self'.packages.locker-service-provider.meta.debug
-            self'.packages.locker-service-client.meta.debug
+            self'.packages.safehold-service-provider.meta.debug
+            self'.packages.safehold-service-client.meta.debug
           ];
           text = ''
-            trap 'killall locker-service-provider' 2 ERR
+            trap 'killall safehold-service-provider' 2 ERR
 
             export RUST_LOG=''${RUST_LOG:=error}
 
-            rm -rf /tmp/locker-service
-            rm -rf /tmp/locker-service2
-            locker-service-provider --data-dir /tmp/locker-service --bootstrap-url http://bad --signal-url ws://bad &
-            locker-service-provider --data-dir /tmp/locker-service2 --bootstrap-url http://bad --signal-url ws://bad &
-            locker-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$1"
+            rm -rf /tmp/safehold-service
+            rm -rf /tmp/safehold-service2
+            safehold-service-provider --data-dir /tmp/safehold-service --bootstrap-url http://bad --signal-url ws://bad &
+            safehold-service-provider --data-dir /tmp/safehold-service2 --bootstrap-url http://bad --signal-url ws://bad &
+            safehold-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$1"
 
-            echo "The test locker service is now ready to be used."
+            echo "The test safehold service is now ready to be used."
 
             echo ""
 
             wait
-            killall locker-service-provider
+            killall safehold-service-provider
           '';
         };
 

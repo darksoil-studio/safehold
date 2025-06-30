@@ -1,7 +1,7 @@
 use hc_zome_traits::*;
 use hdk::prelude::*;
-use locker_service_trait::*;
-use locker_types::*;
+use safehold_service_trait::*;
+use safehold_types::*;
 
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
@@ -34,13 +34,13 @@ pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
 
 #[implemented_zome_traits]
 pub enum ZomeTraits {
-    LockerService(LockerGateway),
+    SafeholdService(SafeholdGateway),
 }
 
-pub struct LockerGateway;
+pub struct SafeholdGateway;
 
 #[implement_zome_trait_as_externs]
-impl LockerService for LockerGateway {
+impl SafeholdService for SafeholdGateway {
     fn store_messages(messages: Vec<MessageWithProvenance>) -> ExternResult<()> {
         let sender = call_info()?.provenance;
 
@@ -53,7 +53,7 @@ impl LockerService for LockerGateway {
         }
 
         let proxied_call = ProxiedCall {
-            zome_name: ZomeName::from("locker"),
+            zome_name: ZomeName::from("safehold"),
             fn_name: FunctionName::from("create_messages"),
             payload: ExternIO::encode(messages).map_err(|err| wasm_error!(err))?,
         };
@@ -75,7 +75,7 @@ impl LockerService for LockerGateway {
         let agent = call_info()?.provenance;
 
         let proxied_call = ProxiedCall {
-            zome_name: ZomeName::from("locker"),
+            zome_name: ZomeName::from("safehold"),
             fn_name: FunctionName::from("get_messages_for_recipient"),
             payload: ExternIO::encode(agent).map_err(|err| wasm_error!(err))?,
         };

@@ -1,19 +1,17 @@
 [package]
-name = "safehold_gateway"
+name = "safehold"
 version = "0.0.1"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "safehold_gateway"
+name = "safehold"
 
 [dependencies]
 hdk = { workspace = true }
-
 holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
+safehold_integrity = { workspace = true }
 
-hc_zome_traits = { git = "https://github.com/holochain-open-dev/zome-traits", branch = "main" }
-
-safehold_service_trait = { path = "../../../../../crates/safehold_service_trait" }
 safehold_types = { path = "../../../../../crates/safehold_types" }
+safehold_service_trait = { path = "../../../../../crates/safehold_service_trait" }

@@ -5,8 +5,8 @@ use hdk::prelude::*;
 use peer_keys::query_peer_keys;
 use utils::{create_relaxed, from_bytes, to_bytes};
 
-use locker_service_trait::MessageOutput;
-use locker_types::{
+use safehold_service_trait::MessageOutput;
+use safehold_types::{
     AgentSpecificContents, DecryptedMessageOutput, EncryptMessageInput, Message, MessageContents,
     MessageWithProvenance,
 };

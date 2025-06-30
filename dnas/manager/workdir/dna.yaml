@@ -1,5 +1,5 @@
 manifest_version: '1'
-name: locker_service
+name: safehold_service
 integrity:
   network_seed: null
   properties: null
