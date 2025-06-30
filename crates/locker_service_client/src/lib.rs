@@ -69,7 +69,7 @@ impl LockerServiceClient {
             std::thread::sleep(Duration::from_secs(1));
 
             retry_count += 1;
-            if retry_count == 20 {
+            if retry_count == 60 {
                 return Err(anyhow!("No clone providers found.".to_string(),));
             }
         }
