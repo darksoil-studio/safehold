@@ -79,8 +79,6 @@ async fn main() -> Result<()> {
         .filter(None, log_level().to_level_filter())
         .filter_module("holochain_sqlite", log::LevelFilter::Off)
         .filter_module("tracing::span", log::LevelFilter::Off)
-        .filter_module("iroh", log::LevelFilter::Off)
-        .filter_module("kitsune2", log::LevelFilter::Off)
         .init();
     set_wasm_level();
 
@@ -95,6 +93,10 @@ async fn main() -> Result<()> {
         args.progenitors.into_iter().map(|p| p.into()).collect(),
     )
     .await?;
+
+    client.wait_for_clone_providers().await?;
+
+    log::info!("Successfully joined peers: executing request...");
 
     match args.command {
         Commands::CreateCloneRequest { network_seed } => {
