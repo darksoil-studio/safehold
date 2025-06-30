@@ -1736,8 +1736,8 @@ dependencies = [
  "encrypted_messages_integrity",
  "hdk",
  "holochain_serialized_bytes",
- "locker_service_trait",
- "locker_types",
+ "safehold_service_trait",
+ "safehold_types",
  "serde",
 ]
 
@@ -1747,7 +1747,7 @@ version = "0.0.1"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
- "locker_types",
+ "safehold_types",
  "serde",
 ]
 
@@ -2752,9 +2752,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_client"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d521041e6507f0d796a10050ff417f766dd117a96e1893eaea0656d1f2eacf3a"
+checksum = "b29ca41800cdbf235c150282decd8eec109fd19c5019f39beccfa089b4102ddc"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -4613,130 +4613,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "locker"
-version = "0.0.1"
-dependencies = [
- "hdk",
- "holochain_serialized_bytes",
- "locker_integrity",
- "locker_service_trait",
- "locker_types",
- "serde",
-]
-
-[[package]]
-name = "locker-service-client"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "clap 4.5.40",
- "clone_manager_types",
- "clone_manager_utils",
- "colored",
- "env_logger",
- "futures",
- "holochain",
- "holochain_client",
- "holochain_conductor_api",
- "holochain_runtime",
- "holochain_types",
- "holochain_util",
- "locker_service_trait",
- "locker_types",
- "log",
- "mockall 0.13.1",
- "mr_bundle",
- "roles_types",
- "serde_json",
- "serde_yaml",
- "service_providers_types",
- "service_providers_utils",
- "sha256",
- "tempdir",
- "tokio",
- "url2",
-]
-
-[[package]]
-name = "locker-service-provider"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "clap 4.5.40",
- "clone_manager_types",
- "clone_manager_utils",
- "env_logger",
- "fixt",
- "futures",
- "holo_hash",
- "holochain",
- "holochain_client",
- "holochain_conductor_api",
- "holochain_runtime",
- "holochain_types",
- "holochain_util",
- "locker-service-client",
- "locker_service_trait",
- "locker_types",
- "log",
- "mr_bundle",
- "roles_types",
- "rustls 0.23.28",
- "serde_json",
- "serde_yaml",
- "service_providers_types",
- "service_providers_utils",
- "sha256",
- "tempdir",
- "tokio",
- "url2",
-]
-
-[[package]]
-name = "locker_gateway"
-version = "0.0.1"
-dependencies = [
- "hc_zome_traits",
- "hdk",
- "holochain_serialized_bytes",
- "locker_service_trait",
- "locker_types",
- "serde",
-]
-
-[[package]]
-name = "locker_integrity"
-version = "0.0.1"
-dependencies = [
- "hdi",
- "holochain_serialized_bytes",
- "locker_types",
- "serde",
-]
-
-[[package]]
-name = "locker_service_trait"
-version = "0.1.0"
-dependencies = [
- "hc_zome_traits",
- "hdk",
- "holochain_serialized_bytes",
- "locker_types",
- "serde",
-]
-
-[[package]]
-name = "locker_types"
-version = "0.1.0"
-dependencies = [
- "hdi",
- "holochain_serialized_bytes",
- "serde",
-]
-
-[[package]]
 name = "log"
 version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6186,8 +6062,8 @@ version = "0.0.1"
 dependencies = [
  "hdk",
  "holochain_serialized_bytes",
- "locker_types",
  "proxy_integrity",
+ "safehold_types",
  "serde",
 ]
 
@@ -7140,6 +7016,130 @@ name = "ryu"
 version = "1.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
+
+[[package]]
+name = "safehold"
+version = "0.0.1"
+dependencies = [
+ "hdk",
+ "holochain_serialized_bytes",
+ "safehold_integrity",
+ "safehold_service_trait",
+ "safehold_types",
+ "serde",
+]
+
+[[package]]
+name = "safehold-service-client"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap 4.5.40",
+ "clone_manager_types",
+ "clone_manager_utils",
+ "colored",
+ "env_logger",
+ "futures",
+ "holochain",
+ "holochain_client",
+ "holochain_conductor_api",
+ "holochain_runtime",
+ "holochain_types",
+ "holochain_util",
+ "log",
+ "mockall 0.13.1",
+ "mr_bundle",
+ "roles_types",
+ "safehold_service_trait",
+ "safehold_types",
+ "serde_json",
+ "serde_yaml",
+ "service_providers_types",
+ "service_providers_utils",
+ "sha256",
+ "tempdir",
+ "tokio",
+ "url2",
+]
+
+[[package]]
+name = "safehold-service-provider"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap 4.5.40",
+ "clone_manager_types",
+ "clone_manager_utils",
+ "env_logger",
+ "fixt",
+ "futures",
+ "holo_hash",
+ "holochain",
+ "holochain_client",
+ "holochain_conductor_api",
+ "holochain_runtime",
+ "holochain_types",
+ "holochain_util",
+ "log",
+ "mr_bundle",
+ "roles_types",
+ "rustls 0.23.28",
+ "safehold-service-client",
+ "safehold_service_trait",
+ "safehold_types",
+ "serde_json",
+ "serde_yaml",
+ "service_providers_types",
+ "service_providers_utils",
+ "sha256",
+ "tempdir",
+ "tokio",
+ "url2",
+]
+
+[[package]]
+name = "safehold_gateway"
+version = "0.0.1"
+dependencies = [
+ "hc_zome_traits",
+ "hdk",
+ "holochain_serialized_bytes",
+ "safehold_service_trait",
+ "safehold_types",
+ "serde",
+]
+
+[[package]]
+name = "safehold_integrity"
+version = "0.0.1"
+dependencies = [
+ "hdi",
+ "holochain_serialized_bytes",
+ "safehold_types",
+ "serde",
+]
+
+[[package]]
+name = "safehold_service_trait"
+version = "0.1.0"
+dependencies = [
+ "hc_zome_traits",
+ "hdk",
+ "holochain_serialized_bytes",
+ "safehold_types",
+ "serde",
+]
+
+[[package]]
+name = "safehold_types"
+version = "0.1.0"
+dependencies = [
+ "hdi",
+ "holochain_serialized_bytes",
+ "serde",
+]
 
 [[package]]
 name = "salsa20"
