@@ -38,7 +38,7 @@ async fn store_and_get_messages() {
 
     std::thread::sleep(Duration::from_secs(20));
 
-    let safehold_service_trait_service_id = safehold_service_trait::LOCKER_SERVICE_HASH.to_vec();
+    let safehold_service_trait_service_id = safehold_service_trait::SAFEHOLD_SERVICE_HASH.to_vec();
 
     let service_providers: Vec<AgentPubKey> = alice
         .0
@@ -123,7 +123,7 @@ async fn send_message(
     recipients: Vec<AgentPubKey>,
     message: MessageContents,
 ) -> anyhow::Result<Vec<MessageWithProvenance>> {
-    let safehold_service_trait_service_id = safehold_service_trait::LOCKER_SERVICE_HASH.to_vec();
+    let safehold_service_trait_service_id = safehold_service_trait::SAFEHOLD_SERVICE_HASH.to_vec();
     let messages: Vec<MessageWithProvenance> = app_ws
         .call_zome(
             ZomeCallTarget::RoleName("example".into()),
@@ -150,7 +150,7 @@ async fn send_message(
 }
 
 async fn receive_messages(app_ws: &AppWebsocket) -> anyhow::Result<Vec<DecryptedMessageOutput>> {
-    let safehold_service_trait_service_id = safehold_service_trait::LOCKER_SERVICE_HASH.to_vec();
+    let safehold_service_trait_service_id = safehold_service_trait::SAFEHOLD_SERVICE_HASH.to_vec();
     let messages_outputs: Vec<MessageOutput> = make_service_request(
         app_ws,
         safehold_service_trait_service_id.clone(),
