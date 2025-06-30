@@ -15,11 +15,11 @@ hdk = "0.5.3"
 serde = "1.0"
 holochain_serialized_bytes = "*"
 
-[workspace.dependencies.locker]
-path = "dnas/locker_service/zomes/coordinator/locker"
+[workspace.dependencies.safehold]
+path = "dnas/safehold_service/zomes/coordinator/safehold"
 
-[workspace.dependencies.locker_integrity]
-path = "dnas/locker_service/zomes/integrity/locker"
+[workspace.dependencies.safehold_integrity]
+path = "dnas/safehold_service/zomes/integrity/safehold"
 
 [workspace.dependencies.proxy]
 path = "dnas/proxy/zomes/coordinator/proxy"

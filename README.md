@@ -46,8 +46,8 @@ To package the web happ:
 npm run package
 ```
 
-You'll have the `locker-service-provider.webhapp` in `workdir`. This is what you should distribute so that the Holochain Launcher can install it.
-You will also have its subcomponent `locker-service-provider.happ` in the same folder`.
+You'll have the `safehold-service-provider.webhapp` in `workdir`. This is what you should distribute so that the Holochain Launcher can install it.
+You will also have its subcomponent `safehold-service-provider.happ` in the same folder`.
 
 ## Documentation
 

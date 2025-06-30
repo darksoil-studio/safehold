@@ -13,4 +13,4 @@ holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 proxy_integrity = { workspace = true }
 
-locker_types = { path = "../../../../../crates/locker_types" }
+safehold_types = { path = "../../../../../crates/safehold_types" }

@@ -1,5 +1,5 @@
 use hdk::prelude::*;
-use locker_types::ProxiedCall;
+use safehold_types::ProxiedCall;
 use proxy_integrity::*;
 
 #[hdk_extern]

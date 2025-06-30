@@ -1,5 +1,5 @@
 manifest_version: '1'
-name: locker-service-provider
+name: safehold-service-provider
 description: null
 roles:
 - name: manager
@@ -24,7 +24,7 @@ roles:
       properties: null
     installed_hash: null
     clone_limit: 0
-- name: locker
+- name: safehold
   provisioning:
     strategy: create
     deferred: false

@@ -1,9 +1,0 @@
-[package]
-name = "locker_types"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-hdi = { workspace = true }
-holochain_serialized_bytes = { workspace = true }
-serde = { workspace = true }

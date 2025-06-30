@@ -12,4 +12,4 @@ hdi = { workspace = true }
 holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 
-locker_types = { path = "../../../../../crates/locker_types" }
+safehold_types = { path = "../../../../../crates/safehold_types" }

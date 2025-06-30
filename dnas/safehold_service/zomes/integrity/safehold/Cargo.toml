@@ -1,17 +1,15 @@
 [package]
-name = "encrypted_messages"
+name = "safehold_integrity"
 version = "0.0.1"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "encrypted_messages"
+name = "safehold_integrity"
 
 [dependencies]
-hdk = { workspace = true }
+hdi = { workspace = true }
 holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
-encrypted_messages_integrity = { path = "../../integrity/encrypted_messages" }
 
 safehold_types = { path = "../../../../../crates/safehold_types" }
-safehold_service_trait = { path = "../../../../../crates/safehold_service_trait" }
