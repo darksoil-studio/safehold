@@ -1,6 +1,6 @@
 use hdi::hash_path::path::root_hash;
 use hdk::prelude::*;
-use safehold_integrity::EntryTypes;
+use proxy_integrity::EntryTypes;
 
 pub fn ensure_relaxed(path: &TypedPath) -> ExternResult<()> {
     if !path.exists()? {

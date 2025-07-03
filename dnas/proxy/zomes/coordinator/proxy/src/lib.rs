@@ -7,7 +7,7 @@ mod utils;
 
 #[hdk_extern]
 pub fn create_proxied_dna(proxied_dna: DnaHash) -> ExternResult<()> {
-    create_relaxed(&EntryTypes::ProxiedDna(ProxiedDna { proxied_dna }))?;
+    create_relaxed(EntryTypes::ProxiedDna(ProxiedDna { proxied_dna }))?;
     Ok(())
 }
 
