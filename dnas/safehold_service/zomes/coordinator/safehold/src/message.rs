@@ -19,6 +19,8 @@ pub fn create_messages(inputs: Vec<MessageWithProvenance>) -> ExternResult<()> {
 
 #[hdk_extern]
 pub fn create_message(message: MessageWithProvenance) -> ExternResult<EntryHash> {
+    info!("Creating message.");
+
     let message_hash = hash_entry(&message)?;
 
     let None = get(message_hash.clone(), GetOptions::default())? else {
