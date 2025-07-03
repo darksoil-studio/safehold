@@ -1,14 +1,14 @@
 use hdk::prelude::*;
-use safehold_types::ProxiedCall;
 use proxy_integrity::*;
+use safehold_types::ProxiedCall;
+use utils::create_relaxed;
+
+mod utils;
 
 #[hdk_extern]
-pub fn create_proxied_dna(proxied_dna: DnaHash) -> ExternResult<Record> {
-    let proxied_role_hash = create_entry(&EntryTypes::ProxiedDna(ProxiedDna { proxied_dna }))?;
-    let record = get(proxied_role_hash.clone(), GetOptions::default())?.ok_or(wasm_error!(
-        WasmErrorInner::Guest("Could not find the newly created ProxiedRole".to_string())
-    ))?;
-    Ok(record)
+pub fn create_proxied_dna(proxied_dna: DnaHash) -> ExternResult<()> {
+    create_relaxed(&EntryTypes::ProxiedDna(ProxiedDna { proxied_dna }))?;
+    Ok(())
 }
 
 #[hdk_extern]

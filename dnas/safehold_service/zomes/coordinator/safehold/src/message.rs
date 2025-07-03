@@ -2,7 +2,7 @@ use hdk::prelude::*;
 use safehold_integrity::*;
 use safehold_service_trait::*;
 
-use crate::utils::ensure_relaxed;
+use crate::utils::{create_link_relaxed, create_relaxed, delete_link_relaxed, ensure_relaxed};
 
 fn agent_path(agent: AgentPubKey) -> ExternResult<TypedPath> {
     Path::from(format!("all_agents.{}", agent)).typed(LinkTypes::AgentsPath)
@@ -25,14 +25,14 @@ pub fn create_message(message: MessageWithProvenance) -> ExternResult<EntryHash>
         return Ok(message_hash);
     };
 
-    create_entry(&EntryTypes::Message(message.clone()))?;
+    create_relaxed(EntryTypes::Message(message.clone()))?;
 
     for (agent, contents) in message.message.recipients.clone() {
         let path = agent_path(agent)?;
 
         ensure_relaxed(&path)?;
 
-        create_link(
+        create_link_relaxed(
             path.path_entry_hash()?,
             message_hash.clone(),
             LinkTypes::RecipientToMessages,
@@ -51,7 +51,7 @@ pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<Me
     )?;
 
     for link in &links {
-        delete_link(link.create_link_hash.clone())?;
+        delete_link_relaxed(link.create_link_hash.clone())?;
     }
 
     let inputs = links
