@@ -64,9 +64,9 @@
 
             rm -rf /tmp/safehold-service
             rm -rf /tmp/safehold-service2
-            safehold-service-provider --data-dir /tmp/safehold-service --bootstrap-url http://bad --signal-url ws://bad &
-            safehold-service-provider --data-dir /tmp/safehold-service2 --bootstrap-url http://bad --signal-url ws://bad &
-            safehold-service-client --bootstrap-url http://bad --signal-url ws://bad create-clone-request --network-seed "$1"
+            safehold-service-provider --data-dir /tmp/safehold-service &
+            safehold-service-provider --data-dir /tmp/safehold-service2 &
+            safehold-service-client create-clone-request --network-seed "$1"
 
             echo "The test safehold service is now ready to be used."
 
