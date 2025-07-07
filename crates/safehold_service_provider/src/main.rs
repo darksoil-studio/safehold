@@ -25,17 +25,21 @@ struct Args {
     progenitors: Vec<AgentPubKeyB64>,
 
     #[arg(long)]
-    bootstrap_url: String,
+    bootstrap_url: Option<String>,
 
     #[arg(long)]
-    signal_url: String,
+    signal_url: Option<String>,
 }
 
-fn network_config(bootstrap_url: String, signal_url: String) -> NetworkConfig {
+fn network_config(bootstrap_url: Option<String>, signal_url: Option<String>) -> NetworkConfig {
     let mut network_config = NetworkConfig::default();
 
-    network_config.bootstrap_url = url2::Url2::parse(bootstrap_url);
-    network_config.signal_url = url2::Url2::parse(signal_url);
+    if let Some(bootstrap_url) = bootstrap_url {
+        network_config.bootstrap_url = url2::Url2::parse(bootstrap_url);
+    }
+    if let Some(signal_url) = signal_url {
+        network_config.signal_url = url2::Url2::parse(signal_url);
+    }
     network_config.webrtc_config = Some(serde_json::json!({
         "ice_servers": {
             "urls": ["stun://stun.l.google.com:19302"]
