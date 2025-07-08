@@ -43,7 +43,7 @@ jobs:
           cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#safehold-service-provider.meta.debug | jq -r 'keys[0]')
 
       - name: Pin provider
-        if: github.event_name != 'pull_request' && github.ref_name == 'main'
+        if: github.event_name != 'pull_request' && github.ref_name == 'main-0.5'
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
