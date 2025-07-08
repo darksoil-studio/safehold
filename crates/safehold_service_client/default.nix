@@ -21,30 +21,29 @@
         buildInputs =
           inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
+        RUSTFLAGS = "-Ctarget-cpu=native";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
       binary =
         craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
 
-      binaryWithDebugHapp =
-        pkgs.runCommandLocal "safehold-service-client" {
-          buildInputs = [ pkgs.makeWrapper ];
-        } ''
-          mkdir $out
-          mkdir $out/bin
-          makeWrapper ${binary}/bin/safehold-service-client $out/bin/safehold-service-client \
-            --add-flags "${self'.packages.safehold_service_client_happ.meta.debug}"
-        '';
-      binaryWithHapp =
-        pkgs.runCommandLocal "safehold-service-client" {
-          buildInputs = [ pkgs.makeWrapper ];
-          meta.debug = binaryWithDebugHapp;
-        } ''
-          mkdir $out
-          mkdir $out/bin
-          makeWrapper ${binary}/bin/safehold-service-client $out/bin/safehold-service-client \
-            --add-flags "${self'.packages.safehold_service_client_happ}"
-        '';
+      binaryWithDebugHapp = pkgs.runCommandLocal "safehold-service-client" {
+        buildInputs = [ pkgs.makeWrapper ];
+      } ''
+        mkdir $out
+        mkdir $out/bin
+        makeWrapper ${binary}/bin/safehold-service-client $out/bin/safehold-service-client \
+          --add-flags "${self'.packages.safehold_service_client_happ.meta.debug}"
+      '';
+      binaryWithHapp = pkgs.runCommandLocal "safehold-service-client" {
+        buildInputs = [ pkgs.makeWrapper ];
+        meta.debug = binaryWithDebugHapp;
+      } ''
+        mkdir $out
+        mkdir $out/bin
+        makeWrapper ${binary}/bin/safehold-service-client $out/bin/safehold-service-client \
+          --add-flags "${self'.packages.safehold_service_client_happ}"
+      '';
     in rec {
 
       builders.safehold-service-client = { progenitors }:
@@ -73,9 +72,8 @@
             '';
         in binaryWithProgenitors;
 
-      packages.safehold-service-client =
-        builders.safehold-service-client {
-          progenitors = inputs.service-providers.outputs.progenitors;
-        };
+      packages.safehold-service-client = builders.safehold-service-client {
+        progenitors = inputs.service-providers.outputs.progenitors;
+      };
     };
 }

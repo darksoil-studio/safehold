@@ -63,6 +63,7 @@
         buildInputs =
           inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
+        RUSTFLAGS = "-Ctarget-cpu=native";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
       binary =
