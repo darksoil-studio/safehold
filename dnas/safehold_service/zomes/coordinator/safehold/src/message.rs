@@ -64,7 +64,7 @@ pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<Me
 
     let records = HDK.with(|hdk| hdk.borrow().get(inputs))?;
 
-    let messages = records
+    let messages: Vec<MessageOutput> = records
         .into_iter()
         .filter_map(|r| r)
         .filter_map(|r| {
@@ -83,6 +83,10 @@ pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<Me
             agent_specific_contents: link.tag.0,
         })
         .collect();
+
+    if !messages.is_empty() {
+        info!("Delived {} messages.", messages.len());
+    }
 
     Ok(messages)
 }
