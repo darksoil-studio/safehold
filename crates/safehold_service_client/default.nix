@@ -21,7 +21,6 @@
         buildInputs =
           inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
-        cargoExtraArgs = " -j 2 ";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
       binary =
@@ -64,6 +63,7 @@
             pkgs.runCommandLocal "safehold-service-client" {
               buildInputs = [ pkgs.makeWrapper ];
               meta.debug = debugBinaryWithProgenitors;
+              meta.cargoArtifacts = cargoArtifacts;
             } ''
               mkdir $out
               mkdir $out/bin

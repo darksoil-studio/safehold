@@ -20,10 +20,6 @@ jobs:
       - uses: cachix/cachix-action@v15
         with:
           name: holochain-ci
-
-      - uses: cachix/cachix-action@v15
-        with:
-          name: darksoil-studio
       
       - uses: cachix/cachix-action@v15
         with:
@@ -36,6 +32,7 @@ jobs:
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
+          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#safehold-service-provider.meta.cargoArtifacts
           cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#safehold-service-provider
           cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#safehold-service-provider | jq -r 'keys[0]')
 
@@ -54,6 +51,7 @@ jobs:
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.DARKSOIL_CACHIX_AUTH_TOKEN }}"
         run: |
+          cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#safehold-service-client.meta.cargoArtifacts
           cachix watch-exec darksoil-studio -- nix build --no-update-lock-file --accept-flake-config -L .#safehold-service-client
           cachix push darksoil-studio $(nix path-info --json --accept-flake-config --no-warn-dirty .#safehold-service-client | jq -r 'keys[0]')
 
