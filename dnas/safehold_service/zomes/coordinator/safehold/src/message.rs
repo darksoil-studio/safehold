@@ -84,5 +84,7 @@ pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<Me
         })
         .collect();
 
+    info!("Delived {} messages.", messages.len());
+
     Ok(messages)
 }
