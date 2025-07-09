@@ -21,7 +21,7 @@
         buildInputs =
           inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
-        cargoExtraArgs = " -j 1 ";
+        cargoExtraArgs = " -j 4 ";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
       binary =
