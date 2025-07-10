@@ -58,19 +58,26 @@
             self'.packages.safehold-service-client.meta.debug
           ];
           text = ''
-            trap 'killall safehold-service-provider' 2 ERR
 
             export RUST_LOG=''${RUST_LOG:=error}
 
-            rm -rf /tmp/safehold-service
-            rm -rf /tmp/safehold-service2
-            safehold-service-provider --bootstrap-url https://bad.bad --data-dir /tmp/safehold-service &
-            safehold-service-provider --bootstrap-url https://bad.bad --data-dir /tmp/safehold-service2 &
+            DIR1="$(mktemp -d)"
+            DIR2="$(mktemp -d)"
+            safehold-service-provider --bootstrap-url https://bad.bad --data-dir "$DIR1" &
+            safehold-service-provider --bootstrap-url https://bad.bad --data-dir "$DIR2" &
             safehold-service-client --bootstrap-url https://bad.bad create-clone-request --network-seed "$1"
 
             echo "The test safehold service is now ready to be used."
 
             echo ""
+
+            function cleanup() {
+              killall safehold-service-provider
+              rm -rf "$DIR1"
+              rm -rf "$DIR2"
+            }
+
+            trap cleanup 2 ERR
 
             wait
             killall safehold-service-provider
