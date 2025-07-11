@@ -1,14 +1,15 @@
 use std::path::PathBuf;
 use std::{io::Write, time::Duration};
 
+use anyhow::anyhow;
 use env_logger::Builder;
 use holo_hash::fixt::AgentPubKeyFixturator;
 use holochain::prelude::{DnaModifiersOpt, RoleSettings, RoleSettingsMap, YamlProperties};
 use holochain_client::{AgentPubKey, AppWebsocket};
 use holochain_runtime::{vec_to_locked, HolochainRuntime, HolochainRuntimeConfig, NetworkConfig};
-use safehold_service_provider::read_from_file;
 use log::Level;
 use roles_types::Properties;
+use safehold_service_provider::read_from_file;
 use url2::url2;
 
 pub fn service_provider_happ_path() -> PathBuf {
@@ -183,5 +184,30 @@ pub async fn setup() -> Scenario {
         carol,
         progenitor: infra_provider_pubkey.clone(),
         network_seed,
+    }
+}
+
+pub async fn with_retries<T>(
+    condition: impl AsyncFn() -> anyhow::Result<T>,
+    retries: usize,
+) -> anyhow::Result<T> {
+    let mut retry_count = 0;
+    loop {
+        let response = condition().await;
+
+        match response {
+            Ok(r) => {
+                return Ok(r);
+            }
+            Err(err) => {
+                log::warn!("Condition not met yet: {err:?} Retrying in 1s.");
+                std::thread::sleep(Duration::from_secs(1));
+
+                retry_count += 1;
+                if retry_count == retries {
+                    return Err(anyhow!("Timeout. Last error: {err:?}"));
+                }
+            }
+        }
     }
 }
