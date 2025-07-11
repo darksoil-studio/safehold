@@ -72,7 +72,7 @@
         doCheck = true;
         __noChroot = true;
         # RUST_LOG = "info";
-        WASM_LOG = "info";
+        WASM_LOG = "debug";
         # For the integration test
         inherit END_USER_HAPP CLIENT_HAPP SERVICE_PROVIDER_HAPP;
       });

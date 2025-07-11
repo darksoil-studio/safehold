@@ -108,7 +108,7 @@ async fn main() -> Result<()> {
             client.create_clone_request(network_seed).await?;
         }
     }
-    std::thread::sleep(Duration::from_secs(10));
+    std::thread::sleep(Duration::from_secs(20));
 
     Ok(())
 }

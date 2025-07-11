@@ -104,9 +104,7 @@ pub struct Scenario {
 }
 
 pub async fn setup() -> Scenario {
-    rustls::crypto::aws_lc_rs::default_provider()
-        .install_default()
-        .unwrap();
+    let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
 
     Builder::new()
         .format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))

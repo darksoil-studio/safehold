@@ -63,7 +63,7 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    let message_content: Vec<u8> = vec![0; 1_000_000];
+    let message_content: Vec<u8> = vec![0; 10];
     let messages: Vec<MessageWithProvenance> = send_message(
         &alice.0,
         vec![bob.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
@@ -81,7 +81,7 @@ async fn store_and_get_messages() {
     assert_eq!(decrypted_messages.len(), 1);
     assert_eq!(decrypted_messages[0].contents, message_content);
 
-    std::thread::sleep(Duration::from_millis(2000));
+    std::thread::sleep(Duration::from_secs(2));
 
     let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
 
@@ -125,6 +125,105 @@ async fn store_and_get_messages() {
     // .unwrap();
 
     // assert_eq!(messages.len(), 1);
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn store_and_get_big_messages_in_chunks() {
+    let Scenario {
+        network_seed,
+        progenitor,
+        // service_provider,
+        alice,
+        bob,
+        carol,
+    } = setup().await;
+
+    let client = SafeholdServiceClient::create(
+        TempDir::new("safehold-service-test").unwrap().into_path(),
+        network_config(),
+        "client-happ".into(),
+        client_happ_path(),
+        vec![progenitor.clone()],
+    )
+    .await
+    .unwrap();
+
+    std::thread::sleep(Duration::from_secs(10));
+
+    client.create_clone_request(network_seed).await.unwrap();
+
+    with_retries(
+        async || {
+            let safehold_service_trait_service_id =
+                safehold_service_trait::SAFEHOLD_SERVICE_HASH.to_vec();
+
+            let service_providers: Vec<AgentPubKey> = alice
+                .0
+                .call_zome(
+                    ZomeCallTarget::RoleName("service_providers".into()),
+                    "service_providers".into(),
+                    "get_providers_for_service".into(),
+                    ExternIO::encode(safehold_service_trait_service_id.clone())?,
+                )
+                .await?
+                .decode()?;
+            if service_providers.is_empty() {
+                return Err(anyhow!("No service providers yet"));
+            }
+            Ok(())
+        },
+        120,
+    )
+    .await
+    .unwrap();
+
+    let message_content: Vec<u8> = vec![0; 20_000_000];
+    let messages: Vec<MessageWithProvenance> = send_message(
+        &alice.0,
+        vec![bob.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
+        message_content.clone(),
+    )
+    .await
+    .unwrap();
+
+    assert_eq!(messages.len(), 4);
+
+    std::thread::sleep(Duration::from_secs(10));
+
+    let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
+
+    assert_eq!(decrypted_messages.len(), 2);
+    assert_eq!(decrypted_messages[0].contents, message_content);
+
+    std::thread::sleep(Duration::from_secs(2));
+
+    let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
+
+    assert_eq!(decrypted_messages.len(), 0);
+
+    let messages = send_message(
+        &bob.0,
+        vec![alice.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
+        vec![],
+    )
+    .await
+    .unwrap();
+
+    assert_eq!(messages.len(), 4);
+
+    let decrypted_messages = receive_messages(&carol.0).await.unwrap();
+    assert_eq!(decrypted_messages.len(), 4);
+
+    let messages: Vec<MessageWithProvenance> = send_message(
+        &carol.0,
+        vec![alice.0.my_pub_key.clone(), bob.0.my_pub_key.clone()],
+        vec![],
+    )
+    .await
+    .unwrap();
+
+    // Now two messages are necessary because players exchanged X25519 keys
+    assert_eq!(messages.len(), 2);
 }
 
 async fn send_message(

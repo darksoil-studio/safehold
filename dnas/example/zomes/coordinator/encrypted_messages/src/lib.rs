@@ -8,7 +8,7 @@ use utils::{create_relaxed, delete_relaxed, from_bytes, to_bytes};
 
 use safehold_service_trait::MessageOutput;
 use safehold_types::{
-    AgentSpecificContents, DecryptedMessageOutput, EncryptMessageInput, Message, MessageContents,
+    AgentSpecificContents, DecryptedMessageOutput, EncryptMessageInput, Message,
     MessageWithProvenance,
 };
 
@@ -16,7 +16,7 @@ mod chunks;
 mod peer_keys;
 mod utils;
 
-pub const CHUNK_SIZE: usize = 50_000; // 50KB
+pub const CHUNK_SIZE: usize = 1000; // 1KB
 
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum MessageEncryption {
@@ -48,6 +48,8 @@ pub fn encrypt_message(input: EncryptMessageInput) -> ExternResult<Vec<MessageWi
     let message_id = new_message_id()?;
 
     let chunks: Vec<&[u8]> = input.message.chunks(CHUNK_SIZE).into_iter().collect();
+
+    debug!("Encrypting message into {} chunks.", chunks.len());
 
     for (i, chunk_contents) in chunks.iter().enumerate() {
         let mut agent_keys: BTreeMap<AgentPubKey, AgentSpecificContents> = BTreeMap::new();
@@ -148,6 +150,11 @@ pub fn encrypt_message(input: EncryptMessageInput) -> ExternResult<Vec<MessageWi
         }
     }
 
+    info!(
+        "Successfully encrypted message into {} messages.",
+        messages.len()
+    );
+
     Ok(messages)
 }
 
@@ -191,7 +198,7 @@ pub fn decrypt_messages(messages: Vec<MessageOutput>) -> ExternResult<Vec<Decryp
 
     for ((message_id, provenance), new_chunks) in new_chunks {
         let pending_chunks = pending_chunks
-            .get(&(message_id, provenance.clone()))
+            .get(&(message_id.clone(), provenance.clone()))
             .cloned()
             .unwrap_or(vec![]);
 
@@ -225,6 +232,13 @@ pub fn decrypt_messages(messages: Vec<MessageOutput>) -> ExternResult<Vec<Decryp
             }
             continue;
         }
+
+        debug!(
+            "Decrypted {} chunks for message {:?} from {}.",
+            chunks.len(),
+            message_id,
+            provenance
+        );
 
         for (chunk_hash, _pending_chunk) in &pending_chunks {
             delete_relaxed(chunk_hash.clone())?;
