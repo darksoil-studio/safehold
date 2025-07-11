@@ -164,7 +164,7 @@ fn sign_message(message: Message) -> ExternResult<MessageWithProvenance> {
 
 #[hdk_extern]
 pub fn decrypt_messages(messages: Vec<MessageOutput>) -> ExternResult<Vec<DecryptedMessageOutput>> {
-    let mut pending_chunks = query_pending_chunks()?;
+    let pending_chunks = query_pending_chunks()?;
     let mut new_chunks: BTreeMap<(MessageId, HoloHash<hash_type::Agent>), Vec<Chunk>> =
         BTreeMap::new();
 
