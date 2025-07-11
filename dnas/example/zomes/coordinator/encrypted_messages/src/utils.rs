@@ -40,3 +40,13 @@ pub fn create_relaxed(entry_type: EntryTypes) -> ExternResult<()> {
 
     Ok(())
 }
+
+///Allowing for other operations to commit before deleting an entry
+pub fn delete_relaxed(address: ActionHash) -> ExternResult<()> {
+    HDK.with(|h| {
+        h.borrow()
+            .delete(DeleteInput::new(address, ChainTopOrdering::Relaxed))
+    })?;
+
+    Ok(())
+}
