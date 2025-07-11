@@ -106,7 +106,7 @@ pub struct Scenario {
 pub async fn setup() -> Scenario {
     let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
 
-    Builder::new()
+    let _ = Builder::new()
         .format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))
         .target(env_logger::Target::Stdout)
         .filter(None, Level::Info.to_level_filter())
@@ -115,7 +115,7 @@ pub async fn setup() -> Scenario {
         .filter_module("tracing::span", log::LevelFilter::Off)
         .filter_module("iroh", log::LevelFilter::Error)
         .filter_module("kitsune2", log::LevelFilter::Warn)
-        .init();
+        .try_init();
 
     let network_seed = String::from("test");
 

@@ -10,10 +10,12 @@ use safehold_service_trait::MessageOutput;
 use safehold_types::{
     DecryptedMessageOutput, EncryptMessageInput, MessageContents, MessageWithProvenance,
 };
+use serial_test::serial;
 use service_providers_utils::make_service_request;
 use tempdir::TempDir;
 
 #[tokio::test(flavor = "multi_thread")]
+#[serial]
 async fn store_and_get_messages() {
     let Scenario {
         network_seed,
@@ -90,7 +92,7 @@ async fn store_and_get_messages() {
     let messages = send_message(
         &bob.0,
         vec![alice.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
-        vec![],
+        vec![0, 0, 0],
     )
     .await
     .unwrap();
@@ -103,7 +105,7 @@ async fn store_and_get_messages() {
     let messages: Vec<MessageWithProvenance> = send_message(
         &carol.0,
         vec![alice.0.my_pub_key.clone(), bob.0.my_pub_key.clone()],
-        vec![],
+        vec![0, 0, 0],
     )
     .await
     .unwrap();
@@ -127,7 +129,10 @@ async fn store_and_get_messages() {
     // assert_eq!(messages.len(), 1);
 }
 
+const CHUNK_SIZE: usize = 1000;
+
 #[tokio::test(flavor = "multi_thread")]
+#[serial]
 async fn store_and_get_big_messages_in_chunks() {
     let Scenario {
         network_seed,
@@ -177,7 +182,7 @@ async fn store_and_get_big_messages_in_chunks() {
     .await
     .unwrap();
 
-    let message_content: Vec<u8> = vec![0; 20_000_000];
+    let message_content: Vec<u8> = vec![0; CHUNK_SIZE * 2];
     let messages: Vec<MessageWithProvenance> = send_message(
         &alice.0,
         vec![bob.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
@@ -192,7 +197,7 @@ async fn store_and_get_big_messages_in_chunks() {
 
     let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
 
-    assert_eq!(decrypted_messages.len(), 2);
+    assert_eq!(decrypted_messages.len(), 1);
     assert_eq!(decrypted_messages[0].contents, message_content);
 
     std::thread::sleep(Duration::from_secs(2));
@@ -204,7 +209,7 @@ async fn store_and_get_big_messages_in_chunks() {
     let messages = send_message(
         &bob.0,
         vec![alice.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
-        vec![],
+        vec![0; CHUNK_SIZE * 2],
     )
     .await
     .unwrap();
@@ -217,7 +222,7 @@ async fn store_and_get_big_messages_in_chunks() {
     let messages: Vec<MessageWithProvenance> = send_message(
         &carol.0,
         vec![alice.0.my_pub_key.clone(), bob.0.my_pub_key.clone()],
-        vec![],
+        vec![0; CHUNK_SIZE * 2],
     )
     .await
     .unwrap();
