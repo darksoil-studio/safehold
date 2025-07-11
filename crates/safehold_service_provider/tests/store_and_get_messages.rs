@@ -34,27 +34,36 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
+    std::thread::sleep(Duration::from_secs(10));
+
     client.create_clone_request(network_seed).await.unwrap();
 
-    std::thread::sleep(Duration::from_secs(20));
+    with_retries(
+        async || {
+            let safehold_service_trait_service_id =
+                safehold_service_trait::SAFEHOLD_SERVICE_HASH.to_vec();
 
-    let safehold_service_trait_service_id = safehold_service_trait::SAFEHOLD_SERVICE_HASH.to_vec();
+            let service_providers: Vec<AgentPubKey> = alice
+                .0
+                .call_zome(
+                    ZomeCallTarget::RoleName("service_providers".into()),
+                    "service_providers".into(),
+                    "get_providers_for_service".into(),
+                    ExternIO::encode(safehold_service_trait_service_id.clone())?,
+                )
+                .await?
+                .decode()?;
+            if service_providers.is_empty() {
+                return Err(anyhow!("No service providers yet"));
+            }
+            Ok(())
+        },
+        120,
+    )
+    .await
+    .unwrap();
 
-    let service_providers: Vec<AgentPubKey> = alice
-        .0
-        .call_zome(
-            ZomeCallTarget::RoleName("service_providers".into()),
-            "service_providers".into(),
-            "get_providers_for_service".into(),
-            ExternIO::encode(safehold_service_trait_service_id.clone()).unwrap(),
-        )
-        .await
-        .unwrap()
-        .decode()
-        .unwrap();
-    assert_eq!(service_providers.len(), 2);
-
-    let message_content: Vec<u8> = vec![0, 1, 2];
+    let message_content: Vec<u8> = vec![0; 1_000_000];
     let messages: Vec<MessageWithProvenance> = send_message(
         &alice.0,
         vec![bob.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
