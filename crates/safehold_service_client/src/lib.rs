@@ -6,11 +6,13 @@ use holochain_runtime::*;
 use holochain_types::prelude::*;
 use roles_types::Properties;
 use setup::setup;
-use std::{collections::BTreeMap, fs, path::PathBuf, time::Duration};
+use std::{fs, path::PathBuf};
+use utils::with_retries;
 
 mod setup;
+mod utils;
 
-pub const SERVICE_PROVIDERS_ROLE_NAME: &'static str = "service_providers";
+pub const SERVICES_ROLE_NAME: &'static str = "services";
 
 pub struct SafeholdServiceClient {
     runtime: HolochainRuntime,
@@ -45,37 +47,37 @@ impl SafeholdServiceClient {
     }
 
     pub async fn wait_for_clone_providers(&self) -> anyhow::Result<()> {
-        let app_ws = self
-            .runtime
-            .app_websocket(self.app_id.clone(), holochain_client::AllowedOrigins::Any)
-            .await?;
+        with_retries(
+            async || {
+                let app_ws = self
+                    .runtime
+                    .app_websocket(self.app_id.clone(), holochain_client::AllowedOrigins::Any)
+                    .await?;
+                let clone_providers: Vec<AgentPubKey> = app_ws
+                    .call_zome(
+                        ZomeCallTarget::RoleName("manager".into()),
+                        ZomeName::from("clone_manager"),
+                        "get_clone_providers".into(),
+                        ExternIO::encode(())?,
+                    )
+                    .await?
+                    .decode()?;
 
-        let mut retry_count = 0;
-        loop {
-            let clone_providers: Vec<AgentPubKey> = app_ws
-                .call_zome(
-                    ZomeCallTarget::RoleName("manager".into()),
-                    ZomeName::from("clone_manager"),
-                    "get_clone_providers".into(),
-                    ExternIO::encode(())?,
-                )
-                .await?
-                .decode()?;
-
-            if clone_providers.len() > 0 {
-                return Ok(());
-            }
-            log::warn!("No clone providers found yet: retrying in 1s.");
-            std::thread::sleep(Duration::from_secs(1));
-
-            retry_count += 1;
-            if retry_count == 60 {
-                return Err(anyhow!("No clone providers found.".to_string(),));
-            }
-        }
+                if clone_providers.is_empty() {
+                    return Err(anyhow!("No clone providers found."));
+                }
+                Ok(())
+            },
+            30,
+        )
+        .await
     }
 
     pub async fn create_clone_request(&self, network_seed: String) -> anyhow::Result<()> {
+        self.wait_for_clone_providers().await?;
+
+        log::info!("Successfully joined peers: executing request...");
+
         let app_ws = self
             .runtime
             .app_websocket(self.app_id.clone(), holochain_client::AllowedOrigins::Any)
@@ -100,34 +102,37 @@ impl SafeholdServiceClient {
 
         log::info!("Creating clone request...");
 
-        app_ws
+        let clone_request_hash: EntryHash = app_ws
             .call_zome(
                 ZomeCallTarget::RoleName("manager".into()),
                 ZomeName::from("clone_manager"),
                 "create_clone_request".into(),
                 ExternIO::encode(clone_request.clone())?,
             )
-            .await?;
+            .await?
+            .decode()?;
 
-        std::thread::sleep(Duration::from_secs(4));
+        with_retries(
+            async || {
+                let providers: Vec<AgentPubKey> = app_ws
+                    .call_zome(
+                        ZomeCallTarget::RoleName("manager".into()),
+                        ZomeName::from("clone_manager"),
+                        "get_clone_providers_for_request".into(),
+                        ExternIO::encode(clone_request_hash.clone())?,
+                    )
+                    .await?
+                    .decode()?;
 
-        let result = app_ws
-            .call_zome(
-                ZomeCallTarget::RoleName("manager".into()),
-                ZomeName::from("clone_manager"),
-                "get_all_clone_requests".into(),
-                ExternIO::encode(())?,
-            )
-            .await?;
+                if providers.is_empty() {
+                    return Err(anyhow!("No clone providers for the request."));
+                }
 
-        let all_clone_requests: BTreeMap<EntryHashB64, CloneRequest> = result.decode()?;
-
-        if !all_clone_requests
-            .into_values()
-            .any(|created_clone_request| created_clone_request.eq(&clone_request))
-        {
-            return Err(anyhow!("Failed to create clone request."));
-        }
+                Ok(())
+            },
+            60,
+        )
+        .await?;
 
         println!("");
 

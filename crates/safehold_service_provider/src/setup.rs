@@ -5,7 +5,7 @@ use holochain_client::{AgentPubKey, ExternIO, ZomeCallTarget};
 use holochain_runtime::HolochainRuntime;
 use roles_types::Properties;
 
-use crate::{safehold_clones::reconcile_safehold_clones, read_from_file};
+use crate::{read_from_file, safehold_clones::reconcile_safehold_clones, SERVICES_ROLE_NAME};
 
 pub async fn setup(
     runtime: &HolochainRuntime,
@@ -59,7 +59,7 @@ pub async fn setup(
             },
         );
         roles_settings.insert(
-            String::from("service_providers"),
+            String::from(SERVICES_ROLE_NAME),
             RoleSettings::Provisioned {
                 membrane_proof: None,
                 modifiers: Some(DnaModifiersOpt {

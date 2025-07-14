@@ -3,6 +3,9 @@ use hdi::prelude::*;
 pub use peer_keys::*;
 pub mod peer_keys;
 
+pub use chunk::*;
+pub mod chunk;
+
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "type")]
 #[hdk_entry_types]
@@ -10,6 +13,8 @@ pub mod peer_keys;
 pub enum EntryTypes {
     #[entry_type(visibility = "private")]
     PeerKeys(PeerKeys),
+    #[entry_type(visibility = "private")]
+    Chunk(Chunk),
 }
 
 // #[derive(Serialize, Deserialize)]
@@ -60,12 +65,18 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 EntryTypes::PeerKeys(message) => {
                     validate_create_peer_keys(EntryCreationAction::Create(action), message)
                 }
+                EntryTypes::Chunk(chunk) => {
+                    validate_create_chunk(EntryCreationAction::Create(action), chunk)
+                }
             },
             OpEntry::UpdateEntry {
                 app_entry, action, ..
             } => match app_entry {
                 EntryTypes::PeerKeys(message) => {
                     validate_create_peer_keys(EntryCreationAction::Update(action), message)
+                }
+                EntryTypes::Chunk(chunk) => {
+                    validate_create_chunk(EntryCreationAction::Update(action), chunk)
                 }
             },
             _ => Ok(ValidateCallbackResult::Valid),
@@ -101,6 +112,19 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                             original_create_action,
                             original_peer_keys,
                         )
+                    }
+                    EntryTypes::Chunk(chunk) => {
+                        let original_app_entry =
+                            must_get_valid_record(action.clone().original_action_address)?;
+                        let original_chunk = match Chunk::try_from(original_app_entry) {
+                            Ok(entry) => entry,
+                            Err(e) => {
+                                return Ok(ValidateCallbackResult::Invalid(format!(
+                                    "Expected to get PeerKeys from Record: {e:?}"
+                                )));
+                            }
+                        };
+                        validate_update_chunk(action, chunk, original_create_action, original_chunk)
                     }
                 }
             }
@@ -151,6 +175,11 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     original_action,
                     original_peer_keys,
                 ),
+                EntryTypes::Chunk(original_chunk) => validate_delete_chunk(
+                    delete_entry.clone().action,
+                    original_action,
+                    original_chunk,
+                ),
             }
         }
         FlatOp::RegisterCreateLink {
@@ -180,6 +209,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 OpRecord::CreateEntry { app_entry, action } => match app_entry {
                     EntryTypes::PeerKeys(message) => {
                         validate_create_peer_keys(EntryCreationAction::Create(action), message)
+                    }
+                    EntryTypes::Chunk(chunk) => {
+                        validate_create_chunk(EntryCreationAction::Create(action), chunk)
                     }
                 },
                 // Complementary validation to the `RegisterUpdate` Op, in which the record itself is validated
@@ -230,6 +262,37 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                                     peer_keys,
                                     original_action,
                                     original_peer_keys,
+                                )
+                            } else {
+                                Ok(result)
+                            }
+                        }
+                        EntryTypes::Chunk(chunk) => {
+                            let result = validate_create_chunk(
+                                EntryCreationAction::Update(action.clone()),
+                                chunk.clone(),
+                            )?;
+                            if let ValidateCallbackResult::Valid = result {
+                                let original_chunk: Option<Chunk> = original_record
+                                    .entry()
+                                    .to_app_option()
+                                    .map_err(|e| wasm_error!(e))?;
+                                let original_chunk = match original_chunk {
+                                    Some(message) => message,
+                                    None => {
+                                        return Ok(
+                                            ValidateCallbackResult::Invalid(
+                                                "The updated entry type must be the same as the original entry type"
+                                                    .to_string(),
+                                            ),
+                                        );
+                                    }
+                                };
+                                validate_update_chunk(
+                                    action,
+                                    chunk,
+                                    original_action,
+                                    original_chunk,
                                 )
                             } else {
                                 Ok(result)
@@ -289,6 +352,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     match original_app_entry {
                         EntryTypes::PeerKeys(original_peer_keys) => {
                             validate_delete_peer_keys(action, original_action, original_peer_keys)
+                        }
+                        EntryTypes::Chunk(original_chunk) => {
+                            validate_delete_chunk(action, original_action, original_chunk)
                         }
                     }
                 }

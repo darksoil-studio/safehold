@@ -15,7 +15,7 @@
             name: test_happ
             description: ~
             roles:   
-              - name: service_providers
+              - name: services
                 provisioning:
                   strategy: create
                   deferred: false
@@ -40,8 +40,7 @@
           '';
 
           dnas = {
-            service_providers =
-              inputs'.service-providers.packages.service_providers_dna;
+            services = inputs'.service-providers.packages.services_dna;
             example = self'.packages.example_dna;
           };
         }).meta.debug;
@@ -62,6 +61,7 @@
         doCheck = false;
         buildInputs =
           inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
+        WASM_LOG = "info";
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
@@ -72,7 +72,6 @@
         doCheck = true;
         __noChroot = true;
         # RUST_LOG = "info";
-        WASM_LOG = "info";
         # For the integration test
         inherit END_USER_HAPP CLIENT_HAPP SERVICE_PROVIDER_HAPP;
       });

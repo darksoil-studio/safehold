@@ -5,8 +5,8 @@
     (builtins.attrNames (builtins.readDir ./zomes/coordinator)));
 
   perSystem = { inputs', self', lib, system, ... }: {
-    packages.service_providers_dna =
-      inputs.service-providers.outputs.builders.${system}.service_providers_dna_with_gateway {
+    packages.services_dna =
+      inputs.service-providers.outputs.builders.${system}.services_dna_with_gateway {
         gatewayZome = self'.packages.safehold_gateway;
       };
   };

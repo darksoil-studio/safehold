@@ -104,20 +104,18 @@ pub struct Scenario {
 }
 
 pub async fn setup() -> Scenario {
-    rustls::crypto::aws_lc_rs::default_provider()
-        .install_default()
-        .unwrap();
+    let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
 
-    Builder::new()
+    let _ = Builder::new()
         .format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))
         .target(env_logger::Target::Stdout)
         .filter(None, Level::Info.to_level_filter())
         .filter_module("holochain_sqlite", log::LevelFilter::Off)
-        .filter_module("holochain", log::LevelFilter::Warn)
+        .filter_module("holochain", log::LevelFilter::Info)
         .filter_module("tracing::span", log::LevelFilter::Off)
-        .filter_module("iroh", log::LevelFilter::Error)
-        .filter_module("kitsune2", log::LevelFilter::Warn)
-        .init();
+        .filter_module("iroh", log::LevelFilter::Warn)
+        .filter_module("kitsune2", log::LevelFilter::Info)
+        .try_init();
 
     let network_seed = String::from("test");
 
@@ -156,21 +154,21 @@ pub async fn setup() -> Scenario {
 
     let alice = launch(
         infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
+        vec![String::from("services")],
         end_user_happ_path(),
         network_seed.clone(),
     )
     .await;
     let bob = launch(
         infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
+        vec![String::from("services")],
         end_user_happ_path(),
         network_seed.clone(),
     )
     .await;
     let carol = launch(
         infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
+        vec![String::from("services")],
         end_user_happ_path(),
         network_seed.clone(),
     )
