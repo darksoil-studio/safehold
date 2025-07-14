@@ -16,7 +16,7 @@ mod chunks;
 mod peer_keys;
 mod utils;
 
-pub const CHUNK_SIZE: usize = 1000; // 1KB
+pub const CHUNK_SIZE: usize = 4_000; // 5KB
 
 #[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 pub enum MessageEncryption {

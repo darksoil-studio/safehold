@@ -61,6 +61,7 @@
         doCheck = false;
         buildInputs =
           inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
+        WASM_LOG = "info";
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
@@ -71,7 +72,6 @@
         doCheck = true;
         __noChroot = true;
         # RUST_LOG = "info";
-        WASM_LOG = "debug";
         # For the integration test
         inherit END_USER_HAPP CLIENT_HAPP SERVICE_PROVIDER_HAPP;
       });

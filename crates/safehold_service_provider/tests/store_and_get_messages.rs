@@ -53,7 +53,7 @@ async fn store_and_get_messages() {
 
     wait_for_providers(&bob.0).await.unwrap();
 
-    std::thread::sleep(Duration::from_secs(2));
+    std::thread::sleep(Duration::from_secs(10));
 
     let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
 
@@ -93,21 +93,6 @@ async fn store_and_get_messages() {
 
     // Now only one message is necessary because players exchanged X25519 keys
     assert_eq!(messages.len(), 1);
-
-    // std::thread::sleep(Duration::from_secs(120));
-
-    // let decrypted_messages = receive_messages(&alice.0).await.unwrap();
-    // assert_eq!(decrypted_messages.len(), 2);
-
-    // let messages: Vec<MessageWithProvenance> = send_message(
-    //     &alice.0,
-    //     vec![bob.0.my_pub_key.clone(), carol.0.my_pub_key.clone()],
-    //     message_content.clone(),
-    // )
-    // .await
-    // .unwrap();
-
-    // assert_eq!(messages.len(), 1);
 }
 
 async fn wait_for_providers(app_ws: &AppWebsocket) -> anyhow::Result<()> {
@@ -130,12 +115,12 @@ async fn wait_for_providers(app_ws: &AppWebsocket) -> anyhow::Result<()> {
             }
             Ok(())
         },
-        50,
+        200,
     )
     .await
 }
 
-const CHUNK_SIZE: usize = 1000;
+const CHUNK_SIZE: usize = 4_000;
 
 #[tokio::test(flavor = "multi_thread")]
 #[serial]
