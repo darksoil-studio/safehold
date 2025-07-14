@@ -154,21 +154,21 @@ pub async fn setup() -> Scenario {
 
     let alice = launch(
         infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
+        vec![String::from("services")],
         end_user_happ_path(),
         network_seed.clone(),
     )
     .await;
     let bob = launch(
         infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
+        vec![String::from("services")],
         end_user_happ_path(),
         network_seed.clone(),
     )
     .await;
     let carol = launch(
         infra_provider_pubkey.clone(),
-        vec![String::from("service_providers")],
+        vec![String::from("services")],
         end_user_happ_path(),
         network_seed.clone(),
     )

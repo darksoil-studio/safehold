@@ -948,7 +948,7 @@ checksum = "b94f61472cee1439c0b966b47e3aca9ae07e45d070759512cd390ea2bebc6675"
 [[package]]
 name = "clone_manager_types"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/clone-manager-zome?branch=main-0.5#9979a6d4070cb0893759263a05d75315300e941c"
+source = "git+https://github.com/darksoil-studio/clone-manager-zome?branch=main-0.5#adf62eebd38fdcc4d2e42b4f71068ab7dbaa2633"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
@@ -958,7 +958,7 @@ dependencies = [
 [[package]]
 name = "clone_manager_utils"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/clone-manager-zome?branch=main-0.5#9979a6d4070cb0893759263a05d75315300e941c"
+source = "git+https://github.com/darksoil-studio/clone-manager-zome?branch=main-0.5#adf62eebd38fdcc4d2e42b4f71068ab7dbaa2633"
 dependencies = [
  "anyhow",
  "clone_manager_types",
@@ -1227,9 +1227,9 @@ checksum = "19d374276b40fb8bbdee95aef7c7fa6b5316ec764510eb64b8dd0e2ed0d7e7f5"
 
 [[package]]
 name = "crc32fast"
-version = "1.4.2"
+version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a97769d94ddab943e4510d138150169a2758b5ef3eb191a9ee688de3e23ef7b3"
+checksum = "9481c1c90cbf2ac953f07c8d4a58aa3945c425b7185c9154d67a65e4230da511"
 dependencies = [
  "cfg-if 1.0.1",
 ]
@@ -6693,9 +6693,9 @@ checksum = "95325155c684b1c89f7765e30bc1c42e4a6da51ca513615660cb8a62ef9a88e3"
 
 [[package]]
 name = "rgb"
-version = "0.8.51"
+version = "0.8.52"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a457e416a0f90d246a4c3288bd7a25b2304ca727f253f95be383dd17af56be8f"
+checksum = "0c6a884d2998352bb4daf0183589aec883f16a6da1f4dde84d8e2e9a5409a1ce"
 dependencies = [
  "bytemuck",
 ]
@@ -7551,7 +7551,7 @@ dependencies = [
 [[package]]
 name = "service_providers_types"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#21c11476c48a71da5be78161b96e3c506f616b85"
+source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#1e9471409e436fe181a45829c0992f7023d24e18"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
@@ -7561,7 +7561,7 @@ dependencies = [
 [[package]]
 name = "service_providers_utils"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#21c11476c48a71da5be78161b96e3c506f616b85"
+source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#1e9471409e436fe181a45829c0992f7023d24e18"
 dependencies = [
  "anyhow",
  "futures",
@@ -8457,9 +8457,9 @@ checksum = "5d99f8c9a7727884afe522e9bd5edbfc91a3312b36a77b5fb8926e4c31a41801"
 
 [[package]]
 name = "toml_writer"
-version = "1.0.0"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b679217f2848de74cabd3e8fc5e6d66f40b7da40f8e1954d92054d9010690fd5"
+checksum = "fcc842091f2def52017664b53082ecbbeb5c7731092bad69d2c63050401dfd64"
 
 [[package]]
 name = "tower"

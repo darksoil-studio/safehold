@@ -1,11 +1,11 @@
-use std::{collections::BTreeSet, time::Duration};
+use std::time::Duration;
 
 mod common;
 use anyhow::anyhow;
 use common::*;
-use holochain::core::DnaHash;
-use holochain_client::{AdminWebsocket, AgentPubKey, AppWebsocket, ExternIO, ZomeCallTarget};
+use holochain_client::{AgentPubKey, AppWebsocket, ExternIO, ZomeCallTarget};
 use safehold_service_client::SafeholdServiceClient;
+use safehold_service_provider::SERVICES_ROLE_NAME;
 use safehold_service_trait::MessageOutput;
 use safehold_types::{
     DecryptedMessageOutput, EncryptMessageInput, MessageContents, MessageWithProvenance,
@@ -36,8 +36,6 @@ async fn store_and_get_messages() {
     .await
     .unwrap();
 
-    std::thread::sleep(Duration::from_secs(10));
-
     client.create_clone_request(network_seed).await.unwrap();
 
     with_retries(
@@ -48,7 +46,7 @@ async fn store_and_get_messages() {
             let service_providers: Vec<AgentPubKey> = alice
                 .0
                 .call_zome(
-                    ZomeCallTarget::RoleName("service_providers".into()),
+                    ZomeCallTarget::RoleName(SERVICES_ROLE_NAME.into()),
                     "service_providers".into(),
                     "get_providers_for_service".into(),
                     ExternIO::encode(safehold_service_trait_service_id.clone())?,
@@ -60,7 +58,7 @@ async fn store_and_get_messages() {
             }
             Ok(())
         },
-        120,
+        10,
     )
     .await
     .unwrap();
@@ -153,8 +151,6 @@ async fn store_and_get_big_messages_in_chunks() {
     .await
     .unwrap();
 
-    std::thread::sleep(Duration::from_secs(10));
-
     client.create_clone_request(network_seed).await.unwrap();
 
     with_retries(
@@ -165,7 +161,7 @@ async fn store_and_get_big_messages_in_chunks() {
             let service_providers: Vec<AgentPubKey> = alice
                 .0
                 .call_zome(
-                    ZomeCallTarget::RoleName("service_providers".into()),
+                    ZomeCallTarget::RoleName(SERVICES_ROLE_NAME.into()),
                     "service_providers".into(),
                     "get_providers_for_service".into(),
                     ExternIO::encode(safehold_service_trait_service_id.clone())?,
@@ -177,7 +173,7 @@ async fn store_and_get_big_messages_in_chunks() {
             }
             Ok(())
         },
-        120,
+        10,
     )
     .await
     .unwrap();
@@ -283,69 +279,4 @@ async fn receive_messages(app_ws: &AppWebsocket) -> anyhow::Result<Vec<Decrypted
         .decode()?;
 
     Ok(decrypted_messages)
-}
-
-async fn consistency(admins_wss: Vec<AdminWebsocket>) -> anyhow::Result<()> {
-    let mut retry_count = 0;
-    loop {
-        let dna_hashes: BTreeSet<DnaHash> =
-            futures::future::try_join_all(admins_wss.iter().map(|admin| admin.list_dnas()))
-                .await
-                .unwrap()
-                .into_iter()
-                .flatten()
-                .collect();
-
-        let consistencied = futures::future::try_join_all(
-            dna_hashes
-                .into_iter()
-                .map(|dna| are_conductors_consistencied(&admins_wss, dna)),
-        )
-        .await?
-        .iter()
-        .all(|c| c.clone());
-
-        if consistencied {
-            return Ok(());
-        }
-
-        retry_count += 1;
-
-        if retry_count > 200 {
-            return Err(anyhow!("Timeout"));
-        }
-
-        std::thread::sleep(Duration::from_millis(500));
-    }
-}
-
-async fn are_conductors_consistencied(
-    admins_wss: &Vec<AdminWebsocket>,
-    dna_hash: DnaHash,
-) -> anyhow::Result<bool> {
-    let states = futures::future::try_join_all(admins_wss.iter().map(|admin_ws| async {
-        let cells = admin_ws.list_cell_ids().await?;
-        let Some(cell_id) = cells.into_iter().find(|cell| cell.dna_hash().eq(&dna_hash)) else {
-            return Err(anyhow!("Cell not found for dna: {dna_hash}."));
-        };
-        let dump = admin_ws.dump_full_state(cell_id, None).await?;
-        Ok(dump)
-    }))
-    .await?;
-
-    if states.iter().any(|s| {
-        s.integration_dump.validation_limbo.len() > 0
-            || s.integration_dump.integration_limbo.len() > 0
-    }) {
-        return Ok(false);
-    }
-
-    if !states
-        .windows(2)
-        .all(|w| w[0].integration_dump.integrated.len() == w[1].integration_dump.integrated.len())
-    {
-        return Ok(false);
-    }
-
-    Ok(true)
 }

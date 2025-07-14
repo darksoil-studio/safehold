@@ -6,8 +6,8 @@ use holochain::prelude::{
 use holochain_client::{
     AdminWebsocket, AppWebsocket, CellInfo, ClonedCell, ExternIO, Timestamp, ZomeCallTarget,
 };
-use safehold_types::MessageWithProvenance;
 use roles_types::Properties;
+use safehold_types::MessageWithProvenance;
 
 pub async fn reconcile_safehold_clones(
     admin_ws: &AdminWebsocket,
@@ -90,7 +90,7 @@ pub async fn reconcile_safehold_clones(
             messages.len()
         );
 
-        let r: () = app_ws
+        let _r: () = app_ws
             .call_zome(
                 ZomeCallTarget::CellId(cloned_cell.cell_id.clone()),
                 "safehold".into(),

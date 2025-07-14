@@ -99,16 +99,11 @@ async fn main() -> Result<()> {
     )
     .await?;
 
-    client.wait_for_clone_providers().await?;
-
-    log::info!("Successfully joined peers: executing request...");
-
     match args.command {
         Commands::CreateCloneRequest { network_seed } => {
             client.create_clone_request(network_seed).await?;
         }
     }
-    std::thread::sleep(Duration::from_secs(50));
 
     Ok(())
 }

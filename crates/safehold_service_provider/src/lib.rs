@@ -1,17 +1,19 @@
-use anyhow::Result;
-use clone_manager_types::NewCloneRequest;
-use clone_manager_utils::{clone_cell, reconcile_cloned_cells};
+use anyhow::{anyhow, Result};
+use clone_manager_types::{CloneRequest, NewCloneRequest};
+use clone_manager_utils::reconcile_cloned_cells;
 use holochain_client::{AdminWebsocket, AppWebsocket};
 use holochain_runtime::*;
 use holochain_types::prelude::*;
 use safehold_clones::reconcile_safehold_clones;
 use setup::setup;
 use std::{fs, path::PathBuf, time::Duration};
+use utils::with_retries;
 
 mod safehold_clones;
 mod setup;
+mod utils;
 
-pub const SERVICE_PROVIDERS_ROLE_NAME: &'static str = "service_providers";
+pub const SERVICES_ROLE_NAME: &'static str = "services";
 
 pub async fn run(
     data_dir: PathBuf,
@@ -65,7 +67,7 @@ pub async fn run(
             &admin_ws,
             &app_ws,
             "manager".into(),
-            SERVICE_PROVIDERS_ROLE_NAME.into(),
+            SERVICES_ROLE_NAME.into(),
         )
         .await
         {
@@ -85,11 +87,33 @@ pub async fn handle_signal(
     signal: AppSignal,
 ) -> anyhow::Result<()> {
     if let Ok(new_clone_request) = signal.into_inner().decode::<NewCloneRequest>() {
-        clone_cell(
+        let a = app_ws.clone();
+        with_retries(
+            async move || {
+                let clone_request: Option<CloneRequest> = a
+                    .call_zome(
+                        holochain_client::ZomeCallTarget::RoleName(String::from("manager")),
+                        "clone_manager".into(),
+                        "get_clone_request".into(),
+                        ExternIO::encode(new_clone_request.clone_request_hash.clone())?,
+                    )
+                    .await?
+                    .decode()?;
+                let Some(_) = clone_request else {
+                    return Err(anyhow!("CloneRequest not found."));
+                };
+
+                Ok(())
+            },
+            10,
+        )
+        .await?;
+
+        reconcile_cloned_cells(
             &admin_ws,
             &app_ws,
-            SERVICE_PROVIDERS_ROLE_NAME.into(),
-            new_clone_request.clone_request,
+            "manager".into(),
+            SERVICES_ROLE_NAME.into(),
         )
         .await?;
     }
