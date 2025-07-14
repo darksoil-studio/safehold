@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
 use chunks::query_pending_chunks;
-use encrypted_messages_integrity::{Chunk, EntryTypes, MessageId, PeerKeys, UnitEntryTypes};
+use encrypted_messages_integrity::{Chunk, EntryTypes, MessageId, PeerKeys};
 use hdk::prelude::*;
 use peer_keys::query_peer_keys;
 use utils::{create_relaxed, delete_relaxed, from_bytes, to_bytes};

@@ -116,7 +116,7 @@ impl SafeholdServiceClient {
             async || {
                 let providers: Vec<AgentPubKey> = app_ws
                     .call_zome(
-                        ZomeCallTarget::RoleName("push_notifications_service".into()),
+                        ZomeCallTarget::RoleName("manager".into()),
                         ZomeName::from("clone_manager"),
                         "get_clone_providers_for_request".into(),
                         ExternIO::encode(clone_request_hash.clone())?,

@@ -9,7 +9,6 @@ use safehold_service_client::SafeholdServiceClient;
 use std::io::Write;
 use std::path::PathBuf;
 use std::str::FromStr;
-use std::time::Duration;
 use tempdir::TempDir;
 
 #[derive(Parser, Debug)]
