@@ -50,6 +50,15 @@ impl SafeholdService for SafeholdGateway {
                     "Message provenance is not the caller of store_messages."
                 ));
             }
+
+            // For now this check is redundant because of the previous check
+            //
+            // let valid =
+            //     verify_signature(message.provenance.clone(), message.signature.clone(), &message.message)?;
+
+            // if !valid {
+            //     return Err(wasm_error!("Invalid signature."));
+            // }
         }
 
         let proxied_call = ProxiedCall {
