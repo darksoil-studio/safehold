@@ -5,7 +5,8 @@ use hdi::prelude::*;
 pub type MessageContents = Vec<u8>;
 pub type AgentSpecificContents = Vec<u8>;
 
-#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, SerializedBytes)]
+#[derive(Clone, PartialEq)]
+#[hdk_entry_helper]
 pub struct Message {
     pub contents: MessageContents,
     pub recipients: BTreeMap<AgentPubKey, AgentSpecificContents>,
