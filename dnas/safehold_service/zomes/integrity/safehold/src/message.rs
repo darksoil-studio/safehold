@@ -5,11 +5,11 @@ pub fn validate_create_message(
     _action: EntryCreationAction,
     message: MessageWithProvenance,
 ) -> ExternResult<ValidateCallbackResult> {
-    let Ok(true) = verify_signature(
-        message.provenance.clone(),
-        message.signature.clone(),
-        &message.message,
-    ) else {
+    let bytes = SerializedBytes::try_from(message.clone()).map_err(|err| wasm_error!(err))?;
+
+    let hash = hash_blake2b(bytes.bytes().to_vec(), 32)?;
+    let Ok(true) = verify_signature(message.provenance.clone(), message.signature.clone(), &hash)
+    else {
         return Ok(ValidateCallbackResult::Invalid(String::from(
             "Invalid signature",
         )));
