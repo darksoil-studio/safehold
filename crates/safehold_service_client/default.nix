@@ -19,7 +19,7 @@
         inherit src version pname;
         doCheck = false;
         buildInputs =
-          inputs.holochain-nix-builders.outputs.dependencies.${system}.holochain.buildInputs;
+          inputs.holochain-utils.outputs.dependencies.${system}.holochain.buildInputs;
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;

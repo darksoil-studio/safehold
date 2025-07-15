@@ -7,7 +7,7 @@
 
   perSystem = { inputs', lib, self', system, ... }: {
     packages.safehold_service_provider_happ =
-      inputs.holochain-nix-builders.outputs.builders.${system}.happ {
+      inputs.holochain-utils.outputs.builders.${system}.happ {
         happManifest = ./happ.yaml;
 
         dnas = {
@@ -19,7 +19,7 @@
       };
 
     packages.safehold_service_client_happ =
-      inputs.holochain-nix-builders.outputs.builders.${system}.happ {
+      inputs.holochain-utils.outputs.builders.${system}.happ {
         happManifest = builtins.toFile "happ.yaml" ''
           ---
           manifest_version: "1"
