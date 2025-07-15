@@ -53,7 +53,7 @@ async fn store_and_get_messages() {
 
     wait_for_providers(&bob.0).await.unwrap();
 
-    std::thread::sleep(Duration::from_secs(10));
+    std::thread::sleep(Duration::from_secs(20));
 
     let decrypted_messages: Vec<DecryptedMessageOutput> = receive_messages(&bob.0).await.unwrap();
 

@@ -161,7 +161,9 @@ pub fn encrypt_message(input: EncryptMessageInput) -> ExternResult<Vec<MessageWi
 fn sign_message(message: Message) -> ExternResult<MessageWithProvenance> {
     let my_pub_key = agent_info()?.agent_initial_pubkey;
 
-    let hash = hash_entry(&message)?;
+    let bytes = SerializedBytes::try_from(message.clone()).map_err(|err| wasm_error!(err))?;
+
+    let hash = hash_blake2b(bytes.bytes().to_vec(), 32)?;
     let signature = sign(my_pub_key.clone(), &hash)?;
 
     Ok(MessageWithProvenance {
