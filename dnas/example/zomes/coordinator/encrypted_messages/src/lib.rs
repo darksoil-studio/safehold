@@ -160,7 +160,9 @@ pub fn encrypt_message(input: EncryptMessageInput) -> ExternResult<Vec<MessageWi
 
 fn sign_message(message: Message) -> ExternResult<MessageWithProvenance> {
     let my_pub_key = agent_info()?.agent_initial_pubkey;
-    let signature = sign(my_pub_key.clone(), &message)?;
+
+    let hash = hash_entry(&message)?;
+    let signature = sign(my_pub_key.clone(), &hash)?;
 
     Ok(MessageWithProvenance {
         provenance: my_pub_key,
