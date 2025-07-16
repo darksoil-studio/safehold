@@ -29,6 +29,7 @@
       inherit inputs;
     } {
       imports = [
+        ./servers.nix
         ./workdir/happ.nix
         ./crates/safehold_service_provider/default.nix
         ./crates/safehold_service_client/default.nix
