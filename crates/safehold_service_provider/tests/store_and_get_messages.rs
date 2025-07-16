@@ -184,7 +184,7 @@ async fn store_and_get_big_messages_in_chunks() {
 
     assert_eq!(messages.len(), 4);
 
-    std::thread::sleep(Duration::from_secs(2));
+    std::thread::sleep(Duration::from_secs(5));
 
     wait_for_providers(&carol.0).await.unwrap();
 
