@@ -11,6 +11,12 @@
 
     clone-manager.url = "github:darksoil-studio/clone-manager-zome/main-0.5";
     clone-manager.inputs.holochain-utils.follows = "holochain-utils";
+
+    garnix-lib = {
+      url = "github:garnix-io/garnix-lib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   nixConfig = {
