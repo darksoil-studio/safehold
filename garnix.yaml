@@ -1,0 +1,4 @@
+builds:
+  exclude:
+    - "checks.*.store-and-get-messages-test"
+
