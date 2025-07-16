@@ -30,6 +30,7 @@ let
   };
 
 in {
+
   flake = {
     nixosConfigurations = {
       safehold-service-provider1 = inputs.nixpkgs.lib.nixosSystem {
