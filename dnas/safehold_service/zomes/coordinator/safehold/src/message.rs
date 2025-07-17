@@ -53,6 +53,7 @@ pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<Me
     )?;
 
     for link in &links {
+        get(link.create_link_hash.clone(), Default::default())?;
         delete_link_relaxed(link.create_link_hash.clone())?;
     }
 

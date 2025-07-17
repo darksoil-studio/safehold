@@ -47,12 +47,12 @@ impl SafeholdServiceClient {
     }
 
     pub async fn wait_for_clone_providers(&self) -> anyhow::Result<()> {
+        let app_ws = self
+            .runtime
+            .app_websocket(self.app_id.clone(), holochain_client::AllowedOrigins::Any)
+            .await?;
         with_retries(
             async || {
-                let app_ws = self
-                    .runtime
-                    .app_websocket(self.app_id.clone(), holochain_client::AllowedOrigins::Any)
-                    .await?;
                 let clone_providers: Vec<AgentPubKey> = app_ws
                     .call_zome(
                         ZomeCallTarget::RoleName("manager".into()),
