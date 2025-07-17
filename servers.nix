@@ -9,6 +9,7 @@ let
       builtins.attrValues sshPubKeys;
     services.openssh.settings.PermitRootLogin = "without-password";
   };
+  bootstrapServerUrl = "http://157.180.93.55:8888";
 
   safehold-service-provider =
     inputs.self.outputs.packages."x86_64-linux".safehold-service-provider;
@@ -20,7 +21,7 @@ let
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart =
-          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider";
+          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider  --bootstrap-url ${bootstrapServerUrl}";
         RuntimeMaxSec = "3600"; # Restart every hour
 
         Restart = "always";
