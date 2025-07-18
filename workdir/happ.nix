@@ -14,7 +14,7 @@
           manager = self'.packages.manager_dna;
           safehold = self'.packages.safehold_dna;
           proxy = self'.packages.proxy_dna;
-          services = self'.packages.services_dna;
+          services = self'.packages.services_dna_with_safehold_gateway;
         };
       };
 
