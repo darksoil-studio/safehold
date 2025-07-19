@@ -1,5 +1,6 @@
 { inputs, ... }:
 let
+
   sshPubKeys = {
     guillem =
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTE+RwRfcG3UNTOZwGmQOKd5R+9jN0adH4BIaZvmWjO guillem.cordoba@gmail.com";
@@ -41,7 +42,7 @@ in {
           sshModule
           safehold-service-provider-module
           {
-            garnix.server.persistence.name = "safehold-service-provider1";
+            garnix.server.persistence.name = "safehold-service-provider-v0-5-x-1";
             system.stateVersion = "25.05";
             garnix.server.enable = true;
             garnix.server.persistence.enable = true;
@@ -55,7 +56,7 @@ in {
           sshModule
           safehold-service-provider-module
           {
-            garnix.server.persistence.name = "safehold-service-provider2";
+            garnix.server.persistence.name = "safehold-service-provider-v0-5-x-2";
             system.stateVersion = "25.05";
             garnix.server.enable = true;
             garnix.server.persistence.enable = true;
