@@ -120,7 +120,7 @@ async fn wait_for_providers(app_ws: &AppWebsocket) -> anyhow::Result<()> {
     .await
 }
 
-const CHUNK_SIZE: usize = 4_000;
+const CHUNK_SIZE: usize = 2_000;
 
 #[tokio::test(flavor = "multi_thread")]
 #[serial]
