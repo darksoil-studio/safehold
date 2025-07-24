@@ -61,14 +61,14 @@
             self'.packages.safehold-service-client.meta.debug
           ];
           text = ''
-
             export RUST_LOG=''${RUST_LOG:=error}
+            export BOOTSTRAP_URL=''${BOOTSTRAP_URL:=http://bad.url.only.mdns.discovery}
 
             DIR1="$(mktemp -d)"
             DIR2="$(mktemp -d)"
-            safehold-service-provider --bootstrap-url https://bad.bad --data-dir "$DIR1" &
-            safehold-service-provider --bootstrap-url https://bad.bad --data-dir "$DIR2" &
-            safehold-service-client --bootstrap-url https://bad.bad create-clone-request --network-seed "$1"
+            safehold-service-provider --bootstrap-url "$BOOTSTRAP_URL" --data-dir "$DIR1" &
+            safehold-service-provider --bootstrap-url "$BOOTSTRAP_URL" --data-dir "$DIR2" &
+            safehold-service-client --bootstrap-url "$BOOTSTRAP_URL" create-clone-request --network-seed "$1"
 
             echo "The test safehold service is now ready to be used."
 
