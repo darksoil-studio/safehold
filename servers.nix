@@ -21,9 +21,11 @@ let
       enable = true;
       path = [ safehold-service-provider ];
       wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       serviceConfig = {
         ExecStart =
-          "sleep 1 && ${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider  --bootstrap-url ${bootstrapServerUrl}";
+          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider  --bootstrap-url ${bootstrapServerUrl}";
         RuntimeMaxSec = "3600"; # Restart every hour
 
         Restart = "always";
