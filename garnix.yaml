@@ -1,9 +1,9 @@
 servers:
-  - configuration: safehold-service-provider1
+  - configuration: safehold-service-provider3
     deployment:
       type: on-branch
       branch: production-v0-5-x
-  - configuration: safehold-service-provider2
+  - configuration: safehold-service-provider4
     deployment:
       type: on-branch
       branch: production-v0-5-x
