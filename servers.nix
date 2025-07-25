@@ -23,11 +23,10 @@ let
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart =
-          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider  --bootstrap-url ${bootstrapServerUrl}";
+          "sleep 1 && ${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider  --bootstrap-url ${bootstrapServerUrl}";
         RuntimeMaxSec = "3600"; # Restart every hour
 
         Restart = "always";
-        RestartSec = 1;
       };
     };
   };
