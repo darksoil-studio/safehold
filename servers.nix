@@ -44,7 +44,7 @@ in {
           safehold-service-provider-module
           {
             garnix.server.persistence.name =
-              "safehold-service-provider-v0-5-x-1";
+              "safehold-service-provider-v0-5-x-3";
             system.stateVersion = "25.05";
             garnix.server.enable = true;
             garnix.server.persistence.enable = true;
@@ -59,7 +59,7 @@ in {
           safehold-service-provider-module
           {
             garnix.server.persistence.name =
-              "safehold-service-provider-v0-5-x-2";
+              "safehold-service-provider-v0-5-x-4";
             system.stateVersion = "25.05";
             garnix.server.enable = true;
             garnix.server.persistence.enable = true;
