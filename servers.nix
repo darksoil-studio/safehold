@@ -26,14 +26,12 @@ let
         ExecStart =
           "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider  --bootstrap-url ${bootstrapServerUrl}";
         RuntimeMaxSec = "3600"; # Restart every hour
-
         Restart = "always";
       };
     };
   };
 
 in {
-
   flake = {
     nixosConfigurations = {
       safehold-service-provider1 = inputs.nixpkgs.lib.nixosSystem {
