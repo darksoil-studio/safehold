@@ -817,11 +817,11 @@
         "roles-zome": "roles-zome"
       },
       "locked": {
-        "lastModified": 1753472766,
-        "narHash": "sha256-rBkHArdg3yo1+3pavixpahmxqj1w/kCGi19ytNvQMRE=",
+        "lastModified": 1753478428,
+        "narHash": "sha256-j25Gi1KjEcNdS2wMtdaQZAgiod/IOkw/G8B1adUuYlE=",
         "owner": "darksoil-studio",
         "repo": "service-providers",
-        "rev": "65aeac3955aa69690ecb1fe745c06c05d388a6f1",
+        "rev": "cf0d0bdf8222d0785aab41bb93f100f496169ffd",
         "type": "github"
       },
       "original": {
