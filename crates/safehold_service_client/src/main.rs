@@ -99,6 +99,7 @@ async fn main() -> Result<()> {
         String::from("temporary-client-app"),
         args.safehold_service_provider_happ,
         args.progenitors.into_iter().map(|p| p.into()).collect(),
+        args.mdns_discovery
     )
     .await?;
 

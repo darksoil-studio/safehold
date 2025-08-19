@@ -33,6 +33,7 @@ async fn store_and_get_messages() {
         "client-happ".into(),
         client_happ_path(),
         vec![progenitor.clone()],
+        false
     )
     .await
     .unwrap();
@@ -142,6 +143,7 @@ async fn store_and_get_big_messages_in_chunks() {
         "client-happ".into(),
         client_happ_path(),
         vec![progenitor.clone()],
+        false
     )
     .await
     .unwrap();
