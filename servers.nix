@@ -8,9 +8,12 @@ let
   sshModule = {
     users.users.root.openssh.authorizedKeys.keys =
       builtins.attrValues sshPubKeys;
+    services.openssh.enable = true;
     services.openssh.settings.PermitRootLogin = "without-password";
   };
-  bootstrapServerUrl = "http://157.180.93.55:8888";
+
+  bootstrapServerUrl =
+    "https://bootstrap.kitsune-v0-1.kitsune.darksoil-studio.garnix.me";
 
   safehold-service-provider =
     inputs.self.outputs.packages."x86_64-linux".safehold-service-provider;
