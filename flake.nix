@@ -66,9 +66,9 @@
 
             DIR1="$(mktemp -d)"
             DIR2="$(mktemp -d)"
-            safehold-service-provider --bootstrap-url "$BOOTSTRAP_URL" --data-dir "$DIR1" &
-            safehold-service-provider --bootstrap-url "$BOOTSTRAP_URL" --data-dir "$DIR2" &
-            safehold-service-client --bootstrap-url "$BOOTSTRAP_URL" create-clone-request --network-seed "$1"
+            safehold-service-provider --bootstrap-url "$BOOTSTRAP_URL" --mdns-discovery --data-dir "$DIR1" &
+            safehold-service-provider --bootstrap-url "$BOOTSTRAP_URL" --mdns-discovery --data-dir "$DIR2" &
+            safehold-service-client --bootstrap-url "$BOOTSTRAP_URL" --mdns-discovery create-clone-request --network-seed "$1"
 
             echo "The test safehold service is now ready to be used."
 

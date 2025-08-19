@@ -25,6 +25,9 @@ struct Args {
     #[arg(long)]
     signal_url: Option<String>,
 
+    #[arg(long)]
+    mdns_discovery: bool,
+
     #[command(subcommand)]
     command: Commands,
 }

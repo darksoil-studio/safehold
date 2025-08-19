@@ -21,8 +21,10 @@ pub async fn run(
     app_id: String,
     safehold_service_provider_happ_path: PathBuf,
     progenitors: Vec<AgentPubKey>,
+    mdns_discovery: bool,
 ) -> anyhow::Result<()> {
-    let config = HolochainRuntimeConfig::new(data_dir.clone(), network_config);
+    let mut config = HolochainRuntimeConfig::new(data_dir.clone(), network_config);
+    config.mdns_discovery = mdns_discovery;
 
     let runtime = HolochainRuntime::launch(vec_to_locked(vec![]), config).await?;
     setup(

@@ -29,6 +29,9 @@ struct Args {
 
     #[arg(long)]
     signal_url: Option<String>,
+
+    #[arg(long)]
+    mdns_discovery: bool,
 }
 
 fn network_config(bootstrap_url: Option<String>, signal_url: Option<String>) -> NetworkConfig {
@@ -94,6 +97,7 @@ async fn main() -> Result<()> {
         args.app_id,
         args.safehold_service_provider_happ,
         args.progenitors.into_iter().map(|p| p.into()).collect(),
+        args.mdns_discovery,
     )
     .await
 }
