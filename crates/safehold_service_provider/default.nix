@@ -60,17 +60,21 @@
         doCheck = false;
         buildInputs =
           inputs.holochain-utils.outputs.dependencies.${system}.holochain.buildInputs;
-        WASM_LOG = "info";
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-      binary =
-        craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
-      check = craneLib.buildPackage (commonArgs // {
+      binary = craneLib.buildPackage (commonArgs // {
         inherit cargoArtifacts;
+      });
+
+      checkArgs = commonArgs // {
         doCheck = true;
+        CARGO_PROFILE = "test";
         __noChroot = true;
-        # RUST_LOG = "info";
+        WASM_LOG = "info";
+      };
+      check = craneLib.cargoTest (checkArgs // {
+        cargoArtifacts = craneLib.buildDepsOnly checkArgs;
         # For the integration test
         inherit END_USER_HAPP CLIENT_HAPP SERVICE_PROVIDER_HAPP;
       });

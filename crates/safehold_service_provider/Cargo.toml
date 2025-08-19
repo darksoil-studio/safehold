@@ -50,3 +50,5 @@ fixt = "0.5"
 holo_hash = "0.5"
 rustls = "0.23"
 serial_test = "3"
+kitsune2_bootstrap_srv = { workspace = true }
+portpicker = "0.1"
