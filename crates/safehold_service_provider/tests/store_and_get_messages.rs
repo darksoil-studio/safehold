@@ -24,11 +24,12 @@ async fn store_and_get_messages() {
         alice,
         bob,
         carol,
+        bootstrap_srv
     } = setup().await;
 
     let client = SafeholdServiceClient::create(
         TempDir::new("safehold-service-test").unwrap().into_path(),
-        network_config(),
+        network_config(&bootstrap_srv),
         "client-happ".into(),
         client_happ_path(),
         vec![progenitor.clone()],
@@ -132,11 +133,12 @@ async fn store_and_get_big_messages_in_chunks() {
         alice,
         bob,
         carol,
+        bootstrap_srv
     } = setup().await;
 
     let client = SafeholdServiceClient::create(
         TempDir::new("safehold-service-test").unwrap().into_path(),
-        network_config(),
+        network_config(&bootstrap_srv),
         "client-happ".into(),
         client_happ_path(),
         vec![progenitor.clone()],

@@ -15,6 +15,7 @@ hdi = "0.6.3"
 hdk = "0.5.3"
 serde = "1.0"
 holochain_serialized_bytes = "*"
+kitsune2_bootstrap_srv = "0.1"
 
 [workspace.dependencies.safehold]
 path = "dnas/safehold_service/zomes/coordinator/safehold"

@@ -15,7 +15,7 @@ mod utils;
 pub const SERVICES_ROLE_NAME: &'static str = "services";
 
 pub struct SafeholdServiceClient {
-    runtime: HolochainRuntime,
+    pub runtime: HolochainRuntime,
     app_id: String,
     progenitors: Vec<AgentPubKey>,
 }
