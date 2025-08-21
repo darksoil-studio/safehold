@@ -34,8 +34,8 @@ let
       };
     };
   };
-
 in {
+
   flake = {
     nixosConfigurations = {
       safehold-service-provider3 = inputs.nixpkgs.lib.nixosSystem {
@@ -70,5 +70,6 @@ in {
       };
     };
   };
+
 }
 
