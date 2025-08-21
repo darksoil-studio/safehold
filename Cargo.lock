@@ -2716,9 +2716,9 @@ dependencies = [
 
 [[package]]
 name = "holochain"
-version = "0.5.4"
+version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5213b9c9cb9cbb4eb17bab0a3f9227bd44dc83b13c3ce40698b5ac71d60ca24"
+checksum = "8ca7c52dcf57247afdeae22ba77268cb192407acd2bf2ca7d272f65a21e32558"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2809,9 +2809,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_cascade"
-version = "0.5.4"
+version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fcc0959b71293f012fb4acd043847c5cdedf8b283c8e10c79233c8e60bbad22d"
+checksum = "be79df0ed2709cff0a1ec4e361b79d873f250ca141b58a3479932b5acc5777e6"
 dependencies = [
  "async-trait",
  "fixt",
@@ -3036,9 +3036,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_p2p"
-version = "0.5.4"
+version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6a71a06e340e18e4899353ec8ed02044b3d5ce8d25db82ce8887f4e8bc8b142"
+checksum = "cd4151623e9ec89b38c57742b64c513128fd37e98ae90adf75007b78a33c7cc2"
 dependencies = [
  "async-trait",
  "blake2b_simd",
@@ -4356,7 +4356,7 @@ dependencies = [
 [[package]]
 name = "kitsune2"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4368,7 +4368,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_api"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -4384,7 +4384,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_bootstrap_client"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "base64 0.22.1",
  "kitsune2_api",
@@ -4423,7 +4423,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_core"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "backon",
  "bytes",
@@ -4444,7 +4444,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_dht"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4454,7 +4454,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_gossip"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "bytes",
  "futures",
@@ -4473,7 +4473,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_transport_iroh"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1ff5a4d7c24e8aa7f7b566c521c3d067ac39cfdd"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#1b99efe1a3b5bf698db8131ae316bd001f8bfb78"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
