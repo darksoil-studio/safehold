@@ -1,6 +1,6 @@
 [package]
 name = "encrypted_messages"
-version.workspace = true
+version = "0.501.0"
 edition = "2021"
 
 [lib]
