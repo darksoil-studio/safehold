@@ -75,6 +75,7 @@ pub async fn run(
             Duration::from_secs(10),
         )
         .expect("Failed to block on shutdown.");
+        std::process::exit(0);
     })?;
 
     loop {
