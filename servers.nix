@@ -34,11 +34,12 @@ let
       };
     };
   };
+
 in {
 
   flake = {
     nixosConfigurations = {
-      safehold-service-provider3 = inputs.nixpkgs.lib.nixosSystem {
+      safehold-service-provider1 = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           inputs.garnix-lib.nixosModules.garnix
@@ -46,14 +47,14 @@ in {
           safehold-service-provider-module
           {
             garnix.server.persistence.name =
-              "safehold-service-provider-v0-5-x-4";
+              "safehold-service-provider-v0-501";
             system.stateVersion = "25.05";
             garnix.server.enable = true;
             garnix.server.persistence.enable = true;
           }
         ];
       };
-      safehold-service-provider4 = inputs.nixpkgs.lib.nixosSystem {
+      safehold-service-provider2 = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           inputs.garnix-lib.nixosModules.garnix
@@ -61,7 +62,7 @@ in {
           safehold-service-provider-module
           {
             garnix.server.persistence.name =
-              "safehold-service-provider-v0-5-x-3";
+              "safehold-service-provider-v0-501";
             system.stateVersion = "25.05";
             garnix.server.enable = true;
             garnix.server.persistence.enable = true;
