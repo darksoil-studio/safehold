@@ -1879,7 +1879,7 @@ dependencies = [
 
 [[package]]
 name = "encrypted_messages"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "encrypted_messages_integrity",
  "hdk",
@@ -1891,7 +1891,7 @@ dependencies = [
 
 [[package]]
 name = "encrypted_messages_integrity"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
@@ -6255,7 +6255,7 @@ dependencies = [
 
 [[package]]
 name = "proxy"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "hdk",
  "holochain_serialized_bytes",
@@ -6266,7 +6266,7 @@ dependencies = [
 
 [[package]]
 name = "proxy_integrity"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
@@ -7204,7 +7204,7 @@ checksum = "28d3b2b1366ec20994f1fd18c3c594f05c5dd4bc44d8bb0c1c632c8d6829481f"
 
 [[package]]
 name = "safehold"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "hdk",
  "holochain_serialized_bytes",
@@ -7216,7 +7216,7 @@ dependencies = [
 
 [[package]]
 name = "safehold-service-client"
-version = "0.1.0"
+version = "0.501.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -7250,7 +7250,7 @@ dependencies = [
 
 [[package]]
 name = "safehold-service-provider"
-version = "0.1.0"
+version = "0.501.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -7289,7 +7289,7 @@ dependencies = [
 
 [[package]]
 name = "safehold_gateway"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "hc_zome_traits",
  "hdk",
@@ -7301,7 +7301,7 @@ dependencies = [
 
 [[package]]
 name = "safehold_integrity"
-version = "0.0.1"
+version = "0.501.0"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
@@ -7311,7 +7311,7 @@ dependencies = [
 
 [[package]]
 name = "safehold_service_trait"
-version = "0.1.0"
+version = "0.501.0"
 dependencies = [
  "hc_zome_traits",
  "hdk",
@@ -7322,7 +7322,7 @@ dependencies = [
 
 [[package]]
 name = "safehold_types"
-version = "0.1.0"
+version = "0.501.0"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",

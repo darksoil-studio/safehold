@@ -1,6 +1,6 @@
 [package]
 name = "proxy"
-version.workspace = true
+version = "0.501.0"
 edition = "2021"
 
 [lib]

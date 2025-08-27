@@ -10,9 +10,6 @@ panic = "abort"
 members = ["dnas/*/zomes/coordinator/*", "dnas/*/zomes/integrity/*", "crates/*"]
 resolver = "2"
 
-[workspace.package]
-version = "0.501.0"
-
 [workspace.dependencies]
 hdi = "0.6.3"
 hdk = "0.5.3"
