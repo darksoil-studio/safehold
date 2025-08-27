@@ -61,49 +61,50 @@ pub async fn run(
     log::info!("Starting safehold service provider.");
 
     let r = runtime.clone();
-
-    tokio::spawn(async move {
-        loop {
-            let Ok(app_ws) = r
-                .app_websocket(app_id.clone(), holochain_client::AllowedOrigins::Any)
-                .await
-            else {
-                log::error!("Failed to connect to the app websocket");
-                continue;
-            };
-            let Ok(admin_ws) = r.admin_websocket().await else {
-                log::error!("Failed to connect to the admin websocket");
-                continue;
-            };
-            if let Err(err) = reconcile_cloned_cells(
-                &admin_ws,
-                &app_ws,
-                "manager".into(),
-                SERVICES_ROLE_NAME.into(),
-            )
-            .await
-            {
-                log::error!("Failed to reconcile cloned services: {err}");
-            }
-            if let Err(err) =
-                reconcile_safehold_clones(&admin_ws, &app_ws, progenitors.clone()).await
-            {
-                log::error!("Failed to reconcile safehold clones: {err}");
-            }
-
-            std::thread::sleep(Duration::from_secs(30));
-        }
-    });
-
     // wait for a unix signal or ctrl-c instruction to
     // shutdown holochain
-    tokio::signal::ctrl_c()
-        .await
-        .unwrap_or_else(|e| log::error!("Could not handle termination signal: {:?}", e));
-    log::info!("Gracefully shutting down conductor...");
-    runtime.shutdown().await?;
+    ctrlc::set_handler(move || {
+        let r = r.clone();
+        holochain_util::tokio_helper::block_on(
+            async move {
+                log::info!("Gracefully shutting down conductor...");
+                if let Err(err) = r.shutdown().await {
+                    log::error!("Failed to shutdown conductor: {err:?}.");
+                }
+            },
+            Duration::from_secs(10),
+        )
+        .expect("Failed to block on shutdown.");
+    })?;
 
-    Ok(())
+    loop {
+        let Ok(app_ws) = runtime
+            .app_websocket(app_id.clone(), holochain_client::AllowedOrigins::Any)
+            .await
+        else {
+            log::error!("Failed to connect to the app websocket");
+            continue;
+        };
+        let Ok(admin_ws) = runtime.admin_websocket().await else {
+            log::error!("Failed to connect to the admin websocket");
+            continue;
+        };
+        if let Err(err) = reconcile_cloned_cells(
+            &admin_ws,
+            &app_ws,
+            "manager".into(),
+            SERVICES_ROLE_NAME.into(),
+        )
+        .await
+        {
+            log::error!("Failed to reconcile cloned services: {err}");
+        }
+        if let Err(err) = reconcile_safehold_clones(&admin_ws, &app_ws, progenitors.clone()).await {
+            log::error!("Failed to reconcile safehold clones: {err}");
+        }
+
+        std::thread::sleep(Duration::from_secs(30));
+    }
 }
 
 pub async fn handle_signal(
