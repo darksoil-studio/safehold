@@ -1,12 +1,12 @@
 servers:
-  - configuration: safehold-service-provider3
+  - configuration: safehold-service-provider1
     deployment:
       type: on-branch
-      branch: production-v0-5-x
-  - configuration: safehold-service-provider4
+      branch: production-*
+  - configuration: safehold-service-provider2
     deployment:
       type: on-branch
-      branch: production-v0-5-x
+      branch: production-*
 builds:
   exclude:
     - "checks.*.store-and-get-messages-test"
