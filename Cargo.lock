@@ -4426,7 +4426,7 @@ dependencies = [
 [[package]]
 name = "kitsune2"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4438,7 +4438,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_api"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -4454,7 +4454,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_bootstrap_client"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "base64 0.22.1",
  "kitsune2_api",
@@ -4493,7 +4493,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_core"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "backon",
  "bytes",
@@ -4514,7 +4514,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_dht"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "bytes",
  "kitsune2_api",
@@ -4524,7 +4524,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_gossip"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "bytes",
  "futures",
@@ -4543,7 +4543,7 @@ dependencies = [
 [[package]]
 name = "kitsune2_transport_iroh"
 version = "0.1.15"
-source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#fd8b866ee3111057f48f0a5f053be5b873bdf8b6"
+source = "git+https://github.com/guillemcordoba/kitsune2?branch=iroh-transport#73364d25b8d2234ff5a822bdc0d2b406ae863e94"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -6349,9 +6349,9 @@ dependencies = [
 
 [[package]]
 name = "quinn"
-version = "0.11.8"
+version = "0.11.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "626214629cda6781b6dc1d316ba307189c85ba657213ce642d9c77670f8202c8"
+checksum = "b9e20a958963c291dc322d98411f541009df2ced7b5a4f2bd52337638cfccf20"
 dependencies = [
  "bytes",
  "cfg_aliases",
@@ -6360,7 +6360,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash 2.1.1",
  "rustls 0.23.31",
- "socket2 0.5.10",
+ "socket2 0.6.0",
  "thiserror 2.0.16",
  "tokio",
  "tracing",
@@ -6369,9 +6369,9 @@ dependencies = [
 
 [[package]]
 name = "quinn-proto"
-version = "0.11.12"
+version = "0.11.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49df843a9161c85bb8aae55f101bc0bac8bcafd637a620d9122fd7e0b2f7422e"
+checksum = "f1906b49b0c3bc04b5fe5d86a77925ae6524a19b816ae38ce1e426255f1d8a31"
 dependencies = [
  "bytes",
  "getrandom 0.3.3",
@@ -6390,16 +6390,16 @@ dependencies = [
 
 [[package]]
 name = "quinn-udp"
-version = "0.5.13"
+version = "0.5.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fcebb1209ee276352ef14ff8732e24cc2b02bbac986cd74a4c81bcb2f9881970"
+checksum = "addec6a0dcad8a8d96a771f815f0eaf55f9d1805756410b39f5fa81332574cbd"
 dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.5.10",
+ "socket2 0.6.0",
  "tracing",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -7676,7 +7676,7 @@ dependencies = [
 [[package]]
 name = "service_providers_types"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#cf0d0bdf8222d0785aab41bb93f100f496169ffd"
+source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#9d1859d0eeda9ff4c9d8808b3e6efcea63f78baf"
 dependencies = [
  "hdi",
  "holochain_serialized_bytes",
@@ -7686,7 +7686,7 @@ dependencies = [
 [[package]]
 name = "service_providers_utils"
 version = "0.1.0"
-source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#cf0d0bdf8222d0785aab41bb93f100f496169ffd"
+source = "git+https://github.com/darksoil-studio/service-providers?branch=main-0.5#9d1859d0eeda9ff4c9d8808b3e6efcea63f78baf"
 dependencies = [
  "anyhow",
  "futures",
