@@ -1,6 +1,6 @@
 [package]
 name = "safehold"
-version = "0.501.0"
+version = "0.502.0"
 edition = "2021"
 
 [lib]
