@@ -12,6 +12,7 @@ let
       builtins.attrValues sshPubKeys;
     services.openssh.enable = true;
     services.openssh.settings.PermitRootLogin = "without-password";
+    services.openssh.ports = [ 22 80 ];
   };
 
   bootstrapServerUrl =
@@ -29,7 +30,7 @@ let
       wants = [ "network-online.target" ];
       serviceConfig = {
         ExecStart =
-          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider --bootstrap-url ${bootstrapServerUrl} --admin-port 80";
+          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider --bootstrap-url ${bootstrapServerUrl} --admin-port 8080";
         RuntimeMaxSec = "3600"; # Restart every hour
         Restart = "always";
       };
