@@ -256,11 +256,11 @@
         "tauri-plugin-holochain": "tauri-plugin-holochain"
       },
       "locked": {
-        "lastModified": 1755947522,
-        "narHash": "sha256-NrXc0DRN3IOSoK6siZjkGc1GfZLfz2PuyE0xUgpY9Yw=",
+        "lastModified": 1756729954,
+        "narHash": "sha256-7OQbmIruCqCK+aXzQ8yCrwi61N6K1jm0CutTn90R+4U=",
         "owner": "darksoil-studio",
         "repo": "holochain-utils",
-        "rev": "e9b5a9dd5a111a039ddccee641290868ecca6cbd",
+        "rev": "4fa7537cc947c427834acf018a05b084b7ef9674",
         "type": "github"
       },
       "original": {
@@ -587,11 +587,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1753170537,
-        "narHash": "sha256-vnaU7xkEWXQ/Bg+IkZT+hkF3h/ZFQ31IFEURpoT8ew8=",
+        "lastModified": 1756729856,
+        "narHash": "sha256-xJnIfcIyLRTXsf+N8OOMnqzRkx2gT/DSta7qCm8yU7Y=",
         "owner": "darksoil-studio",
         "repo": "holochain-playground",
-        "rev": "464d4220865aefd91cf9db19399dfa435c919db7",
+        "rev": "5e858641de8ac6113cfa6b47ea1350762a629a61",
         "type": "github"
       },
       "original": {
@@ -817,11 +817,11 @@
         "roles-zome": "roles-zome"
       },
       "locked": {
-        "lastModified": 1756723246,
-        "narHash": "sha256-lPEODDTpSdOJHvDANkV2TCM/Wlh4eCWugHTLHuP/nVI=",
+        "lastModified": 1756750321,
+        "narHash": "sha256-ucPHeUzQlCxqwZRsEGBeAIDKDjGES7xQFhRXbc0fldc=",
         "owner": "darksoil-studio",
         "repo": "service-providers",
-        "rev": "7aa87a1f6985a1eaab496c53447b95bb1e8fba90",
+        "rev": "b4717c4c981030483cc10f6ba7b331b63b2bd00d",
         "type": "github"
       },
       "original": {
@@ -866,11 +866,11 @@
         "webkitnixpkgs": "webkitnixpkgs"
       },
       "locked": {
-        "lastModified": 1755947416,
-        "narHash": "sha256-Fp1sObCTxY2BxD0m4WdslL0Qll5b9rHRnmEupcV53fM=",
+        "lastModified": 1756109559,
+        "narHash": "sha256-r+Pwd2chZrzvY63HJ/qa7c1/zGAhZtKjCDMEZN+QTUs=",
         "owner": "darksoil-studio",
         "repo": "tauri-plugin-holochain",
-        "rev": "7439f392790b248a866abfcd40c4d8beac5688cb",
+        "rev": "e987ae89c534a9e8c851d03a4e6cf80f228f303b",
         "type": "github"
       },
       "original": {
