@@ -116,7 +116,10 @@ pub async fn reconcile_safehold_clones(
         .collect();
 
     for dangling_cell in dangling_cells {
-        log::info!("Deleting the safehold clone cell for a previous epoch.");
+        log::info!(
+            "Deleting the safehold clone cell for a previous epoch: {}.",
+            dangling_cell.clone_id
+        );
         app_ws
             .disable_clone_cell(DisableCloneCellPayload {
                 clone_cell_id: CloneCellId::CloneId(dangling_cell.clone_id.clone()),
