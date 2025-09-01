@@ -12,7 +12,6 @@ let
       builtins.attrValues sshPubKeys;
     services.openssh.enable = true;
     services.openssh.settings.PermitRootLogin = "without-password";
-    services.openssh.ports = [ 22 80 ];
   };
 
   bootstrapServerUrl =
