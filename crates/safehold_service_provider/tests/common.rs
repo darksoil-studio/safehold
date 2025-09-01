@@ -150,7 +150,8 @@ pub async fn setup() -> Scenario {
             String::from("test-app"),
             service_provider_happ_path(),
             vec![pubkey.clone()],
-            false
+            false,
+            None
         )
         .await
         .unwrap();
@@ -167,7 +168,8 @@ pub async fn setup() -> Scenario {
             String::from("test-app"),
             service_provider_happ_path(),
             vec![pubkey.clone()],
-            false
+            false,
+            None
         )
         .await
         .unwrap();
