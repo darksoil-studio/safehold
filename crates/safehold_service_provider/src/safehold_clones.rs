@@ -9,8 +9,6 @@ use holochain_client::{
 use roles_types::Properties;
 use safehold_types::MessageWithProvenance;
 
-use crate::utils::with_retries;
-
 pub async fn reconcile_safehold_clones(
     admin_ws: &AdminWebsocket,
     app_ws: &AppWebsocket,
@@ -76,38 +74,30 @@ pub async fn reconcile_safehold_clones(
             .filter(|c| c.enabled)
             .max_by_key(|c| c.clone_id.as_clone_index());
         if let Some(previous_cell) = previous_cell {
-            with_retries(
-                async move || {
-                    let messages: Vec<MessageWithProvenance> = app_ws
-                        .call_zome(
-                            ZomeCallTarget::CellId(previous_cell.cell_id.clone()),
-                            "safehold".into(),
-                            "export_undeleted_messages".into(),
-                            ExternIO::encode(())?,
-                        )
-                        .await?
-                        .decode()?;
+            let messages: Vec<MessageWithProvenance> = app_ws
+                .call_zome(
+                    ZomeCallTarget::CellId(previous_cell.cell_id.clone()),
+                    "safehold".into(),
+                    "export_undeleted_messages".into(),
+                    ExternIO::encode(())?,
+                )
+                .await?
+                .decode()?;
 
-                    log::info!(
-                        "Migrating {} messages from the old cell to the new one.",
-                        messages.len()
-                    );
+            log::info!(
+                "Migrating {} messages from the old cell to the new one.",
+                messages.len()
+            );
 
-                    let _r: () = app_ws
-                        .call_zome(
-                            ZomeCallTarget::CellId(cloned_cell.cell_id.clone()),
-                            "safehold".into(),
-                            "create_messages".into(),
-                            ExternIO::encode(messages)?,
-                        )
-                        .await?
-                        .decode()?;
-
-                    Ok(())
-                },
-                10,
-            )
-            .await?;
+            let _r: () = app_ws
+                .call_zome(
+                    ZomeCallTarget::CellId(cloned_cell.cell_id.clone()),
+                    "safehold".into(),
+                    "create_messages".into(),
+                    ExternIO::encode(messages)?,
+                )
+                .await?
+                .decode()?;
         }
 
         log::info!(
