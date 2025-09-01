@@ -1,5 +1,7 @@
 { inputs, ... }:
+
 let
+
   sshPubKeys = {
     guillem =
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTE+RwRfcG3UNTOZwGmQOKd5R+9jN0adH4BIaZvmWjO guillem.cordoba@gmail.com";
@@ -28,7 +30,7 @@ let
       wants = [ "network-online.target" ];
       serviceConfig = {
         ExecStart =
-          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider --bootstrap-url ${bootstrapServerUrl} --admin-port 8080";
+          "${safehold-service-provider}/bin/safehold-service-provider --data-dir /root/safehold-service-provider --bootstrap-url ${bootstrapServerUrl} --admin-port 80";
         RuntimeMaxSec = "3600"; # Restart every hour
         Restart = "always";
       };
