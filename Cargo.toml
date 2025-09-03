@@ -3,16 +3,17 @@ opt-level = "z"
 
 [profile.release]
 opt-level = 3
-lto = "thin"
+lto = "fat"
 panic = "abort"
+codegen-units = 1
 
 [workspace]
 members = ["dnas/*/zomes/coordinator/*", "dnas/*/zomes/integrity/*", "crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "0.6.3"
-hdk = "0.5.3"
+hdi = "0.7.0-dev"
+hdk = "0.6.0-dev"
 serde = "1.0"
 holochain_serialized_bytes = "*"
 kitsune2_bootstrap_srv = "0.1"
@@ -30,9 +31,9 @@ path = "dnas/proxy/zomes/coordinator/proxy"
 path = "dnas/proxy/zomes/integrity/proxy"
 
 [patch.crates-io]
-kitsune2 = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
-kitsune2_api = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
-kitsune2_core = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
-kitsune2_dht = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
-kitsune2_gossip = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
-kitsune2_bootstrap_client = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport" }
+kitsune2 = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport-v0.2" }
+kitsune2_api = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport-v0.2" }
+kitsune2_core = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport-v0.2" }
+kitsune2_dht = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport-v0.2" }
+kitsune2_gossip = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport-v0.2" }
+kitsune2_bootstrap_client = { git = "https://github.com/guillemcordoba/kitsune2", branch = "iroh-transport-v0.2" }

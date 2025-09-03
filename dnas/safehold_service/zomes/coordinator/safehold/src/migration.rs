@@ -8,12 +8,12 @@ pub fn export_undeleted_messages() -> ExternResult<Vec<MessageWithProvenance>> {
 
     let children = path.children()?;
 
-    let get_links_input = children
+    let get_links_input: Vec<GetLinksInput> = children
         .into_iter()
-        .map(|link| GetLinksInputBuilder::try_new(link.target, LinkTypes::RecipientToMessages))
-        .collect::<ExternResult<Vec<GetLinksInputBuilder>>>()?
+        .map(|link| LinkQuery::try_new(link.target, LinkTypes::RecipientToMessages))
+        .collect::<ExternResult<Vec<LinkQuery>>>()?
         .into_iter()
-        .map(|b| b.build())
+        .map(|query| GetLinksInput::from_query(query, GetOptions::network()))
         .collect();
 
     let links = HDK.with(|h| h.borrow().get_links(get_links_input))?;

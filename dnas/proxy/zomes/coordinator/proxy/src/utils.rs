@@ -47,7 +47,7 @@ pub fn create_relaxed(entry_type: EntryTypes) -> ExternResult<()> {
 pub fn delete_link_relaxed(address: ActionHash) -> ExternResult<()> {
     HDK.with(|h| {
         h.borrow()
-            .delete_link(DeleteLinkInput::new(address, ChainTopOrdering::Relaxed))
+            .delete_link(DeleteLinkInput::new(address, GetOptions::network(), ChainTopOrdering::Relaxed))
     })?;
 
     Ok(())

@@ -1,6 +1,6 @@
 [package]
 name = "safehold_integrity"
-version = "0.502.0"
+version = "0.600.0-dev.0"
 edition = "2021"
 
 [lib]
@@ -13,3 +13,4 @@ holochain_serialized_bytes = { workspace = true }
 serde = { workspace = true }
 
 safehold_types = { path = "../../../../../crates/safehold_types" }
+blake2 = "0.10"

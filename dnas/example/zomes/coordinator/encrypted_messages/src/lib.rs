@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use blake2::Digest;
 use chunks::query_pending_chunks;
 use encrypted_messages_integrity::{Chunk, EntryTypes, MessageId, PeerKeys};
 use hdk::prelude::*;
@@ -158,12 +159,18 @@ pub fn encrypt_message(input: EncryptMessageInput) -> ExternResult<Vec<MessageWi
     Ok(messages)
 }
 
+fn hash_blake2b(bytes: &[u8]) -> Vec<u8> {
+    let mut hasher = blake2::Blake2s256::new();
+    hasher.update(bytes);
+    hasher.finalize().to_vec()
+}
+
 fn sign_message(message: Message) -> ExternResult<MessageWithProvenance> {
     let my_pub_key = agent_info()?.agent_initial_pubkey;
 
     let bytes = SerializedBytes::try_from(message.clone()).map_err(|err| wasm_error!(err))?;
 
-    let hash = hash_blake2b(bytes.bytes().to_vec(), 32)?;
+    let hash = hash_blake2b(bytes.bytes());
     let signature = sign(my_pub_key.clone(), &hash)?;
 
     Ok(MessageWithProvenance {

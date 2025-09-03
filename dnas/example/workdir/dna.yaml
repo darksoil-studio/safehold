@@ -1,4 +1,4 @@
-manifest_version: '1'
+manifest_version: '0'
 name: example
 integrity:
   network_seed: null
@@ -6,14 +6,12 @@ integrity:
   zomes:
   - name: encrypted_messages_integrity
     hash: null
-    bundled: ../../../target/wasm32-unknown-unknown/release/encrypted_messages_integrity.wasm
+    path: ../../../target/wasm32-unknown-unknown/release/encrypted_messages_integrity.wasm
     dependencies: null
-    dylib: null
 coordinator:
   zomes:
   - name: encrypted_messages
     hash: null
-    bundled: ../../../target/wasm32-unknown-unknown/release/encrypted_messages.wasm
+    path: ../../../target/wasm32-unknown-unknown/release/encrypted_messages.wasm
     dependencies:
     - name: encrypted_messages_integrity
-    dylib: null

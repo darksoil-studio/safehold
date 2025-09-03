@@ -1,5 +1,12 @@
 use hdi::prelude::*;
 pub use safehold_types::MessageWithProvenance;
+use blake2::Digest;
+
+fn hash_blake2b(bytes: &[u8]) -> Vec<u8> {
+    let mut hasher = blake2::Blake2s256::new();
+    hasher.update(bytes);
+    hasher.finalize().to_vec()
+}
 
 pub fn validate_create_message(
     _action: EntryCreationAction,
@@ -7,7 +14,7 @@ pub fn validate_create_message(
 ) -> ExternResult<ValidateCallbackResult> {
     let bytes = SerializedBytes::try_from(message.message).map_err(|err| wasm_error!(err))?;
 
-    let hash = hash_blake2b(bytes.bytes().to_vec(), 32)?;
+    let hash = hash_blake2b(bytes.bytes());
     let Ok(true) = verify_signature(message.provenance.clone(), message.signature.clone(), &hash)
     else {
         return Ok(ValidateCallbackResult::Invalid(String::from(

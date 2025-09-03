@@ -10,7 +10,7 @@
       END_USER_HAPP = (inputs.holochain-utils.outputs.builders.${system}.happ {
         happManifest = builtins.toFile "happ.yaml" ''
           ---
-          manifest_version: "1"
+          manifest_version: "0"
           name: test_happ
           description: ~
           roles:   
@@ -19,7 +19,7 @@
                 strategy: create
                 deferred: false
               dna:
-                bundled: ""
+                path: ""
                 modifiers:
                   network_seed: ~
                   properties: ~
@@ -30,7 +30,7 @@
                 strategy: create
                 deferred: false
               dna:
-                bundled: ""
+                path: ""
                 modifiers:
                   network_seed: ~
                   properties: ~
@@ -63,9 +63,8 @@
         LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
       };
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-      binary = craneLib.buildPackage (commonArgs // {
-        inherit cargoArtifacts;
-      });
+      binary =
+        craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
 
       checkArgs = commonArgs // {
         doCheck = true;
@@ -98,6 +97,7 @@
         makeWrapper ${binary}/bin/safehold-service-provider $out/bin/safehold-service-provider \
           --add-flags "${self'.packages.safehold_service_provider_happ} --app-id $DNA_HASHES"
       '';
+
     in rec {
 
       builders.safehold-service-provider = { progenitors }:

@@ -48,8 +48,8 @@ pub fn create_message(message: MessageWithProvenance) -> ExternResult<EntryHash>
 pub fn get_messages_for_recipient(recipient: AgentPubKey) -> ExternResult<Vec<MessageOutput>> {
     let path = agent_path(recipient)?;
     let links = get_links(
-        GetLinksInputBuilder::try_new(path.path_entry_hash()?, LinkTypes::RecipientToMessages)?
-            .build(),
+        LinkQuery::try_new(path.path_entry_hash()?, LinkTypes::RecipientToMessages)?,
+        GetStrategy::Network,
     )?;
 
     for link in &links {

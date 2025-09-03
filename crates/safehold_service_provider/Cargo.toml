@@ -1,6 +1,6 @@
 [package]
 name = "safehold-service-provider"
-version = "0.502.0"
+version = "0.600.0-dev.0"
 edition = "2021"
 
 [lib]
@@ -12,12 +12,12 @@ name = "safehold-service-provider"
 path = "src/main.rs"
 
 [dependencies]
-holochain_runtime = { git = "https://github.com/darksoil-studio/tauri-plugin-holochain", branch = "main-0.5" }
-holochain = "0.5"
-holochain_util = "0.5"
-holochain_client = "0.7.0"
-holochain_conductor_api = "0.5"
-holochain_types = "0.5"
+holochain_runtime = { git = "https://github.com/darksoil-studio/tauri-plugin-holochain", branch = "main-0.6" }
+holochain = "0.6.0-dev"
+holochain_util = "0.6.0-dev"
+holochain_client = "0.8.0-dev"
+holochain_conductor_api = "0.6.0-dev"
+holochain_types = "0.6.0-dev"
 
 anyhow = "1"
 clap = {version = "4.5.4", features = [ "derive" ] }
@@ -33,22 +33,22 @@ chrono = "0.4"
 serde_yaml = "0.9"
 serde_json = "1"
 
-clone_manager_types = { git = "https://github.com/darksoil-studio/clone-manager-zome", branch = "main-0.5"}
-clone_manager_utils = { git = "https://github.com/darksoil-studio/clone-manager-zome", branch = "main-0.5"}
+clone_manager_types = { git = "https://github.com/darksoil-studio/clone-manager-zome", branch = "main-0.6"}
+clone_manager_utils = { git = "https://github.com/darksoil-studio/clone-manager-zome", branch = "main-0.6"}
 
-service_providers_types = { git = "https://github.com/darksoil-studio/service-providers", branch = "main-0.5"}
-service_providers_utils = { git = "https://github.com/darksoil-studio/service-providers", branch = "main-0.5"}
+service_providers_types = { git = "https://github.com/darksoil-studio/service-providers", branch = "main-0.6"}
+service_providers_utils = { git = "https://github.com/darksoil-studio/service-providers", branch = "main-0.6"}
 safehold_types = { path = "../safehold_types" }
 safehold_service_trait = { path = "../safehold_service_trait" }
-roles_types = { git = "https://github.com/darksoil-studio/roles-zome", branch = "main-0.5"}
+roles_types = { git = "https://github.com/darksoil-studio/roles-zome", branch = "main-0.6"}
 
 [dev-dependencies]
 tempdir = "0.3.7"
 serde_yaml = "0.9"
 safehold-service-client = { path = "../safehold_service_client" }
 futures = "0.3"
-fixt = "0.5"
-holo_hash = "0.5"
+fixt = "0.6.0-dev"
+holo_hash = "0.6.0-dev"
 rustls = "0.23"
 serial_test = "3"
 kitsune2_bootstrap_srv = { workspace = true }

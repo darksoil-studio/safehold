@@ -2,14 +2,14 @@
   description = "Template for Holochain app development";
 
   inputs = {
-    holochain-utils.url = "github:darksoil-studio/holochain-utils/main-0.5";
+    holochain-utils.url = "github:darksoil-studio/holochain-utils/main-0.6";
     nixpkgs.follows = "holochain-utils/nixpkgs";
     crane.follows = "holochain-utils/crane";
 
-    service-providers.url = "github:darksoil-studio/service-providers/main-0.5";
+    service-providers.url = "github:darksoil-studio/service-providers/main-0.6";
     service-providers.inputs.holochain-utils.follows = "holochain-utils";
 
-    clone-manager.url = "github:darksoil-studio/clone-manager-zome/main-0.5";
+    clone-manager.url = "github:darksoil-studio/clone-manager-zome/main-0.6";
     clone-manager.inputs.holochain-utils.follows = "holochain-utils";
 
     garnix-lib = {

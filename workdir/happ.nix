@@ -22,7 +22,7 @@
       inputs.holochain-utils.outputs.builders.${system}.happ {
         happManifest = builtins.toFile "happ.yaml" ''
           ---
-          manifest_version: "1"
+          manifest_version: "0"
           name: safehold-service-client
           description: ~
           roles:   
@@ -31,7 +31,7 @@
                 strategy: create
                 deferred: false
               dna:
-                bundled: ""
+                path: ""
                 modifiers:
                   network_seed: ~
                   properties: ~

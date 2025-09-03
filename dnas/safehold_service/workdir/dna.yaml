@@ -1,4 +1,4 @@
-manifest_version: '1'
+manifest_version: '0'
 name: safehold_service
 integrity:
   network_seed: null
@@ -6,14 +6,12 @@ integrity:
   zomes:
   - name: safehold_integrity
     hash: null
-    bundled: ../../../target/wasm32-unknown-unknown/release/safehold_integrity.wasm
+    path: ../../../target/wasm32-unknown-unknown/release/safehold_integrity.wasm
     dependencies: null
-    dylib: null
 coordinator:
   zomes:
   - name: safehold
     hash: null
-    bundled: ../../../target/wasm32-unknown-unknown/release/safehold.wasm
+    path: ../../../target/wasm32-unknown-unknown/release/safehold.wasm
     dependencies:
     - name: safehold_integrity
-    dylib: null

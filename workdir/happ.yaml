@@ -1,4 +1,4 @@
-manifest_version: '1'
+manifest_version: '0'
 name: safehold-service-provider
 description: null
 roles:
@@ -7,7 +7,7 @@ roles:
     strategy: create
     deferred: false
   dna:
-    bundled: ''
+    path: ''
     modifiers:
       network_seed: null
       properties: null
@@ -18,7 +18,7 @@ roles:
     strategy: create
     deferred: false
   dna:
-    bundled: ../dnas/proxy/workdir/proxy.dna
+    path: ../dnas/proxy/workdir/proxy.dna
     modifiers:
       network_seed: null
       properties: null
@@ -29,7 +29,7 @@ roles:
     strategy: create
     deferred: false
   dna:
-    bundled: ''
+    path: ''
     modifiers:
       network_seed: null
       properties: null
@@ -40,7 +40,7 @@ roles:
     strategy: create
     deferred: false
   dna:
-    bundled: ''
+    path: ''
     modifiers:
       network_seed: null
       properties: null

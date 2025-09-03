@@ -165,5 +165,5 @@ pub async fn handle_signal(
 
 pub async fn read_from_file(happ_bundle_path: &PathBuf) -> Result<AppBundle> {
     let bytes = fs::read(happ_bundle_path)?;
-    Ok(AppBundle::decode(bytes.as_slice())?)
+    Ok(AppBundle::unpack(bytes.as_slice())?)
 }
